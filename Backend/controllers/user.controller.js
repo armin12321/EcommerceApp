@@ -3,13 +3,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
 var login = function (req, res) {
-    res.send({
-        msg: 'Served login page'
+    res.json({
+        msg: 'Served login page',
+        data: req.body
     });
 };
 var register = function (req, res) {
-    res.send({
-        msg: 'Served register page'
+    res.json({
+        msg: 'Served register page',
+        data: req.body
     });
 };
 var userController = {

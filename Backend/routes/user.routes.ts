@@ -1,10 +1,13 @@
+//third party packages
 import express, { Router } from 'express';
+
+//controllers
 import { userController } from '../controllers/user.controller';
 
 const userRoutes: Router = express.Router();
 
-userRoutes.get('/login', userController.login);
+userRoutes.post('/login', userController.login);
 
-userRoutes.get('/register', userController.register);
+userRoutes.post('/register', userController.register);
 
 export {userRoutes};

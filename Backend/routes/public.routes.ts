@@ -1,4 +1,7 @@
+//third party packages
 import express, { Router } from 'express';
+
+//controller
 import { publicController } from '../controllers/public.controller';
 
 const publicRoutes: Router = express.Router();

@@ -1,14 +1,16 @@
 //functions:
 
 const login = (req: any, res: any) => {
-    res.send({
-        msg: 'Served login page'
+    res.json({
+        msg: 'Served login page',
+        data: req.body
     });
 }
 
 const register = (req: any, res: any) => {
-    res.send({
-        msg: 'Served register page'
+    res.json({
+        msg: 'Served register page',
+        data: req.body
     });
 }
 

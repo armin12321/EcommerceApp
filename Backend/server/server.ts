@@ -1,11 +1,15 @@
+//third party packages
 import express from 'express';
 import cors from 'cors';
-import { dbConfig } from '../configs/db.config';
 import mongoose from 'mongoose';
+
+//configs
+import { dbConfig } from '../configs/db.config';
+import { serverConfig } from '../configs/server.config';
+
+//routes
 import { userRoutes } from '../routes/user.routes';
 import { publicRoutes } from '../routes/public.routes';
-import { rootRoutes } from '../routes/root.routes';
-import { serverConfig } from '../configs/server.config';
 
 
 const app: any = express();
@@ -30,13 +34,10 @@ mongoose.connect(`mongodb://${dbConfig.HOST}: ${dbConfig.PORT}/${dbConfig.DBNAME
 
 ////////////// ------- ROUTES ------ //////////////
 //Routes for user pages:
-app.use('/user', userRoutes);
+app.use('/api/user', userRoutes);
 
 //Routes for public pages:
-app.use('/public', publicRoutes);
-
-//Routes for root 
-app.use('/', rootRoutes);
+app.use('/api/public', publicRoutes);
 
 ///////////////////////////////////////////////////
 
