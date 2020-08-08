@@ -3,8 +3,8 @@
         <div id="profilePhotoPreview">
             <h4 class="text-center">Profile photo preview</h4>
             <div class="container" id="profilePhotoContainer">
-                <div>
-                    <span class="helper"></span><img id="profilePhoto" [src]="imgUrl" *ngIf="imgUrl" alt="Profile photo">
+                <div *ngIf='imgUrl'>
+                    <span class="helper"></span><img id="profilePhoto" [src]="imgUrl" alt="Profile photo">
                 </div>
             </div>
         </div>

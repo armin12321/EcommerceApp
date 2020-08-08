@@ -11,10 +11,16 @@ import { serverConfig } from '../configs/server.config';
 import { userRoutes } from '../routes/user.routes';
 import { publicRoutes } from '../routes/public.routes';
 
+//hand defined middlewares
+import {authMiddleware} from '../middlewares/auth.middleware';
+
 
 const app: any = express();
 
 //////////// ----- MIDDLEWARE ----- /////////////
+//allow certain headers to be able to get token from client:
+app.use(authMiddleware.addHeaders);
+
 //Frontend - Backend compatibility:
 app.use(cors());
 
@@ -30,10 +36,10 @@ app.use(express.urlencoded({ extended: true }));
 /////////////////////////////////////////////////
 
 //Database connection initialization:
-mongoose.connect(`mongodb://${dbConfig.HOST}: ${dbConfig.PORT}/${dbConfig.DBNAME}`, {
+mongoose.connect(dbConfig.ATLASURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(() => console.log(`Sucessfuly connected to database ${dbConfig.DBNAME}`));
+}).then(() => console.log(`Sucessfuly connected to ATLAS database`));
 
 ////////////// ------- ROUTES ------ //////////////
 //Routes for user pages:

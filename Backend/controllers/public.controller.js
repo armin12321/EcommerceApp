@@ -3,6 +3,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicController = void 0;
 var home = function (req, res) {
+    var test = req.headers['x-access-token'];
+    console.log(test); //to see whether i really get a token in every route with interceptor.
     res.json({
         msg: 'Served main page for our website.'
     });

@@ -12,13 +12,20 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 
+import { authInterceptorProviders } from './interceptors/auth.interceptor';
+import { ProfileComponent } from './components/profile/profile.component';
+import { CartComponent } from './components/cart/cart.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProfileComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +35,7 @@ import { RegisterComponent } from './components/register/register.component';
     HttpModule,
     FlashMessagesModule.forRoot(),
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dbConfig = void 0;
 var dbConfig = {
-    HOST: 'localhost',
-    PORT: '27107',
-    DBNAME: 'MojaBaza'
+    ATLASURL: 'mongodb+srv://armin:armin@ecommercedatabase.so37w.azure.mongodb.net/EcommerceDatabase?retryWrites=true&w=majority'
 };
 exports.dbConfig = dbConfig;

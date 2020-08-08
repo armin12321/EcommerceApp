@@ -24,4 +24,12 @@ export class ServerService {
   postLoginData(data): Observable<any> {    
     return this.http.post(`${this.serverURL}/api/user/login`, data);
   }
+
+  getProfileData(): Observable<any> {
+    return this.http.get(`${this.serverURL}/api/user/profile`);
+  }
+
+  getCartData(): Observable<any> {
+    return this.http.get(`${this.serverURL}/api/user/cart`);
+  }
 }

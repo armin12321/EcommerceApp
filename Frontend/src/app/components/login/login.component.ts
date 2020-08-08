@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ServerService } from '../../services/server.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { Router } from '@angular/router';
+import { NavbarService } from '../../services/navbar.service';
+import { TokenService } from '../../services/token.service';
+
 
 @Component({
   selector: 'app-login',
@@ -9,24 +14,39 @@ import { ServerService } from '../../services/server.service';
 
 export class LoginComponent implements OnInit {
   title: string = 'login page.';
+  username: string;
+  password: string;
 
   constructor(
-    private serverService: ServerService
+    private serverService: ServerService,
+    private router: Router,
+    private flashMessage: FlashMessagesService,
+    private navbarService: NavbarService,
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
-    this.postData();
+    
   }
 
-  postData(): void {
-    const this_data = { //this is gettable from form.
-      first: 'first',
-      second: 'second'
+  onSubmit(): void {
+    const credentials = {
+      username: this.username,
+      password: this.password
     };
 
-    this.serverService.postLoginData(this_data).subscribe((data) => {
-      this.title = data.msg;
-      console.log(data);
+    this.serverService.postLoginData(credentials).subscribe((data) => {
+      if (data.success == true) {        
+        //uredi navbar service.
+        this.tokenService.storeUserData(data.token, data.user);  
+        this.flashMessage.show('You are now logged in', {cssClass: 'alert-success', timeout: 5000});
+        this.router.navigate(['/public/home']); //ako sve bude u redu.
+      } else {
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });      
+        this.router.navigate(['/user/login']);
+      }
     });
+
+    
   }
 }
