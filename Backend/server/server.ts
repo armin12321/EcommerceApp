@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import fileUpload from 'express-fileupload';
-import bodyParser from 'body-parser';
 //configs
 import { dbConfig } from '../configs/db.config';
 import { serverConfig } from '../configs/server.config';

@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import path from 'path';
 import User from '../models/user';
 
@@ -16,6 +15,7 @@ const register = (req: any, res: any) => {
     const ext = path.extname(sampleFile.name);
     const avatarName = req.body.username + ext;
     let uploadPath = path.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+    console.log(uploadPath);
     sampleFile.mv(uploadPath, function(err:any){
         if (err){
             return res.json({
