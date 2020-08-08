@@ -83,7 +83,7 @@ export class RegisterComponent implements OnInit {
       const file = <File>event.target.files[0];
       this.img = file;
     }
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.readAsDataURL(this.img);
     reader.onload = (_event) => {
       this.imgUrl = reader.result;
