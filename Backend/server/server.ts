@@ -2,7 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-
+import fileUpload from 'express-fileupload';
+import bodyParser from 'body-parser';
 //configs
 import { dbConfig } from '../configs/db.config';
 import { serverConfig } from '../configs/server.config';
@@ -19,7 +20,13 @@ const app: any = express();
 app.use(cors());
 
 //Parsing requests of content-type: application/json:
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+
+// File Upload
+
+app.use(fileUpload());
 
 //Parsing requests of content-type: urlencoded:
 app.use(express.urlencoded({ extended: true }));

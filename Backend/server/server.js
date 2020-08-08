@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
 var mongoose_1 = __importDefault(require("mongoose"));
+var express_fileupload_1 = __importDefault(require("express-fileupload"));
+var body_parser_1 = __importDefault(require("body-parser"));
 //configs
 var db_config_1 = require("../configs/db.config");
 var server_config_1 = require("../configs/server.config");
@@ -18,7 +20,11 @@ var app = express_1.default();
 //Frontend - Backend compatibility:
 app.use(cors_1.default());
 //Parsing requests of content-type: application/json:
+app.use(body_parser_1.default.json());
+app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
+// File Upload
+app.use(express_fileupload_1.default());
 //Parsing requests of content-type: urlencoded:
 app.use(express_1.default.urlencoded({ extended: true }));
 /////////////////////////////////////////////////
