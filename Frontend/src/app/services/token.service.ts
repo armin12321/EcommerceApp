@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 const TOKEN_ID: string = 'id_token';
 const USER_ID: string = 'user';
@@ -33,4 +34,10 @@ export class TokenService {
     this.loadToken();
     return this.token;
   }
+
+  loggedIn(): boolean{
+    const helper = new JwtHelperService();
+    return helper.isTokenExpired(this.getToken());
+  }
+
 }

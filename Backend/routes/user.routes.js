@@ -10,9 +10,10 @@ var express_1 = __importDefault(require("express"));
 var user_controller_1 = require("../controllers/user.controller");
 //middleware
 var auth_middleware_1 = require("../middlewares/auth.middleware");
+var validate_middleware_1 = require("../middlewares/validate.middleware");
 var userRoutes = express_1.default.Router();
 exports.userRoutes = userRoutes;
 userRoutes.post('/login', user_controller_1.userController.login);
-userRoutes.post('/register', user_controller_1.userController.register);
+userRoutes.post('/register', [validate_middleware_1.validateMiddleware.verifyCredentials], user_controller_1.userController.register);
 userRoutes.get('/profile', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.profile);
 userRoutes.get('/cart', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.cart);

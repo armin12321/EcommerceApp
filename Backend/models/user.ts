@@ -5,14 +5,21 @@ const SALT_WORK_FACTOR = 10;
 
 export interface IUser extends Document {
     name: string;
+    surname: string;
     username: string;
     email: string;
     password: string;
+    address: string;
+    type: string;
     avatarName: string;
 };
 
 export const UserSchema = new Schema({
     name: {
+        type: String,
+        required: true
+    },
+    surname: {
         type: String,
         required: true
     },
@@ -25,6 +32,14 @@ export const UserSchema = new Schema({
         required: true
     },
     password: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    type: {
         type: String,
         required: true
     },

@@ -14,11 +14,14 @@ import { HomeComponent } from '../home/home.component';
 })
 export class RegisterComponent implements OnInit {
   title: string = 'register page.';
-  name: String;
-  username: String;
-  email: String;
-  password: String;
-  repeatedPassword: String;
+  name: string;
+  surname: string;
+  username: string;
+  email: string;
+  password: string;
+  repeatedPassword: string;
+  address: string;
+  type: string;
   img: File;
   imgUrl: any;
 
@@ -41,9 +44,12 @@ export class RegisterComponent implements OnInit {
 
     const user = {
       name: this.name,
+      surname: this.surname,
       email: this.email,
       username: this.username,
       password: this.password,
+      address: this.address,
+      type: this.type,
       repeatedPassword: this.repeatedPassword
     }
 

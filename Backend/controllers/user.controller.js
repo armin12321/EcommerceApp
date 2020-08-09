@@ -53,19 +53,24 @@ var login = function (req, res) {
     });
 };
 var register = function (req, res) {
-    var sampleFile = req.files.file;
-    var ext = path_1.default.extname(sampleFile.name);
-    var avatarName = req.body.username + ext;
-    var uploadPath = path_1.default.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
-    console.log(uploadPath);
-    sampleFile.mv(uploadPath, function (err) {
-        if (err) {
-            return res.json({
-                success: false,
-                msg: 'Something went wrong while uploading profile image'
-            });
-        }
-    });
+    var avatarName;
+    if (!req.files) {
+        avatarName = 'default.jpg';
+    }
+    else {
+        var sampleFile = req.files.file;
+        var ext = path_1.default.extname(sampleFile.name);
+        avatarName = req.body.username + ext;
+        var uploadPath = path_1.default.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+        sampleFile.mv(uploadPath, function (err) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    msg: 'Something went wrong while uploading profile image'
+                });
+            }
+        });
+    }
     var user = new user_1.default({
         name: req.body.name,
         username: req.body.username,
