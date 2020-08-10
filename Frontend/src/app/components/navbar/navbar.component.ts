@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TokenService } from '../../services/token.service';
 import { NavbarService } from '../../services/navbar.service';
 
 @Component({
@@ -12,21 +10,10 @@ export class NavbarComponent implements OnInit {
   title: string = 'navbar';
   currentUrl: string;
 
-  constructor(
-    private tokenService: TokenService,
-    private navbarService: NavbarService,
-    private router: Router
+  constructor(    
+    public navbarService: NavbarService,    
   ) { }
 
   ngOnInit(): void {
   }
-
-  getTokenService(): TokenService{
-    return this.tokenService;
-  }
-
-  displayNavbar(): boolean {
-    return this.navbarService.displayNavbar();
-  }
-
 }

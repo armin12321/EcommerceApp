@@ -35,7 +35,7 @@ export class TokenService {
     return this.token;
   }
 
-  loggedIn(): boolean{
+  expiredToken(): boolean{
     const helper = new JwtHelperService();
     return helper.isTokenExpired(this.getToken());
   }
