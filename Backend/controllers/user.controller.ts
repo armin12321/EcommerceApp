@@ -23,7 +23,7 @@ const login = (req: any, res: any) => {
                 password,
                 user.password
             );
-
+             
             if (!passwordIsValid) {
                 res.json({
                     token: null,
@@ -82,7 +82,7 @@ const register = (req: any, res: any) => {
         type: req.body.type,
         avatarName: avatarName
     });
-    user.save();
+    user.save();    
     return res.json({
         success: true,
         msg: 'User registered successfully'

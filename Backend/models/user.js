@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addUser = exports.UserSchema = void 0;
+exports.addUser = void 0;
 var mongoose_1 = require("mongoose");
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var SALT_WORK_FACTOR = 10;
 ;
-exports.UserSchema = new mongoose_1.Schema({
+var UserSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true
@@ -42,17 +42,18 @@ exports.UserSchema = new mongoose_1.Schema({
         required: true
     }
 });
-exports.addUser = function (newUser, callback) {
+var addUser = function (newUser, callback) {
     bcryptjs_1.default.genSalt(10, function (err, salt) {
         bcryptjs_1.default.hash(newUser.password, salt, function (err, hash) {
             if (err)
                 throw err;
             newUser.password = hash;
-            newUser.save(callback);
+            newUser.save().then(callback);
         });
     });
 };
-exports.UserSchema.pre('save', function (next) {
+exports.addUser = addUser;
+UserSchema.pre('save', function (next) {
     var user = this;
     if (!user.isModified('password'))
         return next();
@@ -67,5 +68,5 @@ exports.UserSchema.pre('save', function (next) {
         });
     });
 });
-var User = mongoose_1.model('User', exports.UserSchema);
+var User = mongoose_1.model('User', UserSchema);
 exports.default = User;

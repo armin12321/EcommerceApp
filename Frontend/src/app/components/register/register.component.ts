@@ -3,9 +3,6 @@ import { ServerService } from '../../services/server.service';
 import { ValidateService } from '../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
-import { Headers } from '@angular/http';
-import { RouterLink } from '@angular/router';
-import { HomeComponent } from '../home/home.component';
 
 @Component({
   selector: 'app-register',

@@ -1,4 +1,4 @@
-import { Document, Model, model, Types, Schema, Query } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const SALT_WORK_FACTOR = 10;
@@ -14,7 +14,7 @@ export interface IUser extends Document {
     avatarName: string;
 };
 
-export const UserSchema = new Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -49,12 +49,12 @@ export const UserSchema = new Schema({
     }
 });
 
-export const addUser = (newUser: any, callback: any) => {
+const addUser = (newUser: any, callback: any) => {
     bcrypt.genSalt(10, (err: any, salt: any) => {
         bcrypt.hash(newUser.password, salt, (err: any, hash: any) => {
             if (err) throw err;
             newUser.password = hash;
-            newUser.save(callback);
+            newUser.save().then(callback);
         })
     });
 }
@@ -77,4 +77,6 @@ UserSchema.pre('save', function (next) {
 
 
 const User = model<IUser>('User', UserSchema);
+
 export default User;
+export {addUser};

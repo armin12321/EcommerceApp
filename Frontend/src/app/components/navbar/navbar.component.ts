@@ -3,6 +3,7 @@ import { NavbarService } from '../../services/navbar.service';
 import { TemplateRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(    
     public navbarService: NavbarService,    
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private flashMessages: FlashMessagesService
   ) { }
 
   ngOnInit(): void {
@@ -29,5 +31,6 @@ export class NavbarComponent implements OnInit {
   logout(): any {
     this.modalRef.hide();
     this.navbarService.logOut();
+    this.flashMessages.show('Logout successful', {cssClass: 'alert-success', timeout: 5000});
   }
 }
