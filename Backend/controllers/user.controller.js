@@ -73,9 +73,12 @@ var register = function (req, res) {
     }
     var user = new user_1.default({
         name: req.body.name,
+        surname: req.body.surname,
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
+        address: req.body.address,
+        type: req.body.type,
         avatarName: avatarName
     });
     user.save();

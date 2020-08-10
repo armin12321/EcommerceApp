@@ -13,6 +13,10 @@ exports.UserSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    surname: {
+        type: String,
+        required: true
+    },
     username: {
         type: String,
         required: true
@@ -22,6 +26,14 @@ exports.UserSchema = new mongoose_1.Schema({
         required: true
     },
     password: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    type: {
         type: String,
         required: true
     },

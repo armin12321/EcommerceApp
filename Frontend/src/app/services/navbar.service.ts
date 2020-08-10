@@ -24,4 +24,10 @@ export class NavbarService {
       return true;
     }
   }
+
+  logOut(): void {
+    this.tokenService.deleteToken();    
+    this.router.navigate(['public/home']);    
+  }  
+
 }

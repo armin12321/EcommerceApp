@@ -40,4 +40,9 @@ export class TokenService {
     return helper.isTokenExpired(this.getToken());
   }
 
+  deleteToken(): void {
+    localStorage.removeItem(USER_ID);        
+    localStorage.removeItem(TOKEN_ID);
+    localStorage.clear();
+  }
 }

@@ -15,7 +15,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { authInterceptorProviders } from './interceptors/auth.interceptor';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CartComponent } from './components/cart/cart.component';
-
+import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -25,9 +25,10 @@ import { CartComponent } from './components/cart/cart.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    CartComponent
+    CartComponent,
   ],
   imports: [
+    ModalModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -35,7 +36,7 @@ import { CartComponent } from './components/cart/cart.component';
     HttpModule,
     FlashMessagesModule.forRoot(),
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, BsModalRef],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
