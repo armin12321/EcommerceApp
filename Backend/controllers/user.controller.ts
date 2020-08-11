@@ -75,6 +75,7 @@ const register = async (req: any, res: any) => {
         const ext = path.extname(sampleFile.name);
         avatarName = req.body.username + ext;
         let uploadPath = path.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+        user.avatarName = avatarName;
         uploaded = await sampleFile.mv(uploadPath, (err:any) => {
             if (err) {
                 return res.json({

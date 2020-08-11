@@ -108,6 +108,7 @@ var register = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 ext = path_1.default.extname(sampleFile.name);
                 avatarName = req.body.username + ext;
                 uploadPath = path_1.default.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+                user.avatarName = avatarName;
                 return [4 /*yield*/, sampleFile.mv(uploadPath, function (err) {
                         if (err) {
                             return res.json({
