@@ -15,7 +15,6 @@ let verifyCredentials = async (req: any, res: any, next: any) => {
         if (user)return false;
         else return true; 
     });
-
     if (username === false){
         return res.json({
             success: false,

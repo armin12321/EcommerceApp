@@ -3,6 +3,7 @@ import User from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { serverConfig } from '../configs/server.config';
+import { PassThrough } from 'stream';
 
 //functions:
 
@@ -54,24 +55,11 @@ const login = (req: any, res: any) => {
     });    
 }
 
-const register = (req: any, res: any) => {
+const register = async (req: any, res: any) => {
     let avatarName;
-    if (!req.files){
-        avatarName = 'default.jpg';
-    }else {
-        let sampleFile = req.files.file;
-        const ext = path.extname(sampleFile.name);
-        avatarName = req.body.username + ext;
-        let uploadPath = path.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
-        sampleFile.mv(uploadPath, function(err:any){
-            if (err){
-                return res.json({
-                    success: false,
-                    msg: 'Something went wrong while uploading profile image'
-                });
-            }        
-        });
-    }    
+    let success: boolean;
+    let msg: string;
+    let uploaded: boolean;
     const user = new User({
         name: req.body.name,
         surname: req.body.surname,
@@ -80,13 +68,35 @@ const register = (req: any, res: any) => {
         password: req.body.password,
         address: req.body.address,
         type: req.body.type,
-        avatarName: avatarName
+        avatarName: 'default.jpg'
     });
-    user.save();    
-    return res.json({
-        success: true,
-        msg: 'User registered successfully'
-    });
+    if (req.files){
+        let sampleFile = req.files.file;
+        const ext = path.extname(sampleFile.name);
+        avatarName = req.body.username + ext;
+        let uploadPath = path.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+        uploaded = await sampleFile.mv(uploadPath, (err:any) => {
+            if (err) {
+                return res.json({
+                    success: false,
+                    msg: 'Something went wrong. Try again later'
+                });
+            }else {
+                user.save();
+                return res.json({
+                    success: true,
+                    msg: 'User successfully registered. You can now log in'
+                });
+            }
+        });
+    }else {
+        user.save();
+        return res.json({
+            success: true,
+            msg: 'User successfully registered. You can now log in'
+        })
+
+    }
 }
 
 const cart = (req: any, res: any) => {
