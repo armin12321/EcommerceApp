@@ -5,7 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CartComponent } from './components/cart/cart.component';
-
+import { ProductsComponent } from './components/products/products.component';
 
 const routes: Routes = [
   {
@@ -24,17 +24,23 @@ const routes: Routes = [
     path: '',
     redirectTo: 'public/home',
     pathMatch: 'full'
-  }, {
+  }, 
+  {
     path: 'user/profile',
     component: ProfileComponent
-  }, {
+  }, 
+  {
     path: 'user/cart',
     component: CartComponent
+  }, 
+  {
+    path: 'user/products',
+    component: ProductsComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })], //da mogu ponovo ucitane komponente imat lifecycle hookove.
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

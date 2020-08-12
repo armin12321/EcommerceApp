@@ -16,6 +16,7 @@ import { authInterceptorProviders } from './interceptors/auth.interceptor';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
+import { ProductsComponent } from './components/products/products.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
     RegisterComponent,
     ProfileComponent,
     CartComponent,
+    ProductsComponent    
   ],
   imports: [
     ModalModule.forRoot(),

@@ -30,6 +30,15 @@ export class TokenService {
     this.user = JSON.parse(user);
   }
 
+  getUser() {
+    if (this.expiredToken()) {
+      return {username: ''};
+    } else {
+      this.loadUser();
+      return this.user;
+    }
+  }
+
   getToken(): string {
     this.loadToken();
     return this.token;

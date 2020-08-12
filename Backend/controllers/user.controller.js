@@ -45,6 +45,7 @@ var user_1 = __importDefault(require("../models/user"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var server_config_1 = require("../configs/server.config");
+var db_config_1 = require("../configs/db.config");
 //functions:
 var login = function (req, res) {
     var username = req.body.username;
@@ -68,9 +69,9 @@ var login = function (req, res) {
             else {
                 var token = jsonwebtoken_1.default.sign({
                     username: user.username,
-                    password: user.password,
-                    email: user.email
-                }, server_config_1.serverConfig.SECRET, { expiresIn: 86400 });
+                    _id: user._id,
+                    type: user.type
+                }, server_config_1.serverConfig.SECRET, { expiresIn: 86400 }); //one day.
                 res.json({
                     token: token,
                     success: true,
@@ -89,7 +90,7 @@ var login = function (req, res) {
     });
 };
 var register = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var avatarName, success, msg, uploaded, user, sampleFile, ext, uploadPath;
+    var avatarName, uploaded, user, sampleFile, ext, uploadPath;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -117,10 +118,11 @@ var register = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                             });
                         }
                         else {
-                            user.save();
-                            return res.json({
-                                success: true,
-                                msg: 'User successfully registered. You can now log in'
+                            user.save().then(function (data) {
+                                return res.json({
+                                    success: true,
+                                    msg: 'User successfully registered. You can now log in'
+                                });
                             });
                         }
                     })];
@@ -128,43 +130,77 @@ var register = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 uploaded = _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                user.save();
-                return [2 /*return*/, res.json({
+                user.save().then(function (data) {
+                    return res.json({
                         success: true,
                         msg: 'User successfully registered. You can now log in'
-                    })];
+                    });
+                });
+                _a.label = 3;
             case 3: return [2 /*return*/];
         }
     });
 }); };
 var cart = function (req, res) {
-    var user = {
-        username: req.username,
-        password: req.password,
-        email: req.email
-    };
-    console.log(user);
-    res.json({
-        msg: 'Here i am at my cart!!!',
-        user: user
-    });
+    //if i'm not buyer, what do i need cart for then?
+    if (req.user_type == db_config_1.dbConfig.user_type.SELLER) {
+        res.json({
+            success: false,
+            msg: 'not a buyer',
+            user: null
+        });
+    }
+    else {
+        var user = {
+            username: req.username,
+            _id: req.user_id,
+            type: req.user_type
+        };
+        console.log(user);
+        res.json({
+            success: true,
+            msg: 'Here I am at my cart.',
+            user: user
+        });
+    }
 };
 var profile = function (req, res) {
     var user = {
         username: req.username,
-        password: req.password,
-        email: req.email
+        _id: req.user_id,
+        type: req.user_type
     };
     console.log(user);
     res.json({
-        msg: 'Here i am at my profile page!!!',
+        success: true,
+        msg: 'Here i am at my profile page.',
         user: user
     });
+};
+var products = function (req, res) {
+    //if i'm not seller, i cannot have products page :
+    if (req.user_type == db_config_1.dbConfig.user_type.BUYER) {
+        res.json({
+            success: false,
+            msg: 'not a seller',
+            products: null
+        });
+    }
+    else {
+        //get products of this seller
+        var products_1 = {};
+        res.json({
+            success: true,
+            msg: 'Here i am at my products.',
+            products: products_1
+        });
+    }
 };
 var userController = {
     register: register,
     login: login,
     cart: cart,
-    profile: profile
+    profile: profile,
+    products: products
 };
 exports.userController = userController;

@@ -18,4 +18,6 @@ userRoutes.get('/profile', [authMiddleware.verifyToken], userController.profile)
 
 userRoutes.get('/cart', [authMiddleware.verifyToken], userController.cart);
 
+userRoutes.get('/products', [authMiddleware.verifyToken], userController.products);
+
 export {userRoutes};

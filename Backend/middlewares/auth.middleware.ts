@@ -6,19 +6,21 @@ let verifyToken = (req: any, res: any, next: any) => {
 
     if (!token) {
       return res.json({
-          msg: 'no token provided in headers'
+          msg: 'not authorized',
+          success: false
       });
     }
   
     jwt.verify(token, serverConfig.SECRET, (err: any, decoded: any) => {
       if (err) {
         return res.json({
-            msg: 'you are not authorized to see content of this page!'
+            msg: 'not authorized',
+            success: false
         });
       }
       req.username = decoded.username;
-      req.password = decoded.password;
-      req.email = decoded.email; //provide information that you got from decoded token.      
+      req.user_id = decoded._id;
+      req.user_type = decoded.type;
       next();
     });
 };

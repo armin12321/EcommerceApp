@@ -17,3 +17,4 @@ userRoutes.post('/login', user_controller_1.userController.login);
 userRoutes.post('/register', [validate_middleware_1.validateMiddleware.verifyCredentials], user_controller_1.userController.register);
 userRoutes.get('/profile', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.profile);
 userRoutes.get('/cart', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.cart);
+userRoutes.get('/products', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.products);

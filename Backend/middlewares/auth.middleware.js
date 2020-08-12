@@ -10,18 +10,20 @@ var verifyToken = function (req, res, next) {
     var token = req.headers["x-access-token"];
     if (!token) {
         return res.json({
-            msg: 'no token provided in headers'
+            msg: 'not authorized',
+            success: false
         });
     }
     jsonwebtoken_1.default.verify(token, server_config_1.serverConfig.SECRET, function (err, decoded) {
         if (err) {
             return res.json({
-                msg: 'you are not authorized to see content of this page!'
+                msg: 'not authorized',
+                success: false
             });
         }
         req.username = decoded.username;
-        req.password = decoded.password;
-        req.email = decoded.email; //provide information that you got from decoded token.      
+        req.user_id = decoded._id;
+        req.user_type = decoded.type;
         next();
     });
 };

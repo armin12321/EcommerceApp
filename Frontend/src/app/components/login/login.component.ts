@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ServerService } from '../../services/server.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
-import { NavbarService } from '../../services/navbar.service';
 import { TokenService } from '../../services/token.service';
 
 
@@ -21,12 +20,13 @@ export class LoginComponent implements OnInit {
     private serverService: ServerService,
     private router: Router,
     private flashMessage: FlashMessagesService,
-    private navbarService: NavbarService,
     private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
-    
+    if (this.tokenService.expiredToken() === false) {
+      this.router.navigate(['/public/home']);
+    }
   }
 
   onSubmit(): void {
@@ -36,8 +36,7 @@ export class LoginComponent implements OnInit {
     };
 
     this.serverService.postLoginData(credentials).subscribe((data) => {
-      if (data.success == true) {        
-        //uredi navbar service.
+      if (data.success == true) {                
         this.tokenService.storeUserData(data.token, data.user);  
         this.flashMessage.show('You are now logged in', {cssClass: 'alert-success', timeout: 5000});
         this.router.navigate(['/public/home']); //ako sve bude u redu.

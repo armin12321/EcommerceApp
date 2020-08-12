@@ -1,9 +1,9 @@
 import path from 'path';
-import User from '../models/user';
+import User, { IUser } from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { serverConfig } from '../configs/server.config';
-import { PassThrough } from 'stream';
+import { dbConfig } from '../configs/db.config';
 
 //functions:
 
@@ -34,9 +34,9 @@ const login = (req: any, res: any) => {
             } else {                
                 let token: any = jwt.sign({
                     username: user.username,
-                    password: user.password,
-                    email: user.email
-                }, serverConfig.SECRET, {expiresIn: 86400});  
+                    _id: user._id,
+                    type: user.type            
+                }, serverConfig.SECRET, {expiresIn: 86400});   //one day.
 
                 res.json({
                     token: token,
@@ -56,9 +56,7 @@ const login = (req: any, res: any) => {
 }
 
 const register = async (req: any, res: any) => {
-    let avatarName;
-    let success: boolean;
-    let msg: string;
+    let avatarName;        
     let uploaded: boolean;
     const user = new User({
         name: req.body.name,
@@ -83,58 +81,91 @@ const register = async (req: any, res: any) => {
                     msg: 'Something went wrong. Try again later'
                 });
             }else {
-                user.save();
-                return res.json({
-                    success: true,
-                    msg: 'User successfully registered. You can now log in'
-                });
+                user.save().then((data) => {
+                    return res.json({
+                        success: true,
+                        msg: 'User successfully registered. You can now log in'
+                    }); 
+                });        
             }
         });
     }else {
-        user.save();
-        return res.json({
-            success: true,
-            msg: 'User successfully registered. You can now log in'
-        })
-
+        user.save().then((data) => {
+            return res.json({
+                success: true,
+                msg: 'User successfully registered. You can now log in'
+            }) 
+        });
     }
 }
 
 const cart = (req: any, res: any) => {
-    const user = {
-        username: req.username,
-        password: req.password,
-        email: req.email
+    //if i'm not buyer, what do i need cart for then?
+    if (req.user_type == dbConfig.user_type.SELLER) {
+        res.json({
+            success: false,
+            msg: 'not a buyer',
+            user: null
+        });
+    } else {
+        const user = {
+            username: req.username,
+            _id: req.user_id,
+            type: req.user_type
+        };
+    
+        console.log(user);
+    
+        res.json({
+            success: true,
+            msg: 'Here I am at my cart.',
+            user: user
+        });
     }
-
-    console.log(user);
-
-    res.json({
-        msg: 'Here i am at my cart!!!',
-        user: user
-    });
 }
 
 const profile = (req: any, res: any) => {
     const user = {
         username: req.username,
-        password: req.password,
-        email: req.email
-    }
+        _id: req.user_id,
+        type: req.user_type
+    };
 
     console.log(user);
 
     res.json({
-        msg: 'Here i am at my profile page!!!',
+        success: true,
+        msg: 'Here i am at my profile page.',
         user: user
     });
+}
+
+const products = (req: any, res: any) => {
+    //if i'm not seller, i cannot have products page :
+    if (req.user_type == dbConfig.user_type.BUYER) {
+        res.json({
+            success: false,
+            msg: 'not a seller',
+            products: null
+        });
+    } else {
+        //get products of this seller
+        const products: any = {};
+
+        res.json({
+            success: true,
+            msg: 'Here i am at my products.',
+            products: products
+        });
+    }
 }
 
 const userController: any = {
     register,
     login,
     cart,
-    profile        
+    profile,
+    products        
 };
 
 export {userController};

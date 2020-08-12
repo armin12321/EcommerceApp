@@ -32,4 +32,8 @@ export class ServerService {
   getCartData(): Observable<any> {
     return this.http.get(`${this.serverURL}/api/user/cart`);
   }
+
+  getMyProducts(): Observable<any> {
+    return this.http.get(`${this.serverURL}/api/user/products`);
+  }
 }

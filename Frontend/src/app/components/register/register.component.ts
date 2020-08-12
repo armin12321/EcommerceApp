@@ -3,6 +3,7 @@ import { ServerService } from '../../services/server.service';
 import { ValidateService } from '../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-register',
@@ -26,14 +27,14 @@ export class RegisterComponent implements OnInit {
     private serverService: ServerService,
     private validateService: ValidateService,
     private flashMessage: FlashMessagesService,
-    private router: Router
+    private router: Router,
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
-  }
-
-  postData(): void {
-    
+    if (this.tokenService.expiredToken() === false) {
+      this.router.navigate(['/public/home']);
+    }
   }
   
   onSubmit(){

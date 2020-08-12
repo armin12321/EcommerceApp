@@ -9,15 +9,21 @@
         <li class="nav-item">
             <a class="nav-link" [routerLink]="['public/home']">Home</a>
         </li>
-        <li *ngIf="navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-            <a class="nav-link" [routerLink]="['user/profile']">Profile</a>
+        <li class="nav-item" *ngIf="navbarService.loggedIn() && !navbarService.isBuyer()">
+          <a class="nav-link" [routerLink]="['user/products']">Products</a>
+      </li>
+        <li *ngIf="navbarService.loggedIn() && navbarService.isBuyer()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+          <a class="nav-link" [routerLink]="['user/cart']">Cart</a>
         </li>
         <li *ngIf="navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-            <a class="nav-link" [routerLink]="['user/cart']">Cart</a>
+            <a class="nav-link" [routerLink]="['user/profile']">Profile</a>
         </li>
       </ul>
       <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item" id="mybutton" (window:resize)='showGreeting()'>
+                <a class="nav-link">Hello, {{ username }} !</a>
+            </li>
             <li *ngIf="navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" (click)='openModal(template)'>
                 <a class="nav-link" [routerLink]=''> Logout </a>
             </li>
