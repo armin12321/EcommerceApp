@@ -17,6 +17,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
   currentUrl: string;
   modalRef: BsModalRef;
   username: string = '';
+  numOfMessages: number;
 
   constructor(    
     public navbarService: NavbarService,    

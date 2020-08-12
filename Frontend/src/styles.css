@@ -1,1 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    font-size: 17px;
+}
+
+input[type] {
+    font-size: 24px;
+};
