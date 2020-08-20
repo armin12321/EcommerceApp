@@ -1,0 +1,72 @@
+<form action="">
+    <div class="row addProduct">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Product name</label>
+                <input type="text" [(ngModel)]="name" name="name" class="form-control form-control-sm">
+            </div>
+            <div class="form-group">
+                <label>Manufactuer</label>
+                <input type="text" [(ngModel)]="manufactuer" name="manufactuer" class="form-control form-control-sm">
+            </div>
+            <div class="form-group">
+                <label>Available</label>
+                <input type="text" [(ngModel)]="available" name="available" class="form-control form-control-sm">
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="text" [(ngModel)]="price" name="price" class="form-control form-control-sm">
+            </div>
+            <div class="form-group">
+                <label>Condition</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [(ngModel)]="condition" name="condition" id="inlineRadio1" value="new">
+                    <label class="form-check-label" for="inlineRadio1">New</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [(ngModel)]="condition" name="condition" id="inlineRadio2" value="used">
+                    <label class="form-check-label" for="inlineRadio2">Used</label>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-6">
+            <label>Description</label>
+            <div class="form-group">
+                <textarea [(ngModel)]="description" name="description" id="exampleFormControlTextarea1" cols="50" rows="10" class="from-control"></textarea>
+            </div>
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" multiple id="inputGroupFile01" (change)="filesSelected($event, template)">
+                  <label class="custom-file-label" for="inputGroupFile01">Choose Photos</label>
+                </div>
+              </div>
+              <label *ngIf="choosenPhotos" class="selectedImages"><span class="boldSpan">Choosen images:</span> {{choosenPhotos}}</label>
+        </div>
+    </div>
+    <input type="submit" value="Submit" class="btn btn-primary" (click)="onSubmit()">
+</form>
+<ng-template #template>
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Is this ok?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modalRef.hide()'>
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+        <p>Inspect your images.</p>
+        </div>
+        <div class="container" id="imgPreviewContainer">
+            <div *ngIf='imgPreviewUrl'>
+                <span class="helper"></span><img id="previewImg" [src]="imgPreviewUrl" alt="">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" (click)='previousImage()'> < </button>
+            <button class="btn btn-primary" (click)='nextImage()'> > </button>
+            <button class="btn btn-primary" (click)='ok()'>Ok</button>
+            <button class="btn btn-danger" (click)='removeImage()'>Remove</button>
+        </div>
+    </div>   
+</ng-template>

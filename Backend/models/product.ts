@@ -1,16 +1,22 @@
 import { Document, model, Schema } from 'mongoose';
 
 export interface IProduct extends Document {
+    name: String,
     user: Object,
     price: number,
     description: string,
     available: number, //how much more.
+    condition: string,
     date: string,
     purchased: number,
     images: Array<string>
 };
 
 const ProductSchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
     user: {
         type: Object,
         required: true
@@ -25,6 +31,10 @@ const ProductSchema = new Schema({
     },
     available: {
         type: Number,
+        required: true
+    },
+    condition: {
+        type: String,
         required: true
     },
     date : {

@@ -14,6 +14,7 @@ var server_config_1 = require("../configs/server.config");
 //routes
 var user_routes_1 = require("../routes/user.routes");
 var public_routes_1 = require("../routes/public.routes");
+var product_routes_1 = require("../routes/product.routes");
 //hand defined middlewares
 var auth_middleware_1 = require("../middlewares/auth.middleware");
 var app = express_1.default();
@@ -39,6 +40,8 @@ mongoose_1.default.connect(db_config_1.dbConfig.ATLASURL, {
 app.use('/api/user', user_routes_1.userRoutes);
 //Routes for public pages:
 app.use('/api/public', public_routes_1.publicRoutes);
+// Routes for products 
+app.use('/api/product', product_routes_1.productRoutes);
 ///////////////////////////////////////////////////
 //start listening on server's port
 app.listen(server_config_1.serverConfig.PORT, function () { return console.log("Server started on port " + server_config_1.serverConfig.PORT); });

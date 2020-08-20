@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 ;
 var ProductSchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        required: true
+    },
     user: {
         type: Object,
         required: true
@@ -17,6 +21,10 @@ var ProductSchema = new mongoose_1.Schema({
     },
     available: {
         type: Number,
+        required: true
+    },
+    condition: {
+        type: String,
         required: true
     },
     date: {

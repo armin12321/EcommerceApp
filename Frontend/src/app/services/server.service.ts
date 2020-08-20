@@ -21,6 +21,10 @@ export class ServerService {
     return this.http.post(`${this.serverURL}/api/user/register`, data);
   }
 
+  postProductData(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/product/add`, data);
+  }
+
   postLoginData(data): Observable<any> {    
     return this.http.post(`${this.serverURL}/api/user/login`, data);
   }

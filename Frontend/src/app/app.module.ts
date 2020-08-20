@@ -17,6 +17,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
 import { ProductsComponent } from './components/products/products.component';
+import { AddproductComponent } from './components/addproduct/addproduct.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ProductsComponent } from './components/products/products.component';
     RegisterComponent,
     ProfileComponent,
     CartComponent,
-    ProductsComponent    
+    ProductsComponent,
+    AddproductComponent    
   ],
   imports: [
     ModalModule.forRoot(),

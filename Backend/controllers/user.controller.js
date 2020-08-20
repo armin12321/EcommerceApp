@@ -187,7 +187,11 @@ var products = function (req, res) {
         });
     }
     else {
-        //get products of this seller
+        var user = {
+            username: req.username,
+            _id: req.user_id,
+            user_type: req.user_type
+        };
         var products_1 = {};
         res.json({
             success: true,

@@ -1,0 +1,39 @@
+.addProduct {
+    margin-top: 100px;
+}
+
+label {
+    margin-right: 20px;
+}
+
+.container {
+    width: 100%;
+    margin: auto;
+}
+
+#imgPreviewContainer {
+    width: 100%;
+    height: 380px;
+}
+
+#imgPreviewContainer div {
+    width: 100%;
+    height: 100%;
+    border: 3px solid black;
+    border-style: dashed;
+    text-align: center;
+}
+
+#previewImg {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+.selectedImages {
+    font-size: 12px;
+}
+
+.boldSpan {
+    font-weight: bold;
+}

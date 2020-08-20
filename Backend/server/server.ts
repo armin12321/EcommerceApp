@@ -10,6 +10,7 @@ import { serverConfig } from '../configs/server.config';
 //routes
 import { userRoutes } from '../routes/user.routes';
 import { publicRoutes } from '../routes/public.routes';
+import { productRoutes } from '../routes/product.routes';
 
 //hand defined middlewares
 import {authMiddleware} from '../middlewares/auth.middleware';
@@ -47,6 +48,9 @@ app.use('/api/user', userRoutes);
 
 //Routes for public pages:
 app.use('/api/public', publicRoutes);
+
+// Routes for products 
+app.use('/api/product', productRoutes);
 
 ///////////////////////////////////////////////////
 

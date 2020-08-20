@@ -1,5 +1,6 @@
 import path from 'path';
 import User, { IUser } from '../models/user';
+import Product, { IProduct } from '../models/product';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { serverConfig } from '../configs/server.config';
@@ -149,9 +150,12 @@ const products = (req: any, res: any) => {
             products: null
         });
     } else {
-        //get products of this seller
+        const user = {
+            username: req.username,
+            _id: req.user_id,
+            user_type: req.user_type 
+        }
         const products: any = {};
-
         res.json({
             success: true,
             msg: 'Here i am at my products.',
