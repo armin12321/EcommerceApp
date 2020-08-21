@@ -13,13 +13,12 @@ const add = (req: any, res: any) => {
     let avatarName, upath, imageName;       
     let pass = true; 
     let uploaded: boolean;
+    console.log(req.body.name);
+    console.log(req.files.file);
     const images = req.files.file;
-    const user = new User({
-        username: req.body.username,
-        type: req.body.type,
-    });
+    const user = new User(JSON.parse(req.body.user));
     const product = new Product({
-        name: req.body.name,
+        name: req.body.name[1],
         user: user,
         price: req.body.price,
         available: req.body.available,
@@ -48,6 +47,8 @@ const add = (req: any, res: any) => {
                 }
             });
         }    
+    }).catch((err) => {
+        console.log(err);
     });
     return res.json({
         success: true,

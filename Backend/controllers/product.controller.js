@@ -13,13 +13,12 @@ var add = function (req, res) {
     var avatarName, upath, imageName;
     var pass = true;
     var uploaded;
+    console.log(req.body.name);
+    console.log(req.files.file);
     var images = req.files.file;
-    var user = new user_1.default({
-        username: req.body.username,
-        type: req.body.type,
-    });
+    var user = new user_1.default(JSON.parse(req.body.user));
     var product = new product_1.default({
-        name: req.body.name,
+        name: req.body.name[1],
         user: user,
         price: req.body.price,
         available: req.body.available,
@@ -46,6 +45,8 @@ var add = function (req, res) {
                 }
             });
         }
+    }).catch(function (err) {
+        console.log(err);
     });
     return res.json({
         success: true,

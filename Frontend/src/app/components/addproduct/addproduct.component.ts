@@ -7,6 +7,7 @@ import { ServerService } from '../../services/server.service';
 import { Router } from '@angular/router';
 
 import { types } from '../../configs/types.config'
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-addproduct',
@@ -35,18 +36,13 @@ export class AddproductComponent implements OnInit {
     private modalService: BsModalService,
     private flashMessage: FlashMessagesService,
     private serverService: ServerService,
-    private router: Router
+    private router: Router,
+    private tokenService: TokenService
     ) { }
 
   ngOnInit(): void {
-    this.serverService.getProfileData().subscribe(data => {
-      if (data.success) {
-        this.user = data.user;
-        if (this.user['type'] == types.BUYER){
-          this.router.navigate(['/public/home']);
-        }
-      }
-    });
+    this.user = this.tokenService.getUser();
+    console.log(this.user);
   }
 
   onSubmit(){
@@ -68,6 +64,8 @@ export class AddproductComponent implements OnInit {
     for (let key in this.user){
       fdata.append(key, this.user[key]);
     }
+
+    fdata.append('user', JSON.stringify(this.user));
 
     for (let key in product){
       fdata.append(key, product[key]);
@@ -101,7 +99,7 @@ export class AddproductComponent implements OnInit {
 
   nextImage(): void{
     this.currentPhoto += 1;
-    if (this.currentPhoto == this.numberOfPhotos) this.currentPhoto = 0;
+    this.currentPhoto %= this.numberOfPhotos;
     this.imgPreview(this.photos[this.currentPhoto]);
   }
 
@@ -115,6 +113,11 @@ export class AddproductComponent implements OnInit {
     this.photos.splice(this.currentPhoto, 1);
     this.currentPhoto -= 1;
     this.numberOfPhotos -= 1;
+    if (this.numberOfPhotos == 0) {
+      this.currentPhoto = 0;
+      this.modalRef.hide();
+      return;
+    }
     if (this.currentPhoto == -1) this.currentPhoto = this.numberOfPhotos - 1;
     this.imgPreview(this.photos[this.currentPhoto]);
   }
