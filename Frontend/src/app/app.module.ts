@@ -29,7 +29,7 @@ import { AddproductComponent } from './components/addproduct/addproduct.componen
     ProfileComponent,
     CartComponent,
     ProductsComponent,
-    AddproductComponent    
+    AddproductComponent,
   ],
   imports: [
     ModalModule.forRoot(),

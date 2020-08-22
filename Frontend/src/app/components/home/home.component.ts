@@ -8,6 +8,7 @@ import { ServerService } from '../../services/server.service';
 })
 export class HomeComponent implements OnInit {
   title: string = 'homepage';
+  heroes: Array<Number> = [1, 2, 3, 4, 5, 3, 4, 4];
 
   constructor(
     private serverService: ServerService
@@ -19,8 +20,7 @@ export class HomeComponent implements OnInit {
 
   getData(): void {
     this.serverService.getHomeData().subscribe((data) => {
-      this.title = data.msg;
-      console.log(data);
+      //display these products on main page.
     });
   }
 
