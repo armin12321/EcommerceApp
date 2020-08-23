@@ -29,6 +29,10 @@ export class ServerService {
     return this.http.post(`${this.serverURL}/api/user/login`, data);
   }
 
+  getProductPicture(data): Observable<any> {      
+    return this.http.post(`${this.serverURL}/api/product/productImage`, data, {responseType: "blob"});
+  }
+
   getProfileData(): Observable<any> {
     return this.http.get(`${this.serverURL}/api/user/profile`);
   }

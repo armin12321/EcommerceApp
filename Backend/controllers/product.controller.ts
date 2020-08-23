@@ -24,7 +24,7 @@ const add = (req: any, res: any) => {
         available: req.body.available,
         condition: req.body.condition,
         purchased: 0,
-        date: new Date(),
+        date: new Date().toISOString(),
         images: [],
         description: req.body.description
     });
@@ -35,7 +35,7 @@ const add = (req: any, res: any) => {
 
     product.save().then((product) => {
         for (let i = 0; i < images.length; i++){
-            imageName = product.name + uuidv4() + path.extname(images[i].name);
+            imageName = product.images[i];
             // imageName = product.id + '-' + i.toString() + path.extname(images[i].name); Ima i ova varijanta davanja imena.
             upath = path.join(__dirname, '..', '/uploads/images/products', imageName);
             images[i].mv(upath, (err: any) => {
@@ -54,10 +54,17 @@ const add = (req: any, res: any) => {
         success: true,
         msg: 'Product added successfully'
     });
-}
+};
+
+const sendProductPicture = (req: any, res: any) => {
+    console.log(req.body.url);
+    const pathToPicture: string = path.join(__dirname, '..', 'uploads/images/products', req.body.url);     
+    res.sendFile(pathToPicture);
+};
 
 const productController: any = {
-    add    
+    add,
+    sendProductPicture    
 };
 
 export { productController };

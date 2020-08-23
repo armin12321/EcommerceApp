@@ -39,11 +39,22 @@ const login = (req: any, res: any) => {
                     type: user.type            
                 }, serverConfig.SECRET, {expiresIn: 86400});   //one day.
 
+                let modifiedUser: any = {
+                    address: user.address,
+                    avatarName: user.avatarName,
+                    email: user.email,
+                    name: user.name,
+                    surname: user.surname,
+                    type: user.type,
+                    username: user.username,
+                    _id: user._id,
+                };
+
                 res.json({
                     token: token,
                     success: true,
                     msg: 'Succesfuly logged in',
-                    user: user                    
+                    user: modifiedUser                    
                 });
             }
         } else { //does not exist, return error.

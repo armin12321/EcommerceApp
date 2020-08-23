@@ -72,11 +72,21 @@ var login = function (req, res) {
                     _id: user._id,
                     type: user.type
                 }, server_config_1.serverConfig.SECRET, { expiresIn: 86400 }); //one day.
+                var modifiedUser = {
+                    address: user.address,
+                    avatarName: user.avatarName,
+                    email: user.email,
+                    name: user.name,
+                    surname: user.surname,
+                    type: user.type,
+                    username: user.username,
+                    _id: user._id,
+                };
                 res.json({
                     token: token,
                     success: true,
                     msg: 'Succesfuly logged in',
-                    user: user
+                    user: modifiedUser
                 });
             }
         }

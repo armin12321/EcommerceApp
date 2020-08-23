@@ -12,4 +12,6 @@ const productRoutes: Router = express.Router();
 
 productRoutes.post('/add', [authMiddleware.verifyToken], productController.add);
 
+productRoutes.post('/productImage', [authMiddleware.verifyToken], productController.sendProductPicture);
+
 export {productRoutes};

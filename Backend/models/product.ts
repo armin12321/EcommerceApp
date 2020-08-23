@@ -7,7 +7,7 @@ export interface IProduct extends Document {
     description: string,
     available: number, //how much more.
     condition: string,
-    date: string,
+    date: Date,
     purchased: number,
     images: Array<string>
 };
@@ -38,7 +38,7 @@ const ProductSchema = new Schema({
         required: true
     },
     date : {
-        type: String,
+        type: Date,
         required: true
     },
     purchased: {
