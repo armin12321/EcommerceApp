@@ -3,6 +3,8 @@ import { ServerService } from '../../services/server.service';
 import { AfterContentChecked } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SharedDataService } from '../../services/shared-data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,13 +14,15 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class HomeComponent implements OnInit, AfterContentChecked {
   title: string = 'homepage';
   // heroes: Array<Number> = [1, 2, 3, 4, 5, 3, 4, 4];
-  products: Array<Object>;
+  products: Array<any>;
 
   imageURLs: Array<any> = [];
 
   constructor(
     private serverService: ServerService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private sharedData: SharedDataService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +36,16 @@ export class HomeComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  setSellerID(productIndex) {
+    this.sharedData.setSellerID(this.products[productIndex].product.user._id);
+    this.router.navigate(['/public/sellerInfo']);
+  }
+
+  setProductID(productIndex) {
+    this.sharedData.setProductID(this.products[productIndex].product._id);
+    this.router.navigate(['/public/productInfo']);
+  }
+
   getData(): void {
     this.serverService.getHomeData().subscribe((data) => {
       console.log(data);
@@ -41,6 +55,7 @@ export class HomeComponent implements OnInit, AfterContentChecked {
         let url = data.products[i].product.images[0];
         this.imageURLs.push(''); // not to be undefined
         this.getProductPicture(url).subscribe((picture) => {
+          console.log(picture);
           this.imgPreview(picture, i);
         })
       }
@@ -48,10 +63,10 @@ export class HomeComponent implements OnInit, AfterContentChecked {
   }
 
   getProductPicture(url: any): Observable<any> {
-    const objectt = {
-      url: url
+    const wrapper = {
+      url
     };
-    return this.serverService.getProductPicture(objectt);    
+    return this.serverService.getProductPicture(wrapper);   
   }
 
   resize(): void {

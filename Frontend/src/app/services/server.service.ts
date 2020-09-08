@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ResponseType } from '@angular/http';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +44,17 @@ export class ServerService {
 
   getMyProducts(): Observable<any> {
     return this.http.get(`${this.serverURL}/api/user/products`);
+  }
+
+  getSellerData(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/public/sellerInfo`, data);
+  }
+
+  getProductData(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/public/productInfo`, data);
+  } 
+
+  getAvatarImage(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/public/avatarImage`, data, {responseType: "blob"});
   }
 }

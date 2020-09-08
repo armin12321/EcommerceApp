@@ -18,6 +18,8 @@ import { CartComponent } from './components/cart/cart.component';
 import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
 import { ProductsComponent } from './components/products/products.component';
 import { AddproductComponent } from './components/addproduct/addproduct.component';
+import { SellerInfoComponent } from './components/seller-info/seller-info.component';
+import { ProductInfoComponent } from './components/product-info/product-info.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { AddproductComponent } from './components/addproduct/addproduct.componen
     CartComponent,
     ProductsComponent,
     AddproductComponent,
+    SellerInfoComponent,
+    ProductInfoComponent,
   ],
   imports: [
     ModalModule.forRoot(),

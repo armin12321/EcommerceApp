@@ -10,4 +10,8 @@ publicRoutes.get('/home', publicController.home);
 
 publicRoutes.get('/about', publicController.about);
 
+publicRoutes.post('/sellerInfo', publicController.sellerInfo);
+
+publicRoutes.post('/avatarImage', publicController.avatarImage);
+
 export {publicRoutes};

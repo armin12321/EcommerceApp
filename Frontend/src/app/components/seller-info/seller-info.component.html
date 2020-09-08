@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-6">
+            <div class="row" style="margin: 5px;">
+                <img [src]="avatarURL" style="height: 250px; width: 250px;" alt="Seller avatar">
+            </div>
+        </div>
+        <div class="col-6" style="margin-top: 5px;">
+            <div class="row">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Username</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.username }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.name }} {{ user.surname }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Address</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.address }}</p>
+                            </div>
+                        </div>
+            </div>
+            </div>
+            <div class="row" style="margin-top: 20px;">
+                <button class="btn btn-primary"> Chat with {{user.username}} </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        Ovdje idu top 5 njegovih proizvoda ili takvo nešto....
+    </div>    
+</div>
+

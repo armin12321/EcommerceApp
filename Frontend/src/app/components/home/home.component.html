@@ -26,8 +26,15 @@
                 <h5 class="card-title">Price: {{ p.product.price }} KM</h5>
             </div>
         </div>    
-        <a href="#" class="card-link">More about product</a>
-        <a href="#" class="card-link">More about seller</a>
+        <div class="row">
+            <div class="col-6">
+                <button (click)="setProductID(i)" style="margin-right: 8px;" class="btn btn-primary btn-sm">More about product</button>
+            </div>
+            <div class="col-6">
+                <button (click)="setSellerID(i)" style="margin-left: 8px;" class="btn btn-primary btn-sm">More about seller</button>
+            </div>
+        </div>
+        
     </div>
     <div class="card-footer text-muted">
         {{ p.ago }}

@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
+    "dev": "npm run tsc & nodemon server/server.js",
     "tsc": "tsc"
   },
   "keywords": [],

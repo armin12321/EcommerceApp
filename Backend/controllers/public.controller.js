@@ -7,6 +7,8 @@ exports.publicController = void 0;
 //functions:
 var product_1 = __importDefault(require("../models/product"));
 var moment_1 = __importDefault(require("moment"));
+var user_1 = __importDefault(require("../models/user"));
+var path_1 = __importDefault(require("path"));
 var home = function (req, res) {
     var test = req.headers['x-access-token'];
     //return all possible products sorted by the date
@@ -59,9 +61,41 @@ var about = function (req, res) {
         msg: 'Served about page for our website'
     });
 };
+var sellerInfo = function (req, res) {
+    console.log(req.body._id);
+    user_1.default
+        .findById(req.body._id)
+        .lean()
+        .then(function (user) {
+        console.log(user);
+        var wrapper = {
+            avatarName: user === null || user === void 0 ? void 0 : user.avatarName,
+            username: user === null || user === void 0 ? void 0 : user.username,
+            name: user === null || user === void 0 ? void 0 : user.name,
+            surname: user === null || user === void 0 ? void 0 : user.surname,
+            address: user === null || user === void 0 ? void 0 : user.address,
+            email: user === null || user === void 0 ? void 0 : user.email
+        };
+        res.json({
+            success: true,
+            msg: 'Served seller info',
+            user: wrapper
+        });
+    });
+};
+var productInfo = function (req, res) {
+    res.json({});
+};
+var avatarImage = function (req, res) {
+    console.log(req.body.avatarName);
+    res.sendFile(path_1.default.join(__dirname, '..', 'uploads', 'images', 'avatars', req.body.avatarName));
+};
 //objects:
 var publicController = {
     home: home,
-    about: about
+    about: about,
+    sellerInfo: sellerInfo,
+    productInfo: productInfo,
+    avatarImage: avatarImage
 };
 exports.publicController = publicController;

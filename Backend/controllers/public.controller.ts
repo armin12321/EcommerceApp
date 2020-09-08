@@ -1,7 +1,10 @@
 //functions:
 import Product, {IProduct} from '../models/product'
 import moment from 'moment';
-
+import User, { IUser } from '../models/user';
+import { json } from 'express';
+import { userController } from './user.controller';
+import path from 'path';
 
 const home = (req: any, res: any) => {
     let test = req.headers['x-access-token'];
@@ -64,10 +67,47 @@ const about = (req: any, res: any) => {
     });   
 }
 
+const sellerInfo = (req: any, res: any) => {
+    console.log(req.body._id);
+
+    User
+    .findById(req.body._id)
+    .lean()
+    .then((user) => {
+        console.log(user);
+        let wrapper: Object = {
+            avatarName: user?.avatarName,
+            username: user?.username,
+            name: user?.name,
+            surname: user?.surname,
+            address: user?.address,
+            email: user?.email
+        }
+       res.json({
+           success: true,
+           msg: 'Served seller info',
+           user: wrapper
+       }); 
+    });
+}
+
+const productInfo = (req: any, res: any) => {
+    res.json({});
+}
+
+const avatarImage = (req: any, res: any) => {
+    console.log(req.body.avatarName);
+    res.sendFile(
+        path.join(__dirname, '..', 'uploads', 'images', 'avatars', req.body.avatarName)
+    );
+}
 //objects:
 const publicController: any = {
     home,
-    about
+    about,
+    sellerInfo,
+    productInfo,
+    avatarImage
 };
 
 export {publicController};
