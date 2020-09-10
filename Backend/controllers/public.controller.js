@@ -9,14 +9,14 @@ var product_1 = __importDefault(require("../models/product"));
 var moment_1 = __importDefault(require("moment"));
 var user_1 = __importDefault(require("../models/user"));
 var path_1 = __importDefault(require("path"));
+var mongodb_1 = require("mongodb");
 var home = function (req, res) {
-    var test = req.headers['x-access-token'];
     //return all possible products sorted by the date
     product_1.default
-        .find()
+        .find({})
         .sort({ date: -1 })
         .lean()
-        .limit(5)
+        .limit(18)
         .then(function (products) {
         //for each product, find difference in time of getting information, and setting product
         var dateToday = new Date().toISOString();
@@ -90,12 +90,57 @@ var avatarImage = function (req, res) {
     console.log(req.body.avatarName);
     res.sendFile(path_1.default.join(__dirname, '..', 'uploads', 'images', 'avatars', req.body.avatarName));
 };
+var topProducts = function (req, res) {
+    var id = new mongodb_1.ObjectID(req.body._id);
+    product_1.default
+        .find({ "user._id": id })
+        .sort({ purchased: -1, date: -1 })
+        .lean()
+        .limit(10)
+        .then(function (products) {
+        var dateToday = new Date().toISOString();
+        var modifiedProducts = products.map(function (product) {
+            var ago = findTime(dateToday, product.date);
+            return {
+                product: product,
+                ago: ago
+            };
+        });
+        res.json({
+            success: true,
+            msg: 'Served main page for our website.',
+            products: modifiedProducts,
+        });
+    });
+    var findTime = function (bigger, smaller) {
+        var bigg = moment_1.default(bigger);
+        var small = moment_1.default(smaller);
+        var sec = bigg.diff(small, 'seconds');
+        var min = bigg.diff(small, 'minutes');
+        var hours = bigg.diff(small, 'hours');
+        var days = bigg.diff(small, 'days');
+        var months = bigg.diff(small, 'months');
+        var years = bigg.diff(small, 'years');
+        if (sec != 0 && sec < 60)
+            return sec + " seconds ago";
+        if (min != 0 && min < 60)
+            return min + " minutes ago";
+        if (hours != 0 && hours < 24)
+            return hours + " hours ago";
+        if (days != 0 && days < 30)
+            return days + " days ago";
+        if (months != 0 && months < 12)
+            return months + " months ago";
+        return years + " years ago";
+    };
+};
 //objects:
 var publicController = {
     home: home,
     about: about,
     sellerInfo: sellerInfo,
     productInfo: productInfo,
-    avatarImage: avatarImage
+    avatarImage: avatarImage,
+    topProducts: topProducts
 };
 exports.publicController = publicController;

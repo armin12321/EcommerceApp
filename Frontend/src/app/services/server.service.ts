@@ -57,4 +57,8 @@ export class ServerService {
   getAvatarImage(data): Observable<any> {
     return this.http.post(`${this.serverURL}/api/public/avatarImage`, data, {responseType: "blob"});
   }
+
+  getTopProducts(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/public/topProducts`, data);
+  }
 }

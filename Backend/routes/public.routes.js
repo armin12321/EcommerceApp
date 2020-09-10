@@ -14,3 +14,4 @@ publicRoutes.get('/home', public_controller_1.publicController.home);
 publicRoutes.get('/about', public_controller_1.publicController.about);
 publicRoutes.post('/sellerInfo', public_controller_1.publicController.sellerInfo);
 publicRoutes.post('/avatarImage', public_controller_1.publicController.avatarImage);
+publicRoutes.post('/topProducts', public_controller_1.publicController.topProducts);

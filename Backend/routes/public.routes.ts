@@ -14,4 +14,6 @@ publicRoutes.post('/sellerInfo', publicController.sellerInfo);
 
 publicRoutes.post('/avatarImage', publicController.avatarImage);
 
+publicRoutes.post('/topProducts', publicController.topProducts);
+
 export {publicRoutes};

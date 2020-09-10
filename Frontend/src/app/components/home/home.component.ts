@@ -13,9 +13,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, AfterContentChecked {
   title: string = 'homepage';
-  // heroes: Array<Number> = [1, 2, 3, 4, 5, 3, 4, 4];
   products: Array<any>;
-
   imageURLs: Array<any> = [];
 
   constructor(
