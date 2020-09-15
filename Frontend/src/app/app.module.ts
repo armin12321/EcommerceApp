@@ -20,6 +20,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { AddproductComponent } from './components/addproduct/addproduct.component';
 import { SellerInfoComponent } from './components/seller-info/seller-info.component';
 import { ProductInfoComponent } from './components/product-info/product-info.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ProductInfoComponent } from './components/product-info/product-info.com
     AddproductComponent,
     SellerInfoComponent,
     ProductInfoComponent,
+    ChatComponent,
   ],
   imports: [
     ModalModule.forRoot(),

@@ -74,7 +74,8 @@ var sellerInfo = function (req, res) {
             name: user === null || user === void 0 ? void 0 : user.name,
             surname: user === null || user === void 0 ? void 0 : user.surname,
             address: user === null || user === void 0 ? void 0 : user.address,
-            email: user === null || user === void 0 ? void 0 : user.email
+            email: user === null || user === void 0 ? void 0 : user.email,
+            _id: user === null || user === void 0 ? void 0 : user._id
         };
         res.json({
             success: true,

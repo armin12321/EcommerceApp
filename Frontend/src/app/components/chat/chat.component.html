@@ -1,0 +1,37 @@
+<div class="container">
+    <!-- For demo purpose-->
+    <header class="text-center" style="background-color: grey;">
+      <h1 class="display-10 text-white">Chat with {{ chat_person_username }}</h1>
+    </header>
+      <!-- Chat Box-->
+      <div class="col-12 px-0">
+        <div class="px-5 py-7 chat-box bg-white" id="box">
+
+          <!-- Zajedničko za ova dva oblačića-->
+          <div class="media w-50" *ngFor="let m of Messages; let i = index" [ngClass]="calcClass(m)"> <!-- kod receivera još klase: ml-auto, mb-3 -->
+              <!-- Kod sendera ovdje ide slika. -->
+              <img [src]="pictureURL" alt="user" width="50" class="rounded-circle" [ngStyle]="calcPictureStyle(m)">
+              <div class="media-body" [ngClass]="calcClass1(m)"> <!--Kod sendera klasa: ml-3 -->
+                  <div class="rounded py-2 px-3 mb-2" [ngClass]="calcClass2(m)"> <!--Kod sendera dark, a kod receivera bg-primary -->
+                    <p class="text-small mb-0 text-white">
+                        {{ m.msg }}
+                    </p>
+                  </div>
+                  <p class="small text-muted">{{ m.time }}</p>
+              </div>
+          </div>
+
+        </div>
+  
+        <!-- Typing area -->
+        <form action="" class="bg-light">
+          <div class="input-group">
+            <input type="text" [(ngModel)]='message' placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light" name="message">
+            <div class="input-group-append">
+              <button (click)="sendMessage()" id="button-addon2" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+  

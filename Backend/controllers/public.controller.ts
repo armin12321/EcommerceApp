@@ -80,7 +80,8 @@ const sellerInfo = (req: any, res: any) => {
             name: user?.name,
             surname: user?.surname,
             address: user?.address,
-            email: user?.email
+            email: user?.email,
+            _id: user?._id
         }
        res.json({
            success: true,

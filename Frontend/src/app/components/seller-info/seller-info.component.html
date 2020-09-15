@@ -42,7 +42,7 @@
                         </div>
             </div>
             </div>
-            <div class="row info2" style="margin-top: 20px;">
+            <div class="row info2" style="margin-top: 20px;" *ngIf="navbarService.loggedIn() && !sameUser()" (click)="Chat()">
                 <button class="btn btn-primary"> Chat with {{user.username}} </button>
             </div>
         </div>

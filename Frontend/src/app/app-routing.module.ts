@@ -9,6 +9,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { AddproductComponent } from './components/addproduct/addproduct.component';
 import { SellerInfoComponent } from './components/seller-info/seller-info.component';
 import { ProductInfoComponent } from './components/product-info/product-info.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
   {
     path: 'public/productInfo',
     component: ProductInfoComponent
+  },
+  {
+    path: 'user/chat',
+    component: ChatComponent
   }
 ];
 

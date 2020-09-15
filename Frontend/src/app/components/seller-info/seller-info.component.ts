@@ -5,6 +5,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SharedDataService } from '../../services/shared-data.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { NavbarService } from 'src/app/services/navbar.service';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-seller-info',
@@ -21,7 +23,9 @@ export class SellerInfoComponent implements OnInit, AfterContentChecked {
     private sanitizer: DomSanitizer,
     private serverService: ServerService,
     private sharedData: SharedDataService,
-    private router: Router
+    private router: Router,
+    public navbarService: NavbarService,
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +41,20 @@ export class SellerInfoComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  Chat(): void {
+    this.sharedData.setChatPersonUsername(this.user.username);
+    this.sharedData.setChatPersonID(this.user._id);
+    this.router.navigate(['/user/chat']);
+  }
+
+  sameUser(): Boolean {
+    console.log(this.user._id);
+    console.log(this.tokenService.getUser()._id);
+    if (this.user._id == this.tokenService.getUser()._id)
+      return true;
+    return false;
+  }
+
   getData(): void {
     //firstly, get data about the seller
     let wrapper = {
@@ -44,9 +62,10 @@ export class SellerInfoComponent implements OnInit, AfterContentChecked {
     }
 
     this.serverService.getSellerData(wrapper).subscribe((data) => {
-	  console.log(data);
+    console.log(data);
 	  if (data.success) {
-		  this.user = data.user; // this is gonna display in html.
+      this.user = data.user; // this is gonna display in html.
+      this.sharedData.setChatPersonAvatarURL(this.user.avatarName);
 		  this.getAvatarImage(this.user.avatarName).subscribe((picture) => {
 			this.imgPreview(picture);				  
 		  })

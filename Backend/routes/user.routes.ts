@@ -3,6 +3,7 @@ import express, { Router } from 'express';
 
 //controllers
 import { userController } from '../controllers/user.controller';
+import { chatController } from '../controllers/chat.controller';
 
 //middleware
 import { authMiddleware } from '../middlewares/auth.middleware';
@@ -19,5 +20,9 @@ userRoutes.get('/profile', [authMiddleware.verifyToken], userController.profile)
 userRoutes.get('/cart', [authMiddleware.verifyToken], userController.cart);
 
 userRoutes.get('/products', [authMiddleware.verifyToken], userController.products);
+
+userRoutes.post('/chat/loadMessages', [authMiddleware.verifyToken], chatController.loadMessages);
+
+userRoutes.post('/chat/sendMessage', [authMiddleware.verifyToken], chatController.saveMessage);
 
 export {userRoutes};

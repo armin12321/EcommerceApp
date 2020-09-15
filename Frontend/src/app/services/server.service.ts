@@ -61,4 +61,12 @@ export class ServerService {
   getTopProducts(data): Observable<any> {
     return this.http.post(`${this.serverURL}/api/public/topProducts`, data);
   }
+
+  loadOldMessages(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/user/chat/loadMessages`, data);
+  }
+
+  sendMessagee(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/user/chat/sendMessage`, data);
+  }
 }
