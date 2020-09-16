@@ -1,4 +1,4 @@
-import { Component, OnInit, Sanitizer } from '@angular/core';
+import { AfterContentChecked, Component, OnDestroy, OnInit, Sanitizer, ɵclearOverrides } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -10,13 +10,14 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy, AfterContentChecked {
   chat_person_id: string = "";
   user_id: string = "";
   chat_person_username: string = "";
   message: string = "";
   Messages: Array<any> = [];
   pictureURL: any = "";
+  myInterval: any;
 
   constructor(
     private serverService: ServerService,
@@ -25,9 +26,20 @@ export class ChatComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) { }
 
+  ngAfterContentChecked(): void {
+
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.myInterval);
+  }
+
   ngOnInit(): void {
     this.chat_person_id = this.sharedData.getChatPersonID();
     this.chat_person_username = this.sharedData.getChatPersonUsername();
+
+    //Get messages that keep coming.
+    this.getMessages();
 
     //get person's avatar image, and then set it.
     console.log(this.sharedData.getChatPersonAvatarURL());
@@ -37,21 +49,43 @@ export class ChatComponent implements OnInit {
 
     //load all the messages that you have been typing with this guy.
     this.loadMessages({ chat_id: this.chat_person_id }).subscribe((data) => {
+      //this load operation aproximatelly needs 200ms, so we can try multiple values.
+
       if (data.msg === "not authorized") {
         this.router.navigate(['/public/home']);
       } else {
         if (data.msg === "loaded messages successfully") {
           console.log(data);
-          this.Messages = data.messages;
 
-          //get your element by id , and then scroll to bottom: //still not working.
-          this.scrollDown();
-
+          // need to do it like this because of the scroll.
+          for (let i = 0; i < data.messages.length; i++) {
+            this.Messages.push(data.messages[i]);
+            this.scrollDown();
+          }
         } else {
           console.log(data.msg);
         }
       }
     });
+  }
+
+  getMessages(): any {
+    // throw new Error('Method not implemented.');
+    this.myInterval = setInterval(() => {
+
+      this.serverService.getNewMessages({chat_id: this.chat_person_id}).subscribe((data) => {
+        //add all messages to the old ones, and try to scroll down.
+
+        if (data.success) {
+          for (let i = 0; i < data.messages.length; i++) {
+            this.Messages.push(data.messages[i]);
+            this.scrollDown();
+          }
+        } else {
+          console.log(data.msg);
+        }
+    });
+    }, 500);
   }
 
   loadMessages(data): Observable<any> {
@@ -85,7 +119,7 @@ export class ChatComponent implements OnInit {
     
     this.send(wrapper).subscribe((data) => {
       console.log(data);
-      this.message = "";
+      this.message = ""; //not to see same message again.
       this.scrollDown();
     });
   }
@@ -125,12 +159,13 @@ export class ChatComponent implements OnInit {
   }
 
   calcPictureStyle(message): any {
-    let dont_need_picture = {
+    const dont_need_picture = {
       'display': 'none'
-    }
+    };
+
     if (message.to == this.chat_person_id) {
       return dont_need_picture;
-    } else {
+    } else { //else style picture 
       return {};
     }
   }

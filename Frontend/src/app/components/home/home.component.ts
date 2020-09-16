@@ -89,4 +89,10 @@ export class HomeComponent implements OnInit, AfterContentChecked {
       this.imageURLs[index] = this.sanitizer.bypassSecurityTrustUrl(`${reader.result}`);
     };
   }
+
+  imageStyle(): object {
+    return {
+      'border-radius': '50px'
+    };
+  }
 }

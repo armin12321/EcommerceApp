@@ -27,6 +27,10 @@ var MessageSchema = new mongoose_1.Schema({
     messageType: {
         type: String,
         required: true
+    },
+    fromUsername: {
+        type: String,
+        required: true
     }
 });
 //here maybe functions for this model...

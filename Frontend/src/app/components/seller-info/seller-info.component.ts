@@ -48,8 +48,6 @@ export class SellerInfoComponent implements OnInit, AfterContentChecked {
   }
 
   sameUser(): Boolean {
-    console.log(this.user._id);
-    console.log(this.tokenService.getUser()._id);
     if (this.user._id == this.tokenService.getUser()._id)
       return true;
     return false;
@@ -130,6 +128,12 @@ export class SellerInfoComponent implements OnInit, AfterContentChecked {
     reader.readAsDataURL(img);
     reader.onload = (_event) => {      
       this.avatarURL = this.sanitizer.bypassSecurityTrustUrl(`${reader.result}`);
+    };
+  }
+
+  pictureStyle(): object {
+    return {
+      'border-radius': '120px 20px 120px 20px'
     };
   }
 

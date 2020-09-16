@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavbarService } from '../../services/navbar.service';
 import { TemplateRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AfterContentChecked } from '@angular/core';
+import { ServerService } from 'src/app/services/server.service';
 
 
 @Component({
@@ -12,21 +13,44 @@ import { AfterContentChecked } from '@angular/core';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, AfterContentChecked {
+export class NavbarComponent implements OnInit, AfterContentChecked, OnDestroy {
   title: string = 'navbar';
   currentUrl: string;
   modalRef: BsModalRef;
   username: string = '';
   numOfMessages: number;
+  myInterval: number;
 
   constructor(    
     public navbarService: NavbarService,    
     private modalService: BsModalService,
-    private flashMessages: FlashMessagesService
+    private flashMessages: FlashMessagesService,
+    private serverService: ServerService
   ) {  }
 
   ngOnInit(): void {
     this.username = this.navbarService.getUsername(); 
+    this.getMessages();
+  }
+
+  getMessages(): void {
+    //throw new Error('Method not implemented.')
+    this.myInterval = setInterval(() => {
+      if (!this.navbarService.loggedIn())
+        return;
+
+      this.serverService.getNotifications().subscribe((data: any) => {
+        if (data.success) {
+          this.numOfMessages = data.numOfMessages
+        } else {
+          console.log(data.msg);
+        }
+      });
+    }, 600);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.myInterval);
   }
 
   ngAfterContentChecked() { //provjerava vise puta, nakon ucitavanja svake od komponenata.

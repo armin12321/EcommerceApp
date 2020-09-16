@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseType } from '@angular/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +12,11 @@ export class ServerService {
   constructor(
     private http: HttpClient
   ) { }
+
+  getNotifications() {
+    // throw new Error('Method not implemented.');
+    return this.http.get(`${this.serverURL}/api/user/notifications`);
+  }
 
   getHomeData(): Observable<any> {
     return this.http.get(`${this.serverURL}/api/public/home`, {}); //here goes http options.
@@ -68,5 +72,9 @@ export class ServerService {
 
   sendMessagee(data): Observable<any> {
     return this.http.post(`${this.serverURL}/api/user/chat/sendMessage`, data);
+  }
+
+  getNewMessages(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/user/chat/getNewMessages`, data);
   }
 }

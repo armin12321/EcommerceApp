@@ -7,7 +7,8 @@ export interface IMessage extends Document {
     msg: String,
     time: Date,
     viewed: Boolean,
-    messageType: String
+    messageType: String,
+    fromUsername: String
 };
 
 const MessageSchema = new Schema({
@@ -32,6 +33,10 @@ const MessageSchema = new Schema({
         required: true
     },
     messageType: {
+        type: String,
+        required: true
+    },
+    fromUsername: {
         type: String,
         required: true
     }

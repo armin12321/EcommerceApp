@@ -2,7 +2,7 @@
     <div class="row" style="margin-top: 30px;">
         <div class="col-6 avatarImage" id="avatarImage">
             <div class="row" style="margin: 5px;">
-                <img [src]="avatarURL" style="height: 250px; width: 250px;" alt="Seller avatar">
+                <img [src]="avatarURL" style="height: 250px; width: 250px;" alt="Seller avatar" [ngStyle]="pictureStyle()">
             </div>
         </div>
         <div class="col-6 info" style="margin-top: 5px;" id="info">

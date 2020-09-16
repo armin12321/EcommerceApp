@@ -25,4 +25,8 @@ userRoutes.post('/chat/loadMessages', [authMiddleware.verifyToken], chatControll
 
 userRoutes.post('/chat/sendMessage', [authMiddleware.verifyToken], chatController.saveMessage);
 
+userRoutes.post('/chat/getNewMessages', [authMiddleware.verifyToken], chatController.getNewMessages);
+
+userRoutes.get('/notifications', [authMiddleware.verifyToken], chatController.notifications);
+
 export {userRoutes};
