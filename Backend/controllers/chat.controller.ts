@@ -1,16 +1,17 @@
 //imports
 import Messages, { IMessage } from '../models/messages';
 import { ObjectID } from 'mongodb';
-import { stringify } from 'querystring';
 import Message from '../models/messages';
 
 //////////////helper methods
+///next time we're gonna update our way of updating messages with our own helper method,
+//because in extreme cases current implementation would not work.
 
 //helper update method
 let calcNewMessages = (messages: Array<Pick<any, any>>) => {
     let newMessages: Array<Object> = [];
     messages.forEach((message) => {
-        let time = `${message.time.getHours()}:${message.time.getMinutes()} - ${message.time.getDate()}/${message.time.getMonth()}/${message.time.getFullYear()}`;
+        let time = `${message.time.getHours()}:${message.time.getMinutes()} - ${message.time.getDate()}/${message.time.getMonth() + 1}/${message.time.getFullYear()}`;
         
         const n = {
             time: time,
@@ -86,7 +87,8 @@ const saveMessage = (req: any, res: any) => {
         msg: req.body.message,
         time: new Date(),
         viewed: false,
-        fromUsername: req.username
+        fromUsername: req.username,
+        toUsername: req.body.toUsername
     });
 
     message

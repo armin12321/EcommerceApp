@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class SharedDataService {
   chat_person_avatarURL: string = "";
 
   constructor(
+    private sanitizer: DomSanitizer
   ) { }
 
   setChatPersonAvatarURL(a: string): void {
@@ -44,6 +46,14 @@ export class SharedDataService {
   getProductID(): string {
     this.product_id = localStorage.getItem("productID");
     return this.product_id;
+  }
+
+  showPicture(image: any): any {
+    let reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = (_event) => {      
+      return this.sanitizer.bypassSecurityTrustUrl(`${reader.result}`);
+    };
   }
 
   setChatPersonID(chat_id: string): void {

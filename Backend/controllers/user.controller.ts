@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { serverConfig } from '../configs/server.config';
 import { dbConfig } from '../configs/db.config';
+import { ObjectID } from 'mongodb';
 
 //functions:
 
@@ -173,9 +174,28 @@ const products = (req: any, res: any) => {
             products: products
         });
     }
-}
+};
+
+const getByID = (req: any, res: any) => {
+    //here getting req.body.ID
+    console.log(req.body.id);
+    let id = new ObjectID(req.body.id);
+    
+    User
+    .findById(id)
+    .lean()
+    .then((user) => {
+        console.log(user);
+        res.json({
+            success: true,
+            avatarName: user?.avatarName,
+            msg: 'Successfully returned by ID'
+        });
+    });
+};
 
 const userController: any = {
+    getByID,
     register,
     login,
     cart,

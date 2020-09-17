@@ -9,11 +9,13 @@ var messages_1 = __importDefault(require("../models/messages"));
 var mongodb_1 = require("mongodb");
 var messages_2 = __importDefault(require("../models/messages"));
 //////////////helper methods
+///next time we're gonna update our way of updating messages with our own helper method,
+//because in extreme cases current implementation would not work.
 //helper update method
 var calcNewMessages = function (messages) {
     var newMessages = [];
     messages.forEach(function (message) {
-        var time = message.time.getHours() + ":" + message.time.getMinutes() + " - " + message.time.getDate() + "/" + message.time.getMonth() + "/" + message.time.getFullYear();
+        var time = message.time.getHours() + ":" + message.time.getMinutes() + " - " + message.time.getDate() + "/" + (message.time.getMonth() + 1) + "/" + message.time.getFullYear();
         var n = {
             time: time,
             from: message.from,
@@ -78,7 +80,8 @@ var saveMessage = function (req, res) {
         msg: req.body.message,
         time: new Date(),
         viewed: false,
-        fromUsername: req.username
+        fromUsername: req.username,
+        toUsername: req.body.toUsername
     });
     message
         .save()

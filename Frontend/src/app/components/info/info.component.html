@@ -1,0 +1,59 @@
+<br><ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+      <a class="nav-link active" (click)="getMessagesInfo()" data-toggle="tab" href="#messages">New messages</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="getRecentChats()" data-toggle="tab" href="#chats">Recent chats</a>
+    </li>
+    <li class="nav-item" *ngIf="navbarService.isBuyer()">
+      <a class="nav-link" (click)="getOrderInfo()" data-toggle="tab" href="#myOrders">My orders</a>
+    </li>
+</ul><br><br>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade show active" id="messages">      
+      <div *ngFor="let m of messages; let i = index;" class="msg alert alert-dismissible alert-success" style="max-width: 1100px; margin:auto;margin-bottom: 13px;">        
+          <div class="row" style="text-align: center;">
+              <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">
+                <img [src]="this.imgURLs[i]" alt="Chat person" width="50" class="rounded-circle">
+              </div>              
+              <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">
+                <strong>{{ m.fromUsername }}</strong>
+            </div>
+              <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">
+                <strong>{{ m.time }}</strong>
+              </div>              
+              <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">    
+                <a>
+                    <i class="fa-layers-counter fa-5x" style="background-color: red;">{{ m.numOfMessages }}</i>                    
+                </a>                
+                <a href="#" onclick="return false" (click)="goToChat(m)">
+                    <i class="fa fa-paper-plane fa-2x"></i>                
+                </a>                    
+            </div>
+          </div>
+      </div>
+      <div class="alert alert-success" *ngIf="messages.length == 0" style="margin: auto; text-align: center;"><strong>There is no new messages.</strong></div>
+    </div>
+    <div class="tab-pane fade" id="chats">
+        <div *ngFor="let p of people; let i = index;" class="chat alert alert-dismissible alert-primary" style="max-width: 1000px; margin:auto;margin-bottom: 13px;">        
+            <div class="row" style="text-align: center;">
+                <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">
+                  <img [src]="imgChats[i]" alt="people image" width="50" class="rounded-circle">
+                </div>              
+                <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">
+                  <strong>{{ p.messengerUsername }}</strong>
+              </div>
+                <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">
+                  <strong>{{ p.time }}</strong>
+                </div>              
+                <div class="col-3 d-flex justify-content-center" style="flex-direction: column;">
+                  <a href="#" onclick="return false" (click)="goToChat1(p)" id="here"><i class="fa fa-paper-plane fa-2x"></i></a>
+              </div>
+            </div>
+        </div>
+        <div class="alert alert-primary" *ngIf="people.length == 0" style="margin: auto; text-align: center;"><strong>There is no recent chats.</strong></div>
+    </div>
+    <div class="tab-pane fade" id="myOrders">
+        <p>Ovdje moje narudzbe.</p>
+    </div>
+</div>

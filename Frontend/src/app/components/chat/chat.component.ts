@@ -102,12 +102,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterContentChecked {
 
     let wrapper = {
       to: this.chat_person_id,
-      message: this.message
+      message: this.message,
+      toUsername: this.chat_person_username
     };
 
     let d = new Date();
 
-    let time = `${d.getHours()}:${d.getMinutes()} - ${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
+    let time = `${d.getHours()}:${d.getMinutes()} - ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
     
     let newMsg = {
       time: time,

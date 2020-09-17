@@ -13,6 +13,20 @@ export class ServerService {
     private http: HttpClient
   ) { }
 
+  getRecentChats(): Observable<any> {
+    // throw new Error('Method not implemented.');
+    return this.http.get(`${this.serverURL}/api/info/recentChats`);
+  }
+
+  findByID(data): Observable<any> {
+    // throw new Error('Method not implemented.');
+    return this.http.post(`${this.serverURL}/api/user/getByID`, data);
+  }
+  getMessagesInfo(): Observable<any> {
+    // throw new Error('Method not implemented.');
+    return this.http.get(`${this.serverURL}/api/info/newMessages`);
+  }
+
   getNotifications() {
     // throw new Error('Method not implemented.');
     return this.http.get(`${this.serverURL}/api/user/notifications`);

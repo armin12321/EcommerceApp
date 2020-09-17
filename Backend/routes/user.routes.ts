@@ -29,4 +29,6 @@ userRoutes.post('/chat/getNewMessages', [authMiddleware.verifyToken], chatContro
 
 userRoutes.get('/notifications', [authMiddleware.verifyToken], chatController.notifications);
 
+userRoutes.post('/getByID', [authMiddleware.verifyToken], userController.getByID);
+
 export {userRoutes};

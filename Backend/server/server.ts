@@ -11,9 +11,11 @@ import { serverConfig } from '../configs/server.config';
 import { userRoutes } from '../routes/user.routes';
 import { publicRoutes } from '../routes/public.routes';
 import { productRoutes } from '../routes/product.routes';
+import { infoRoutes } from '../routes/info.routes';
 
 //hand defined middlewares
 import {authMiddleware} from '../middlewares/auth.middleware';
+import { info } from 'console';
 
 
 const app: any = express();
@@ -51,6 +53,9 @@ app.use('/api/public', publicRoutes);
 
 // Routes for products 
 app.use('/api/product', productRoutes);
+
+// Routes for notifications
+app.use('/api/info', infoRoutes);
 
 ///////////////////////////////////////////////////
 

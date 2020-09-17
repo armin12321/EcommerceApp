@@ -23,3 +23,4 @@ userRoutes.post('/chat/loadMessages', [auth_middleware_1.authMiddleware.verifyTo
 userRoutes.post('/chat/sendMessage', [auth_middleware_1.authMiddleware.verifyToken], chat_controller_1.chatController.saveMessage);
 userRoutes.post('/chat/getNewMessages', [auth_middleware_1.authMiddleware.verifyToken], chat_controller_1.chatController.getNewMessages);
 userRoutes.get('/notifications', [auth_middleware_1.authMiddleware.verifyToken], chat_controller_1.chatController.notifications);
+userRoutes.post('/getByID', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.getByID);

@@ -31,6 +31,10 @@ var MessageSchema = new mongoose_1.Schema({
     fromUsername: {
         type: String,
         required: true
+    },
+    toUsername: {
+        type: String,
+        required: true
     }
 });
 //here maybe functions for this model...

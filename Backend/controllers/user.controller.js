@@ -46,6 +46,7 @@ var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var server_config_1 = require("../configs/server.config");
 var db_config_1 = require("../configs/db.config");
+var mongodb_1 = require("mongodb");
 //functions:
 var login = function (req, res) {
     var username = req.body.username;
@@ -210,7 +211,24 @@ var products = function (req, res) {
         });
     }
 };
+var getByID = function (req, res) {
+    //here getting req.body.ID
+    console.log(req.body.id);
+    var id = new mongodb_1.ObjectID(req.body.id);
+    user_1.default
+        .findById(id)
+        .lean()
+        .then(function (user) {
+        console.log(user);
+        res.json({
+            success: true,
+            avatarName: user === null || user === void 0 ? void 0 : user.avatarName,
+            msg: 'Successfully returned by ID'
+        });
+    });
+};
 var userController = {
+    getByID: getByID,
     register: register,
     login: login,
     cart: cart,
