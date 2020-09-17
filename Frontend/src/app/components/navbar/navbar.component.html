@@ -1,4 +1,4 @@
-<nav *ngIf="navbarService.displayNavbar()" class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav *ngIf="navbarService.displayNavbar()" class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:fixed; z-index: 10; width: 100%;">
     <a class="navbar-brand" [routerLink]="['/']">eCommerce</a>
     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -7,21 +7,21 @@
     <div class="navbar-collapse collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" [routerLink]="['public/home']">Home</a>
+            <a class="nav-link" [routerLink]="['public/home']" data-toggle="collapse" data-target=".navbar-collapse.show">Home</a>
         </li>
         <li class="nav-item" *ngIf="navbarService.loggedIn() && !navbarService.isBuyer()">
-          <a class="nav-link" [routerLink]="['user/products']">Products</a>
+          <a class="nav-link" [routerLink]="['user/products']" data-toggle="collapse" data-target=".navbar-collapse.show">Products</a>
       </li>
-        <li *ngIf="navbarService.loggedIn() && navbarService.isBuyer()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <li *ngIf="navbarService.loggedIn() && navbarService.isBuyer()" data-toggle="collapse" data-target=".navbar-collapse.show" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
           <a class="nav-link" [routerLink]="['user/cart']">Cart</a>
         </li>
-        <li *ngIf="navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <li *ngIf="navbarService.loggedIn()" class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
             <a class="nav-link" [routerLink]="['user/profile']">Profile</a>
         </li>
       </ul>
       <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item" *ngIf='navbarService.loggedIn()'>                                                                  
+            <li class="nav-item" *ngIf='navbarService.loggedIn()' data-toggle="collapse" data-target=".navbar-collapse.show">                                                                  
               <a [routerLink]="['user/info']" class="nav-link">
                   <span class="fa-layers fa-fw" style="margin-right: 20px;">
                     <i class="fas fa-envelope fa-2x"></i>
@@ -32,19 +32,19 @@
             <li class="nav-item" id="mybutton" (window:resize)='showGreeting()'>
                 <a class="nav-link">Hello, {{ username }} !</a>
             </li>
-            <li *ngIf="navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" (click)='openModal(template)'>
+            <li data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" (click)='openModal(template)'>
                 <a class="nav-link" [routerLink]=''> Logout </a>
             </li>
-            <li *ngIf="!navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+            <li data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="!navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
                 <a class="nav-link" [routerLink]="['user/login']">Login</a>
             </li>
-            <li *ngIf="!navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+            <li data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="!navbarService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
                 <a class="nav-link" [routerLink]="['user/register']">Register</a>
             </li>
         </ul>
     </div>
     </div>
-</nav>
+</nav><br><br><br>
 
 <ng-template #template>
             <div class="modal-content">
