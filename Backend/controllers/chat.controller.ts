@@ -60,6 +60,7 @@ const loadMessages = (req: any, res: any) => {
     .sort({time: 1})
     .lean()
     .then((messages) => {
+        //ovo se pod hitno mora drugačije implementirati......
         Message.updateMany(filterForUpdate, {viewed: true}, (err) => {
             if (err) throw err;
             else console.log(`Updated new logs in loadMessages`);
@@ -123,7 +124,7 @@ const getNewMessages = (req: any, res: any) => {
     .sort({time: 1})
     .lean()
     .then((messages) => {        
-
+        //ovo se pod hitno mora drugačije implementirati, i omogućiti u localstorage-u više chatova odjednom....
         Messages.updateMany(filter, {viewed: true}, (err) => {
             if (err) throw err;
             else console.log(`Updated logs in getNewMessages.`);
