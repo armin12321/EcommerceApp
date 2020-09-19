@@ -6,6 +6,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AfterContentChecked } from '@angular/core';
 import { ServerService } from 'src/app/services/server.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -29,6 +30,16 @@ export class NavbarComponent implements OnInit, AfterContentChecked, OnDestroy {
   ) {  }
 
   ngOnInit(): void {
+    let that = this;
+
+    window.addEventListener('beforeunload', function (e) {       
+      if (that.navbarService.loggedIn())
+          that.changeOnlineStatus(false).subscribe();
+    }); 
+
+    if (this.navbarService.loggedIn()) //if i'm logged in, and navbar is initialized
+        this.changeOnlineStatus(true).subscribe();
+
     this.username = this.navbarService.getUsername(); 
     this.getMessages();
   }
@@ -53,6 +64,10 @@ export class NavbarComponent implements OnInit, AfterContentChecked, OnDestroy {
     clearInterval(this.myInterval);
   }
 
+  changeOnlineStatus(b: Boolean): Observable<any> {
+    return this.serverService.changeOnlineStatus({online: b});
+  }
+
   ngAfterContentChecked() { //provjerava vise puta, nakon ucitavanja svake od komponenata.
     let elem = document.getElementById('mybutton');
     if (elem != null) {
@@ -66,6 +81,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked, OnDestroy {
   }
 
   logout(): any {
+    this.changeOnlineStatus(false).subscribe();
     this.username = '';
     this.modalRef.hide();
     this.navbarService.logOut();

@@ -31,6 +31,8 @@ app.use(express_fileupload_1.default());
 //Parsing requests of content-type: urlencoded:
 app.use(express_1.default.urlencoded({ extended: true }));
 /////////////////////////////////////////////////
+//set for enabling updates
+mongoose_1.default.set('useFindAndModify', false);
 //Database connection initialization:
 mongoose_1.default.connect(db_config_1.dbConfig.ATLASURL, {
     useNewUrlParser: true,

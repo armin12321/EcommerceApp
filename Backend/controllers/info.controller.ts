@@ -1,5 +1,6 @@
 import Messages, { IMessage } from '../models/messages';
 import { ObjectID } from 'mongodb';
+import User, {IUser} from '../models/user';
 
 //helpers :
 
@@ -146,10 +147,33 @@ let recentChats = (req: any, res: any) => {
     });
 };
 
+let changeOnlineStatus = (req: any, res: any) => {
+    console.log(req.body);
+    console.log(req.username);
+    console.log(req.user_id);
+
+    let user_id_object = new ObjectID(req.user_id);
+
+    //change status in user field.
+
+    let updateQuery = {
+        online: req.body.online,
+        lastTimeOnline: new Date()
+    };
+
+    User
+    .findByIdAndUpdate(user_id_object, updateQuery)
+    .lean()
+    .then((user) => {        
+        console.log(`Status for ${req.username} changed.`);
+    });
+};
+
 const infoController = {
     myOrders,
     newMessages,
-    recentChats
+    recentChats,
+    changeOnlineStatus
 };
 
 export {infoController};

@@ -113,7 +113,9 @@ var register = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     password: req.body.password,
                     address: req.body.address,
                     type: req.body.type,
-                    avatarName: 'default.jpg'
+                    avatarName: 'default.jpg',
+                    online: true,
+                    lastTimeOnline: new Date()
                 });
                 if (!req.files) return [3 /*break*/, 2];
                 sampleFile = req.files.file;

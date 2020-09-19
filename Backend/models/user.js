@@ -40,6 +40,14 @@ var UserSchema = new mongoose_1.Schema({
     avatarName: {
         type: String,
         required: true
+    },
+    online: {
+        type: Boolean,
+        required: false
+    },
+    lastTimeOnline: {
+        type: Date,
+        required: false
     }
 });
 var addUser = function (newUser, callback) {

@@ -1,8 +1,16 @@
 <div class="container">
+  <br>
     <!-- For demo purpose-->
-    <header class="text-center" style="background-color: grey;">
-      <h1 class="display-10 text-white">Chat with {{ chat_person_username }}</h1>
-    </header>
+    <div style="background-color: black; border-radius: 15px;">
+      <header class="text-center">
+        <h1 class="display-10 text-white">
+          Chat with: {{ chat_person_username }}
+          <i *ngIf="this.online == true"  class="fas fa-circle fa-sm" style="color:green;padding-left: 10px;"></i> 
+          <i style="padding-left: 10px;">online</i>
+          <i style="padding-left: 10px;" *ngIf="this.online == false">{{this.lastTimeOnline}}</i>
+        </h1>        
+      </header>
+    </div>    
       <!-- Chat Box-->
       <div class="col-12 px-0">
         <div class="px-5 py-7 chat-box bg-white" id="box">
@@ -17,12 +25,22 @@
                         {{ m.msg }}
                     </p>
                   </div>
-                  <p class="small text-muted">{{ m.time }}</p>
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="small text-muted">{{ m.time }}</p>
+                    </div>
+                    <div class="col-6" style="text-align: right;" *ngIf="lastSeen(m._id)">
+                      <img [src]="pictureURL" alt="user" width="30" class="rounded-circle">
+                    </div>
+                  </div>
+                   
               </div>
           </div>
 
         </div>
-  
+        <div style="text-align: center;" *ngIf="showModal()" (click)="goDown()">
+          <a class="nav-link" href="#" onclick="return false">New messages({{ this.numOfMessages }}) <i class="fas fa-arrow-down"></i></a>
+        </div>
         <!-- Typing area -->
         <form action="" class="bg-light">
           <div class="input-group">

@@ -18,7 +18,8 @@ export class SharedDataService {
   setChatPersonAvatarURL(a: string): void {
     this.chat_person_avatarURL = a;
     localStorage.removeItem("avatarURL");
-    localStorage.setItem("avatarURL", this.chat_person_avatarURL);
+
+    localStorage.setItem("avatarURL", this.chat_person_avatarURL);        
   }
 
   getChatPersonAvatarURL():string {

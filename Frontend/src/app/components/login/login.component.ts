@@ -3,6 +3,7 @@ import { ServerService } from '../../services/server.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import { TokenService } from '../../services/token.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -39,13 +40,16 @@ export class LoginComponent implements OnInit {
       if (data.success == true) {                
         this.tokenService.storeUserData(data.token, data.user);  
         this.flashMessage.show('You are now logged in', {cssClass: 'alert-success', timeout: 5000});
+        this.changeOnlineStatus(true).subscribe();
         this.router.navigate(['/public/home']); //ako sve bude u redu.
       } else {
         this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });      
         this.router.navigate(['/user/login']);
       }
-    });
+    });    
+  }
 
-    
+  changeOnlineStatus(b: Boolean): Observable<any> {
+    return this.serverService.changeOnlineStatus({online: b});
   }
 }

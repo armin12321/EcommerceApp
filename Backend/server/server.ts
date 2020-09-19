@@ -38,6 +38,9 @@ app.use(express.urlencoded({ extended: true }));
 
 /////////////////////////////////////////////////
 
+//set for enabling updates
+mongoose.set('useFindAndModify', false);
+
 //Database connection initialization:
 mongoose.connect(dbConfig.ATLASURL, {
     useNewUrlParser: true,

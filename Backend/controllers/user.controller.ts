@@ -79,7 +79,9 @@ const register = async (req: any, res: any) => {
         password: req.body.password,
         address: req.body.address,
         type: req.body.type,
-        avatarName: 'default.jpg'
+        avatarName: 'default.jpg',
+        online: true,
+        lastTimeOnline: new Date()
     });
     if (req.files){
         let sampleFile = req.files.file;

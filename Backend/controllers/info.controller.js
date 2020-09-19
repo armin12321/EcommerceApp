@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.infoController = void 0;
 var messages_1 = __importDefault(require("../models/messages"));
 var mongodb_1 = require("mongodb");
+var user_1 = __importDefault(require("../models/user"));
 //helpers :
 var preprocess = function (messages) {
     var histogram = []; //holding already viewed messengers.
@@ -125,9 +126,27 @@ var recentChats = function (req, res) {
         });
     });
 };
+var changeOnlineStatus = function (req, res) {
+    console.log(req.body);
+    console.log(req.username);
+    console.log(req.user_id);
+    var user_id_object = new mongodb_1.ObjectID(req.user_id);
+    //change status in user field.
+    var updateQuery = {
+        online: req.body.online,
+        lastTimeOnline: new Date()
+    };
+    user_1.default
+        .findByIdAndUpdate(user_id_object, updateQuery)
+        .lean()
+        .then(function (user) {
+        console.log("Status for " + req.username + " changed.");
+    });
+};
 var infoController = {
     myOrders: myOrders,
     newMessages: newMessages,
-    recentChats: recentChats
+    recentChats: recentChats,
+    changeOnlineStatus: changeOnlineStatus
 };
 exports.infoController = infoController;

@@ -7,11 +7,17 @@ import { Observable } from 'rxjs';
 })
 
 export class ServerService {
+  
   private serverURL: string = 'http://localhost:5000';
 
   constructor(
     private http: HttpClient
   ) { }
+
+  changeOnlineStatus(data): Observable<any> {
+    // throw new Error('Method not implemented.');
+    return this.http.post(`${this.serverURL}/api/info/changeOnlineStatus`, data);
+  }
 
   getRecentChats(): Observable<any> {
     // throw new Error('Method not implemented.');

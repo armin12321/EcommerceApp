@@ -17,7 +17,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterContentChecked {
   message: string = "";
   Messages: Array<any> = [];
   pictureURL: any = "";
-  myInterval: any;
+  myInterval: any;  
+  seen_id: any;
+  numOfMessages: Number = 0;
+  online: Boolean = false;
+  lastTimeOnline: any = [];
 
   constructor(
     private serverService: ServerService,
@@ -38,9 +42,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.chat_person_id = this.sharedData.getChatPersonID();
     this.chat_person_username = this.sharedData.getChatPersonUsername();
 
-    //Get messages that keep coming.
-    this.getMessages();
-
     //get person's avatar image, and then set it.
     console.log(this.sharedData.getChatPersonAvatarURL());
     this.serverService.getAvatarImage({avatarName: this.sharedData.getChatPersonAvatarURL()}).subscribe((picture) => {
@@ -57,35 +58,71 @@ export class ChatComponent implements OnInit, OnDestroy, AfterContentChecked {
         if (data.msg === "loaded messages successfully") {
           console.log(data);
 
-          // need to do it like this because of the scroll.
-          for (let i = 0; i < data.messages.length; i++) {
-            this.Messages.push(data.messages[i]);
-            this.scrollDown();
-          }
+          this.Messages = data.messages;
+          this.scroll();        
+
         } else {
           console.log(data.msg);
         }
       }
     });
+
+    //Get messages that keep coming.
+    this.getMessages();
+  }
+
+  showModal(): Boolean {
+    if (this.numOfMessages != 0)
+      return true;
+    else 
+      return false;
+  }
+
+  goDown(): void {
+    this.scroll();
+    this.numOfMessages = 0;
   }
 
   getMessages(): any {
     // throw new Error('Method not implemented.');
-    this.myInterval = setInterval(() => {
+    this.myInterval = setInterval(() => {            
 
       this.serverService.getNewMessages({chat_id: this.chat_person_id}).subscribe((data) => {
         //add all messages to the old ones, and try to scroll down.
 
-        if (data.success) {
+        if (data.success) {          
           for (let i = 0; i < data.messages.length; i++) {
-            this.Messages.push(data.messages[i]);
-            this.scrollDown();
+            this.Messages.push(data.messages[i]);                      
+          }        
+          let box = document.getElementById('box');
+
+          if (data.messages.length != 0 && (box.scrollHeight - box.scrollTop <= 515)) {
+            this.scroll();
+          }          
+          else if (data.messages.length != 0 && (box.scrollHeight - box.scrollTop > 515)) {
+            this.numOfMessages = data.messages.length;            
           }
+
+          //let's get if chat_person is online:
+          this.online = data.isOnline;
+
+          //also get it's last time online attribute
+          this.lastTimeOnline = data.lastTimeOnline;
+
+          //update seen id:
+          this.seen_id = data.seen_id;
         } else {
           console.log(data.msg);
         }
     });
     }, 500);
+  }
+
+  lastSeen(message_id): Boolean {
+    if (String(message_id) == String(this.seen_id))
+      return true;
+    else
+      return false;
   }
 
   loadMessages(data): Observable<any> {
@@ -105,24 +142,19 @@ export class ChatComponent implements OnInit, OnDestroy, AfterContentChecked {
       message: this.message,
       toUsername: this.chat_person_username
     };
-
-    let d = new Date();
-
-    let time = `${d.getHours()}:${d.getMinutes()} - ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
     
-    let newMsg = {
-      time: time,
-      msg: this.message,
-      to: this.chat_person_id
-    }
-
-    this.Messages.push(newMsg);
-    
-    this.send(wrapper).subscribe((data) => {
-      console.log(data);
-      this.message = ""; //not to see same message again.
-      this.scrollDown();
+    this.send(wrapper).subscribe((data) => {      
+      this.message = ""; //not to see same message again.      
+      //add real time to this message      
+      this.Messages.push(data.message);      
+      this.scroll();      
     });
+  }
+
+  scroll(): void {
+    setTimeout(() => {
+      this.scrollDown();
+    }, 0);
   }
 
   send(data: any): Observable<any> {

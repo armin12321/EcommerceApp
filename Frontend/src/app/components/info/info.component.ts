@@ -34,7 +34,7 @@ export class InfoComponent implements OnInit {
       console.log(data);
       if (data.success) {
         this.messages = data.messages;
-        //get image of each and every one of messengers.
+       //get image of each and every one of messengers.
         for (let i = 0; i < this.messages.length; i++) {
           this.imgURLs.push(""); //not to be empty
           //getID, find by id and return avatar name

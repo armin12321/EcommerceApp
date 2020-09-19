@@ -12,6 +12,8 @@ export interface IUser extends Document {
     address: string;
     type: string;
     avatarName: string;
+    online: Boolean;
+    lastTimeOnline: Date;
 };
 
 const UserSchema = new Schema({
@@ -46,6 +48,14 @@ const UserSchema = new Schema({
     avatarName: {
         type: String,
         required: true
+    },
+    online: {
+        type: Boolean,
+        required: false        
+    },
+    lastTimeOnline: {
+        type: Date,
+        required: false
     }
 });
 

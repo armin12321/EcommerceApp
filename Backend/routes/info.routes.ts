@@ -15,4 +15,6 @@ infoRoutes.get('/recentChats', [authMiddleware.verifyToken], infoController.rece
 
 infoRoutes.get('/myOrders', [authMiddleware.verifyToken], infoController.myOrders); //later
 
+infoRoutes.post('/changeOnlineStatus',[authMiddleware.verifyToken] ,infoController.changeOnlineStatus);
+
 export {infoRoutes};
