@@ -1,18 +1,15 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.userRoutes = void 0;
 //third party packages
-var express_1 = __importDefault(require("express"));
+var express_1 = require("express");
 //controllers
 var user_controller_1 = require("../controllers/user.controller");
 var chat_controller_1 = require("../controllers/chat.controller");
 //middleware
 var auth_middleware_1 = require("../middlewares/auth.middleware");
 var validate_middleware_1 = require("../middlewares/validate.middleware");
-var userRoutes = express_1.default.Router();
+var userRoutes = express_1["default"].Router();
 exports.userRoutes = userRoutes;
 userRoutes.post('/login', user_controller_1.userController.login);
 userRoutes.post('/register', [validate_middleware_1.validateMiddleware.verifyCredentials], user_controller_1.userController.register);

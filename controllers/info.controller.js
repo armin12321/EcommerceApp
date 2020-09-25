@@ -1,12 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.infoController = void 0;
-var messages_1 = __importDefault(require("../models/messages"));
+var messages_1 = require("../models/messages");
 var mongodb_1 = require("mongodb");
-var user_1 = __importDefault(require("../models/user"));
+var user_1 = require("../models/user");
 //helpers :
 var preprocess = function (messages) {
     var histogram = []; //holding already viewed messengers.
@@ -89,7 +86,7 @@ var newMessages = function (req, res) {
         to: user_id_object,
         viewed: false
     };
-    messages_1.default
+    messages_1["default"]
         .find(filter)
         .sort({ time: -1 })
         .lean()
@@ -111,7 +108,7 @@ var recentChats = function (req, res) {
             { from: user_id_object }
         ]
     };
-    messages_1.default
+    messages_1["default"]
         .find(filter)
         .sort({ time: -1 })
         .lean()
@@ -136,7 +133,7 @@ var changeOnlineStatus = function (req, res) {
         online: req.body.online,
         lastTimeOnline: new Date()
     };
-    user_1.default
+    user_1["default"]
         .findByIdAndUpdate(user_id_object, updateQuery)
         .lean()
         .then(function (user) {

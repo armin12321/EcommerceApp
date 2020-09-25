@@ -11,72 +11,72 @@ var core_1 = require("@angular/core");
 var ServerService = /** @class */ (function () {
     function ServerService(http) {
         this.http = http;
-        this.serverURL = 'http://localhost:5000';
+        this.serverURL = '';
     }
     ServerService.prototype.changeOnlineStatus = function (data) {
         // throw new Error('Method not implemented.');
-        return this.http.post(this.serverURL + "/api/info/changeOnlineStatus", data);
+        return this.http.post(this.serverURL + "api/info/changeOnlineStatus", data);
     };
     ServerService.prototype.getRecentChats = function () {
         // throw new Error('Method not implemented.');
-        return this.http.get(this.serverURL + "/api/info/recentChats");
+        return this.http.get(this.serverURL + "api/info/recentChats");
     };
     ServerService.prototype.findByID = function (data) {
         // throw new Error('Method not implemented.');
-        return this.http.post(this.serverURL + "/api/user/getByID", data);
+        return this.http.post(this.serverURL + "api/user/getByID", data);
     };
     ServerService.prototype.getMessagesInfo = function () {
         // throw new Error('Method not implemented.');
-        return this.http.get(this.serverURL + "/api/info/newMessages");
+        return this.http.get(this.serverURL + "api/info/newMessages");
     };
     ServerService.prototype.getNotifications = function () {
         // throw new Error('Method not implemented.');
-        return this.http.get(this.serverURL + "/api/user/notifications");
+        return this.http.get(this.serverURL + "api/user/notifications");
     };
     ServerService.prototype.getHomeData = function () {
-        return this.http.get(this.serverURL + "/api/public/home", {}); //here goes http options.
+        return this.http.get(this.serverURL + "api/public/home", {}); //here goes http options.
     };
     ServerService.prototype.postRegisterData = function (data) {
-        return this.http.post(this.serverURL + "/api/user/register", data);
+        return this.http.post(this.serverURL + "api/user/register", data);
     };
     ServerService.prototype.postProductData = function (data) {
-        return this.http.post(this.serverURL + "/api/product/add", data);
+        return this.http.post(this.serverURL + "api/product/add", data);
     };
     ServerService.prototype.postLoginData = function (data) {
-        return this.http.post(this.serverURL + "/api/user/login", data);
+        return this.http.post(this.serverURL + "api/user/login", data);
     };
     ServerService.prototype.getProductPicture = function (data) {
-        return this.http.post(this.serverURL + "/api/product/productImage", data, { responseType: "blob" });
+        return this.http.post(this.serverURL + "api/product/productImage", data, { responseType: "blob" });
     };
     ServerService.prototype.getProfileData = function () {
-        return this.http.get(this.serverURL + "/api/user/profile");
+        return this.http.get(this.serverURL + "api/user/profile");
     };
     ServerService.prototype.getCartData = function () {
-        return this.http.get(this.serverURL + "/api/user/cart");
+        return this.http.get(this.serverURL + "api/user/cart");
     };
     ServerService.prototype.getMyProducts = function () {
-        return this.http.get(this.serverURL + "/api/user/products");
+        return this.http.get(this.serverURL + "api/user/products");
     };
     ServerService.prototype.getSellerData = function (data) {
-        return this.http.post(this.serverURL + "/api/public/sellerInfo", data);
+        return this.http.post(this.serverURL + "api/public/sellerInfo", data);
     };
     ServerService.prototype.getProductData = function (data) {
-        return this.http.post(this.serverURL + "/api/public/productInfo", data);
+        return this.http.post(this.serverURL + "api/public/productInfo", data);
     };
     ServerService.prototype.getAvatarImage = function (data) {
-        return this.http.post(this.serverURL + "/api/public/avatarImage", data, { responseType: "blob" });
+        return this.http.post(this.serverURL + "api/public/avatarImage", data, { responseType: "blob" });
     };
     ServerService.prototype.getTopProducts = function (data) {
-        return this.http.post(this.serverURL + "/api/public/topProducts", data);
+        return this.http.post(this.serverURL + "api/public/topProducts", data);
     };
     ServerService.prototype.loadOldMessages = function (data) {
-        return this.http.post(this.serverURL + "/api/user/chat/loadMessages", data);
+        return this.http.post(this.serverURL + "api/user/chat/loadMessages", data);
     };
     ServerService.prototype.sendMessagee = function (data) {
-        return this.http.post(this.serverURL + "/api/user/chat/sendMessage", data);
+        return this.http.post(this.serverURL + "api/user/chat/sendMessage", data);
     };
     ServerService.prototype.getNewMessages = function (data) {
-        return this.http.post(this.serverURL + "/api/user/chat/getNewMessages", data);
+        return this.http.post(this.serverURL + "api/user/chat/getNewMessages", data);
     };
     ServerService = __decorate([
         core_1.Injectable({

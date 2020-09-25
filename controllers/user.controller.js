@@ -35,15 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.userController = void 0;
-var path_1 = __importDefault(require("path"));
-var user_1 = __importDefault(require("../models/user"));
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var path_1 = require("path");
+var user_1 = require("../models/user");
+var bcryptjs_1 = require("bcryptjs");
+var jsonwebtoken_1 = require("jsonwebtoken");
 var server_config_1 = require("../configs/server.config");
 var db_config_1 = require("../configs/db.config");
 var mongodb_1 = require("mongodb");
@@ -52,14 +49,14 @@ var login = function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
     //check if username exists
-    user_1.default.findOne({
+    user_1["default"].findOne({
         username: username
     })
         .lean() //return json, instead of mongodb type.
         .then(function (user) {
         if (user) { //exists, check password:
             console.log(user); // to see what type is user.
-            var passwordIsValid = bcryptjs_1.default.compareSync(password, user.password);
+            var passwordIsValid = bcryptjs_1["default"].compareSync(password, user.password);
             if (!passwordIsValid) {
                 res.json({
                     token: null,
@@ -68,7 +65,7 @@ var login = function (req, res) {
                 });
             }
             else {
-                var token = jsonwebtoken_1.default.sign({
+                var token = jsonwebtoken_1["default"].sign({
                     username: user.username,
                     _id: user._id,
                     type: user.type
@@ -81,7 +78,7 @@ var login = function (req, res) {
                     surname: user.surname,
                     type: user.type,
                     username: user.username,
-                    _id: user._id,
+                    _id: user._id
                 };
                 res.json({
                     token: token,
@@ -105,7 +102,7 @@ var register = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                user = new user_1.default({
+                user = new user_1["default"]({
                     name: req.body.name,
                     surname: req.body.surname,
                     username: req.body.username,
@@ -119,9 +116,9 @@ var register = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 });
                 if (!req.files) return [3 /*break*/, 2];
                 sampleFile = req.files.file;
-                ext = path_1.default.extname(sampleFile.name);
+                ext = path_1["default"].extname(sampleFile.name);
                 avatarName = req.body.username + ext;
-                uploadPath = path_1.default.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+                uploadPath = path_1["default"].join(__dirname, '..', '/uploads/images/avatars/', avatarName);
                 user.avatarName = avatarName;
                 return [4 /*yield*/, sampleFile.mv(uploadPath, function (err) {
                         if (err) {
@@ -217,7 +214,7 @@ var getByID = function (req, res) {
     //here getting req.body.ID
     console.log(req.body.id);
     var id = new mongodb_1.ObjectID(req.body.id);
-    user_1.default
+    user_1["default"]
         .findById(id)
         .lean()
         .then(function (user) {

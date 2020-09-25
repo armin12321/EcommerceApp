@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.authMiddleware = void 0;
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var jsonwebtoken_1 = require("jsonwebtoken");
 var server_config_1 = require("../configs/server.config");
 var verifyToken = function (req, res, next) {
     var token = req.headers["x-access-token"];
@@ -14,7 +11,7 @@ var verifyToken = function (req, res, next) {
             success: false
         });
     }
-    jsonwebtoken_1.default.verify(token, server_config_1.serverConfig.SECRET, function (err, decoded) {
+    jsonwebtoken_1["default"].verify(token, server_config_1.serverConfig.SECRET, function (err, decoded) {
         if (err) {
             return res.json({
                 msg: 'not authorized',

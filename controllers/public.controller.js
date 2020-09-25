@@ -1,18 +1,15 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.publicController = void 0;
 //functions:
-var product_1 = __importDefault(require("../models/product"));
-var moment_1 = __importDefault(require("moment"));
-var user_1 = __importDefault(require("../models/user"));
-var path_1 = __importDefault(require("path"));
+var product_1 = require("../models/product");
+var moment_1 = require("moment");
+var user_1 = require("../models/user");
+var path_1 = require("path");
 var mongodb_1 = require("mongodb");
 var home = function (req, res) {
     //return all possible products sorted by the date
-    product_1.default
+    product_1["default"]
         .find({})
         .sort({ date: -1 })
         .lean()
@@ -30,12 +27,12 @@ var home = function (req, res) {
         res.json({
             success: true,
             msg: 'Served main page for our website.',
-            products: modifiedProducts,
+            products: modifiedProducts
         });
     });
     var findTime = function (bigger, smaller) {
-        var bigg = moment_1.default(bigger);
-        var small = moment_1.default(smaller);
+        var bigg = moment_1["default"](bigger);
+        var small = moment_1["default"](smaller);
         var sec = bigg.diff(small, 'seconds');
         var min = bigg.diff(small, 'minutes');
         var hours = bigg.diff(small, 'hours');
@@ -63,7 +60,7 @@ var about = function (req, res) {
 };
 var sellerInfo = function (req, res) {
     console.log(req.body._id);
-    user_1.default
+    user_1["default"]
         .findById(req.body._id)
         .lean()
         .then(function (user) {
@@ -89,11 +86,11 @@ var productInfo = function (req, res) {
 };
 var avatarImage = function (req, res) {
     console.log(req.body.avatarName);
-    res.sendFile(path_1.default.join(__dirname, '..', 'uploads', 'images', 'avatars', req.body.avatarName));
+    res.sendFile(path_1["default"].join(__dirname, '..', 'uploads', 'images', 'avatars', req.body.avatarName));
 };
 var topProducts = function (req, res) {
     var id = new mongodb_1.ObjectID(req.body._id);
-    product_1.default
+    product_1["default"]
         .find({ "user._id": id })
         .sort({ purchased: -1, date: -1 })
         .lean()
@@ -110,12 +107,12 @@ var topProducts = function (req, res) {
         res.json({
             success: true,
             msg: 'Served main page for our website.',
-            products: modifiedProducts,
+            products: modifiedProducts
         });
     });
     var findTime = function (bigger, smaller) {
-        var bigg = moment_1.default(bigger);
-        var small = moment_1.default(smaller);
+        var bigg = moment_1["default"](bigger);
+        var small = moment_1["default"](smaller);
         var sec = bigg.diff(small, 'seconds');
         var min = bigg.diff(small, 'minutes');
         var hours = bigg.diff(small, 'hours');

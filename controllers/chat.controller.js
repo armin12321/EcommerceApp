@@ -35,16 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.chatController = void 0;
 //imports
-var messages_1 = __importDefault(require("../models/messages"));
+var messages_1 = require("../models/messages");
 var mongodb_1 = require("mongodb");
-var user_1 = __importDefault(require("../models/user"));
-var moment_1 = __importDefault(require("moment"));
+var user_1 = require("../models/user");
+var moment_1 = require("moment");
 //////////////helper methods
 ///next time we're gonna update our way of updating messages with our own helper method,
 //because in extreme cases current implementation would not work.
@@ -70,8 +67,8 @@ var calcNewMessages = function (messages) {
 };
 ///helper for finding 'ago'
 var findTime = function (bigger, smaller) {
-    var bigg = moment_1.default(bigger);
-    var small = moment_1.default(smaller);
+    var bigg = moment_1["default"](bigger);
+    var small = moment_1["default"](smaller);
     var sec = bigg.diff(small, 'seconds');
     var min = bigg.diff(small, 'minutes');
     var hours = bigg.diff(small, 'hours');
@@ -101,7 +98,7 @@ var updateAll = function (messages, user_id_object) { return __awaiter(void 0, v
                         switch (_a.label) {
                             case 0:
                                 if (!(String(user_id_object) == String(messages[i].to) && messages[i].viewed == false)) return [3 /*break*/, 2];
-                                return [4 /*yield*/, messages_1.default.updateOne({ _id: messages[i]._id }, { viewed: true }, function (err) {
+                                return [4 /*yield*/, messages_1["default"].updateOne({ _id: messages[i]._id }, { viewed: true }, function (err) {
                                         if (err)
                                             throw err;
                                         else
@@ -150,7 +147,7 @@ var loadMessages = function (req, res) {
     //     from: chat_id_object,
     //     viewed: false
     // };
-    messages_1.default
+    messages_1["default"]
         .find(filter)
         .sort({ time: 1 })
         .lean()
@@ -182,7 +179,7 @@ var saveMessage = function (req, res) {
     var fromObject = new mongodb_1.ObjectID(req.user_id);
     var toObject = new mongodb_1.ObjectID(req.body.to);
     var date = new Date();
-    var message = new messages_1.default({
+    var message = new messages_1["default"]({
         from: fromObject,
         to: toObject,
         messageType: "String",
@@ -221,7 +218,7 @@ var getNewMessages = function (req, res) {
         viewed: true
     };
     //find last message's view 
-    messages_1.default
+    messages_1["default"]
         .find(filter2)
         .sort({ time: -1 })
         .lean()
@@ -232,12 +229,12 @@ var getNewMessages = function (req, res) {
             msg_id = undefined;
         else
             msg_id = msgs[0]._id;
-        messages_1.default
+        messages_1["default"]
             .find(filter)
             .sort({ time: 1 })
             .lean()
             .then(function (messages) {
-            user_1.default
+            user_1["default"]
                 .findById(chat_id_object)
                 .lean()
                 .then(function (user) {
@@ -281,7 +278,7 @@ var notifications = function (req, res) {
         to: user_id,
         viewed: false
     };
-    messages_1.default
+    messages_1["default"]
         .find(filter)
         .sort({ time: -1 })
         .lean()

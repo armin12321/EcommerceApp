@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var mongoose_1 = require("mongoose");
 ;
 var ProductSchema = new mongoose_1.Schema({
@@ -42,4 +42,4 @@ var ProductSchema = new mongoose_1.Schema({
 });
 //here maybe functions for this model...
 var Product = mongoose_1.model('Product', ProductSchema);
-exports.default = Product;
+exports["default"] = Product;

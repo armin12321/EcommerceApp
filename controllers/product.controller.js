@@ -1,12 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.productController = void 0;
-var path_1 = __importDefault(require("path"));
-var user_1 = __importDefault(require("../models/user"));
-var product_1 = __importDefault(require("../models/product"));
+var path_1 = require("path");
+var user_1 = require("../models/user");
+var product_1 = require("../models/product");
 var uuid_1 = require("uuid");
 //functions:
 var add = function (req, res) {
@@ -16,8 +13,8 @@ var add = function (req, res) {
     console.log(req.body.name);
     console.log(req.files.file);
     var images = req.files.file;
-    var user = new user_1.default(JSON.parse(req.body.user));
-    var product = new product_1.default({
+    var user = new user_1["default"](JSON.parse(req.body.user));
+    var product = new product_1["default"]({
         name: req.body.name[1],
         user: user,
         price: req.body.price,
@@ -29,13 +26,13 @@ var add = function (req, res) {
         description: req.body.description
     });
     for (var i = 0; i < images.length; i++) {
-        product['images'].push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
+        product['images'].push(product.name + uuid_1.v4() + path_1["default"].extname(images[i].name));
     }
     product.save().then(function (product) {
         for (var i = 0; i < images.length; i++) {
             imageName = product.images[i];
             // imageName = product.id + '-' + i.toString() + path.extname(images[i].name); Ima i ova varijanta davanja imena.
-            upath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
+            upath = path_1["default"].join(__dirname, '..', '/uploads/images/products', imageName);
             images[i].mv(upath, function (err) {
                 if (err) {
                     return res.json({
@@ -45,7 +42,7 @@ var add = function (req, res) {
                 }
             });
         }
-    }).catch(function (err) {
+    })["catch"](function (err) {
         console.log(err);
     });
     return res.json({
@@ -55,7 +52,7 @@ var add = function (req, res) {
 };
 var sendProductPicture = function (req, res) {
     console.log(req.body.url);
-    var pathToPicture = path_1.default.join(__dirname, '..', 'uploads/images/products', req.body.url);
+    var pathToPicture = path_1["default"].join(__dirname, '..', 'uploads/images/products', req.body.url);
     res.sendFile(pathToPicture);
 };
 var productController = {
