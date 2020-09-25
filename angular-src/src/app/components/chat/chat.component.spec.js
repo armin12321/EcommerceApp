@@ -1,22 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var testing_1 = require("@angular/core/testing");
-var chat_component_1 = require("./chat.component");
-describe('ChatComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(testing_1.async(function () {
-        testing_1.TestBed.configureTestingModule({
-            declarations: [chat_component_1.ChatComponent]
+import { async, TestBed } from '@angular/core/testing';
+import { ChatComponent } from './chat.component';
+describe('ChatComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ChatComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
-        fixture = testing_1.TestBed.createComponent(chat_component_1.ChatComponent);
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ChatComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should create', function () {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

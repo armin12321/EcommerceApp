@@ -1,15 +1,12 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatComponent = void 0;
-var core_1 = require("@angular/core");
-var ChatComponent = /** @class */ (function () {
-    function ChatComponent(serverService, sharedData, router, sanitizer) {
+import { Component } from '@angular/core';
+let ChatComponent = class ChatComponent {
+    constructor(serverService, sharedData, router, sanitizer) {
         this.serverService = serverService;
         this.sharedData = sharedData;
         this.router = router;
@@ -24,31 +21,30 @@ var ChatComponent = /** @class */ (function () {
         this.online = false;
         this.lastTimeOnline = [];
     }
-    ChatComponent.prototype.ngAfterContentChecked = function () {
-    };
-    ChatComponent.prototype.ngOnDestroy = function () {
+    ngAfterContentChecked() {
+    }
+    ngOnDestroy() {
         clearInterval(this.myInterval);
-    };
-    ChatComponent.prototype.ngOnInit = function () {
-        var _this = this;
+    }
+    ngOnInit() {
         this.chat_person_id = this.sharedData.getChatPersonID();
         this.chat_person_username = this.sharedData.getChatPersonUsername();
         //get person's avatar image, and then set it.
         console.log(this.sharedData.getChatPersonAvatarURL());
-        this.serverService.getAvatarImage({ avatarName: this.sharedData.getChatPersonAvatarURL() }).subscribe(function (picture) {
-            _this.showPicture(picture);
+        this.serverService.getAvatarImage({ avatarName: this.sharedData.getChatPersonAvatarURL() }).subscribe((picture) => {
+            this.showPicture(picture);
         });
         //load all the messages that you have been typing with this guy.
-        this.loadMessages({ chat_id: this.chat_person_id }).subscribe(function (data) {
+        this.loadMessages({ chat_id: this.chat_person_id }).subscribe((data) => {
             //this load operation aproximatelly needs 200ms, so we can try multiple values.
             if (data.msg === "not authorized") {
-                _this.router.navigate(['/public/home']);
+                this.router.navigate(['/public/home']);
             }
             else {
                 if (data.msg === "loaded messages successfully") {
                     console.log(data);
-                    _this.Messages = data.messages;
-                    _this.scroll();
+                    this.Messages = data.messages;
+                    this.scroll();
                 }
                 else {
                     console.log(data.msg);
@@ -57,112 +53,108 @@ var ChatComponent = /** @class */ (function () {
         });
         //Get messages that keep coming.
         this.getMessages();
-    };
-    ChatComponent.prototype.showModal = function () {
+    }
+    showModal() {
         if (this.numOfMessages != 0)
             return true;
         else
             return false;
-    };
-    ChatComponent.prototype.goDown = function () {
+    }
+    goDown() {
         this.scroll();
         this.numOfMessages = 0;
-    };
-    ChatComponent.prototype.getMessages = function () {
-        var _this = this;
+    }
+    getMessages() {
         // throw new Error('Method not implemented.');
-        this.myInterval = setInterval(function () {
-            _this.serverService.getNewMessages({ chat_id: _this.chat_person_id }).subscribe(function (data) {
+        this.myInterval = setInterval(() => {
+            this.serverService.getNewMessages({ chat_id: this.chat_person_id }).subscribe((data) => {
                 //add all messages to the old ones, and try to scroll down.
                 if (data.success) {
-                    for (var i = 0; i < data.messages.length; i++) {
-                        _this.Messages.push(data.messages[i]);
+                    for (let i = 0; i < data.messages.length; i++) {
+                        this.Messages.push(data.messages[i]);
                     }
-                    var box = document.getElementById('box');
+                    let box = document.getElementById('box');
                     if (data.messages.length != 0 && (box.scrollHeight - box.scrollTop <= 515)) {
-                        _this.scroll();
+                        this.scroll();
                     }
                     else if (data.messages.length != 0 && (box.scrollHeight - box.scrollTop > 515)) {
-                        _this.numOfMessages = data.messages.length;
+                        this.numOfMessages = data.messages.length;
                     }
                     //let's get if chat_person is online:
-                    _this.online = data.isOnline;
+                    this.online = data.isOnline;
                     //also get it's last time online attribute
-                    _this.lastTimeOnline = data.lastTimeOnline;
+                    this.lastTimeOnline = data.lastTimeOnline;
                     //update seen id:
-                    _this.seen_id = data.seen_id;
+                    this.seen_id = data.seen_id;
                 }
                 else {
                     console.log(data.msg);
                 }
             });
         }, 500);
-    };
-    ChatComponent.prototype.lastSeen = function (message_id) {
+    }
+    lastSeen(message_id) {
         if (String(message_id) == String(this.seen_id))
             return true;
         else
             return false;
-    };
-    ChatComponent.prototype.loadMessages = function (data) {
+    }
+    loadMessages(data) {
         return this.serverService.loadOldMessages(data);
-    };
-    ChatComponent.prototype.scrollDown = function () {
-        var box = document.getElementById('box');
+    }
+    scrollDown() {
+        let box = document.getElementById('box');
         box.scrollTop = box.scrollHeight;
-    };
-    ChatComponent.prototype.sendMessage = function () {
-        var _this = this;
+    }
+    sendMessage() {
         console.log(this.message);
-        var wrapper = {
+        let wrapper = {
             to: this.chat_person_id,
             message: this.message,
             toUsername: this.chat_person_username
         };
-        this.send(wrapper).subscribe(function (data) {
-            _this.message = ""; //not to see same message again.      
+        this.send(wrapper).subscribe((data) => {
+            this.message = ""; //not to see same message again.      
             //add real time to this message      
-            _this.Messages.push(data.message);
-            _this.scroll();
+            this.Messages.push(data.message);
+            this.scroll();
         });
-    };
-    ChatComponent.prototype.scroll = function () {
-        var _this = this;
-        setTimeout(function () {
-            _this.scrollDown();
+    }
+    scroll() {
+        setTimeout(() => {
+            this.scrollDown();
         }, 0);
-    };
-    ChatComponent.prototype.send = function (data) {
+    }
+    send(data) {
         return this.serverService.sendMessagee(data);
-    };
-    ChatComponent.prototype.calcClass = function (message) {
-        var classes = ['ml-auto', 'mb-3'];
+    }
+    calcClass(message) {
+        let classes = ['ml-auto', 'mb-3'];
         if (message.to == this.chat_person_id)
             return classes;
-    };
-    ChatComponent.prototype.calcClass1 = function (message) {
-        var classes = ['ml-3'];
+    }
+    calcClass1(message) {
+        let classes = ['ml-3'];
         if (message.to != this.chat_person_id)
             return classes;
-    };
-    ChatComponent.prototype.calcClass2 = function (message) {
-        var dark = ['bg-dark'];
-        var primary = ['bg-primary'];
+    }
+    calcClass2(message) {
+        let dark = ['bg-dark'];
+        let primary = ['bg-primary'];
         if (message.to == this.chat_person_id)
             return primary;
         else
             return dark;
-    };
-    ChatComponent.prototype.showPicture = function (image) {
-        var _this = this;
-        var reader = new FileReader();
+    }
+    showPicture(image) {
+        let reader = new FileReader();
         reader.readAsDataURL(image);
-        reader.onload = function (_event) {
-            _this.pictureURL = _this.sanitizer.bypassSecurityTrustUrl("" + reader.result);
+        reader.onload = (_event) => {
+            this.pictureURL = this.sanitizer.bypassSecurityTrustUrl(`${reader.result}`);
         };
-    };
-    ChatComponent.prototype.calcPictureStyle = function (message) {
-        var dont_need_picture = {
+    }
+    calcPictureStyle(message) {
+        const dont_need_picture = {
             'display': 'none'
         };
         if (message.to == this.chat_person_id) {
@@ -171,14 +163,13 @@ var ChatComponent = /** @class */ (function () {
         else { //else style picture 
             return {};
         }
-    };
-    ChatComponent = __decorate([
-        core_1.Component({
-            selector: 'app-chat',
-            templateUrl: './chat.component.html',
-            styleUrls: ['./chat.component.css']
-        })
-    ], ChatComponent);
-    return ChatComponent;
-}());
-exports.ChatComponent = ChatComponent;
+    }
+};
+ChatComponent = __decorate([
+    Component({
+        selector: 'app-chat',
+        templateUrl: './chat.component.html',
+        styleUrls: ['./chat.component.css']
+    })
+], ChatComponent);
+export { ChatComponent };

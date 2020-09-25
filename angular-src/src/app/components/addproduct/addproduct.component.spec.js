@@ -1,22 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var testing_1 = require("@angular/core/testing");
-var addproduct_component_1 = require("./addproduct.component");
-describe('AddproductComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(testing_1.async(function () {
-        testing_1.TestBed.configureTestingModule({
-            declarations: [addproduct_component_1.AddproductComponent]
+import { async, TestBed } from '@angular/core/testing';
+import { AddproductComponent } from './addproduct.component';
+describe('AddproductComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [AddproductComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
-        fixture = testing_1.TestBed.createComponent(addproduct_component_1.AddproductComponent);
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AddproductComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should create', function () {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

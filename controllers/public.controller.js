@@ -1,71 +1,68 @@
-"use strict";
-exports.__esModule = true;
-exports.publicController = void 0;
 //functions:
-var product_1 = require("../models/product");
-var moment_1 = require("moment");
-var user_1 = require("../models/user");
-var path_1 = require("path");
-var mongodb_1 = require("mongodb");
-var home = function (req, res) {
+import Product from '../models/product';
+import moment from 'moment';
+import User from '../models/user';
+import path from 'path';
+import { ObjectID } from 'mongodb';
+const home = (req, res) => {
     //return all possible products sorted by the date
-    product_1["default"]
+    Product
         .find({})
         .sort({ date: -1 })
         .lean()
         .limit(18)
-        .then(function (products) {
+        .then((products) => {
         //for each product, find difference in time of getting information, and setting product
-        var dateToday = new Date().toISOString();
-        var modifiedProducts = products.map(function (product) {
-            var ago = findTime(dateToday, product.date);
+        let dateToday = new Date().toISOString();
+        let modifiedProducts = products.map((product) => {
+            let ago = findTime(dateToday, product.date);
             return {
-                product: product,
-                ago: ago
+                product,
+                ago
             };
         });
         res.json({
             success: true,
             msg: 'Served main page for our website.',
-            products: modifiedProducts
+            products: modifiedProducts,
         });
     });
-    var findTime = function (bigger, smaller) {
-        var bigg = moment_1["default"](bigger);
-        var small = moment_1["default"](smaller);
-        var sec = bigg.diff(small, 'seconds');
-        var min = bigg.diff(small, 'minutes');
-        var hours = bigg.diff(small, 'hours');
-        var days = bigg.diff(small, 'days');
-        var months = bigg.diff(small, 'months');
-        var years = bigg.diff(small, 'years');
+    let findTime = (bigger, smaller) => {
+        let bigg = moment(bigger);
+        let small = moment(smaller);
+        let sec = bigg.diff(small, 'seconds');
+        let min = bigg.diff(small, 'minutes');
+        let hours = bigg.diff(small, 'hours');
+        let days = bigg.diff(small, 'days');
+        let months = bigg.diff(small, 'months');
+        let years = bigg.diff(small, 'years');
         if (sec != 0 && sec < 60)
-            return sec + " seconds ago";
+            return `${sec} seconds ago`;
         if (min != 0 && min < 60)
-            return min + " minutes ago";
+            return `${min} minutes ago`;
         if (hours != 0 && hours < 24)
-            return hours + " hours ago";
+            return `${hours} hours ago`;
         if (days != 0 && days < 30)
-            return days + " days ago";
+            return `${days} days ago`;
         if (months != 0 && months < 12)
-            return months + " months ago";
-        return years + " years ago";
+            return `${months} months ago`;
+        return `${years} years ago`;
     };
 };
-var about = function (req, res) {
+const about = (req, res) => {
     res.json({
         success: true,
         msg: 'Served about page for our website'
     });
 };
-var sellerInfo = function (req, res) {
+const sellerInfo = (req, res) => {
     console.log(req.body._id);
-    user_1["default"]
+    User
         .findById(req.body._id)
         .lean()
-        .then(function (user) {
+        .then((user) => {
         console.log(user);
-        var wrapper = {
+        let wrapper = {
             avatarName: user === null || user === void 0 ? void 0 : user.avatarName,
             username: user === null || user === void 0 ? void 0 : user.username,
             name: user === null || user === void 0 ? void 0 : user.name,
@@ -81,64 +78,64 @@ var sellerInfo = function (req, res) {
         });
     });
 };
-var productInfo = function (req, res) {
+const productInfo = (req, res) => {
     res.json({});
 };
-var avatarImage = function (req, res) {
+const avatarImage = (req, res) => {
     console.log(req.body.avatarName);
-    res.sendFile(path_1["default"].join(__dirname, '..', 'uploads', 'images', 'avatars', req.body.avatarName));
+    res.sendFile(path.join(__dirname, '..', 'uploads', 'images', 'avatars', req.body.avatarName));
 };
-var topProducts = function (req, res) {
-    var id = new mongodb_1.ObjectID(req.body._id);
-    product_1["default"]
+const topProducts = (req, res) => {
+    let id = new ObjectID(req.body._id);
+    Product
         .find({ "user._id": id })
         .sort({ purchased: -1, date: -1 })
         .lean()
         .limit(10)
-        .then(function (products) {
-        var dateToday = new Date().toISOString();
-        var modifiedProducts = products.map(function (product) {
-            var ago = findTime(dateToday, product.date);
+        .then((products) => {
+        let dateToday = new Date().toISOString();
+        let modifiedProducts = products.map((product) => {
+            let ago = findTime(dateToday, product.date);
             return {
-                product: product,
-                ago: ago
+                product,
+                ago
             };
         });
         res.json({
             success: true,
             msg: 'Served main page for our website.',
-            products: modifiedProducts
+            products: modifiedProducts,
         });
     });
-    var findTime = function (bigger, smaller) {
-        var bigg = moment_1["default"](bigger);
-        var small = moment_1["default"](smaller);
-        var sec = bigg.diff(small, 'seconds');
-        var min = bigg.diff(small, 'minutes');
-        var hours = bigg.diff(small, 'hours');
-        var days = bigg.diff(small, 'days');
-        var months = bigg.diff(small, 'months');
-        var years = bigg.diff(small, 'years');
+    let findTime = (bigger, smaller) => {
+        let bigg = moment(bigger);
+        let small = moment(smaller);
+        let sec = bigg.diff(small, 'seconds');
+        let min = bigg.diff(small, 'minutes');
+        let hours = bigg.diff(small, 'hours');
+        let days = bigg.diff(small, 'days');
+        let months = bigg.diff(small, 'months');
+        let years = bigg.diff(small, 'years');
         if (sec != 0 && sec < 60)
-            return sec + " seconds ago";
+            return `${sec} seconds ago`;
         if (min != 0 && min < 60)
-            return min + " minutes ago";
+            return `${min} minutes ago`;
         if (hours != 0 && hours < 24)
-            return hours + " hours ago";
+            return `${hours} hours ago`;
         if (days != 0 && days < 30)
-            return days + " days ago";
+            return `${days} days ago`;
         if (months != 0 && months < 12)
-            return months + " months ago";
-        return years + " years ago";
+            return `${months} months ago`;
+        return `${years} years ago`;
     };
 };
 //objects:
-var publicController = {
-    home: home,
-    about: about,
-    sellerInfo: sellerInfo,
-    productInfo: productInfo,
-    avatarImage: avatarImage,
-    topProducts: topProducts
+const publicController = {
+    home,
+    about,
+    sellerInfo,
+    productInfo,
+    avatarImage,
+    topProducts
 };
-exports.publicController = publicController;
+export { publicController };

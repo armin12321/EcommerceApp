@@ -28,6 +28,7 @@
     "moment": "^2.27.0",
     "mongoose": "^5.9.27",
     "multer": "^1.4.2",
+    "ts-node": "^9.0.0",
     "typescript": "^3.9.7",
     "uuid": "^8.3.0",
     "uuidv4": "^6.2.3"
@@ -35,5 +36,6 @@
   "devDependencies": {
     "nodemon": "^2.0.4"
   },
-  "description": ""
+  "description": "",
+  "type": "module"
 }

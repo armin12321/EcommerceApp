@@ -1,22 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var testing_1 = require("@angular/core/testing");
-var navbar_component_1 = require("./navbar.component");
-describe('NavbarComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(testing_1.async(function () {
-        testing_1.TestBed.configureTestingModule({
-            declarations: [navbar_component_1.NavbarComponent]
+import { async, TestBed } from '@angular/core/testing';
+import { NavbarComponent } from './navbar.component';
+describe('NavbarComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [NavbarComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
-        fixture = testing_1.TestBed.createComponent(navbar_component_1.NavbarComponent);
+    beforeEach(() => {
+        fixture = TestBed.createComponent(NavbarComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should create', function () {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

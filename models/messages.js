@@ -1,15 +1,13 @@
-"use strict";
-exports.__esModule = true;
-var mongodb_1 = require("mongodb");
-var mongoose_1 = require("mongoose");
+import { ObjectID } from 'mongodb';
+import { model, Schema } from 'mongoose';
 ;
-var MessageSchema = new mongoose_1.Schema({
+const MessageSchema = new Schema({
     from: {
-        type: mongodb_1.ObjectID,
+        type: ObjectID,
         required: true
     },
     to: {
-        type: mongodb_1.ObjectID,
+        type: ObjectID,
         required: true
     },
     time: {
@@ -38,5 +36,5 @@ var MessageSchema = new mongoose_1.Schema({
     }
 });
 //here maybe functions for this model...
-var Message = mongoose_1.model('Message', MessageSchema);
-exports["default"] = Message;
+const Message = model('Message', MessageSchema);
+export default Message;

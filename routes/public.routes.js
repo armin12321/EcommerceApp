@@ -1,14 +1,11 @@
-"use strict";
-exports.__esModule = true;
-exports.publicRoutes = void 0;
 //third party packages
-var express_1 = require("express");
+import express from 'express';
 //controller
-var public_controller_1 = require("../controllers/public.controller");
-var publicRoutes = express_1["default"].Router();
-exports.publicRoutes = publicRoutes;
-publicRoutes.get('/home', public_controller_1.publicController.home);
-publicRoutes.get('/about', public_controller_1.publicController.about);
-publicRoutes.post('/sellerInfo', public_controller_1.publicController.sellerInfo);
-publicRoutes.post('/avatarImage', public_controller_1.publicController.avatarImage);
-publicRoutes.post('/topProducts', public_controller_1.publicController.topProducts);
+import { publicController } from '../controllers/public.controller';
+const publicRoutes = express.Router();
+publicRoutes.get('/home', publicController.home);
+publicRoutes.get('/about', publicController.about);
+publicRoutes.post('/sellerInfo', publicController.sellerInfo);
+publicRoutes.post('/avatarImage', publicController.avatarImage);
+publicRoutes.post('/topProducts', publicController.topProducts);
+export { publicRoutes };

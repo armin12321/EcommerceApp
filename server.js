@@ -1,49 +1,47 @@
-"use strict";
-exports.__esModule = true;
 //third party packages
-var express_1 = require("express");
-var cors_1 = require("cors");
-var mongoose_1 = require("mongoose");
-var express_fileupload_1 = require("express-fileupload");
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import fileUpload from 'express-fileupload';
 //configs
-var db_config_1 = require("./configs/db.config");
-var server_config_1 = require("./configs/server.config");
+import { dbConfig } from './configs/db.config';
+import { serverConfig } from './configs/server.config';
 //routes
-var user_routes_1 = require("./routes/user.routes");
-var public_routes_1 = require("./routes/public.routes");
-var product_routes_1 = require("./routes/product.routes");
-var info_routes_1 = require("./routes/info.routes");
+import { userRoutes } from './routes/user.routes';
+import { publicRoutes } from './routes/public.routes';
+import { productRoutes } from './routes/product.routes';
+import { infoRoutes } from './routes/info.routes';
 //hand defined middlewares
-var auth_middleware_1 = require("./middlewares/auth.middleware");
-var app = express_1["default"]();
+import { authMiddleware } from './middlewares/auth.middleware';
+const app = express();
 //////////// ----- MIDDLEWARE ----- /////////////
 //allow certain headers to be able to get token from client:
-app.use(auth_middleware_1.authMiddleware.addHeaders);
+app.use(authMiddleware.addHeaders);
 //Frontend - Backend compatibility:
-app.use(cors_1["default"]());
+app.use(cors());
 //Parsing requests of content-type: application/json:
-app.use(express_1["default"].json());
+app.use(express.json());
 // File Upload
-app.use(express_fileupload_1["default"]());
+app.use(fileUpload());
 //Parsing requests of content-type: urlencoded:
-app.use(express_1["default"].urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 /////////////////////////////////////////////////
 //set for enabling updates
-mongoose_1["default"].set('useFindAndModify', false);
+mongoose.set('useFindAndModify', false);
 //Database connection initialization:
-mongoose_1["default"].connect(db_config_1.dbConfig.ATLASURL, {
+mongoose.connect(dbConfig.ATLASURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(function () { return console.log("Sucessfuly connected to ATLAS database"); });
+}).then(() => console.log(`Sucessfuly connected to ATLAS database`));
 ////////////// ------- ROUTES ------ //////////////
 //Routes for user pages:
-app.use('/api/user', user_routes_1.userRoutes);
+app.use('/api/user', userRoutes);
 //Routes for public pages:
-app.use('/api/public', public_routes_1.publicRoutes);
+app.use('/api/public', publicRoutes);
 // Routes for products 
-app.use('/api/product', product_routes_1.productRoutes);
+app.use('/api/product', productRoutes);
 // Routes for notifications
-app.use('/api/info', info_routes_1.infoRoutes);
+app.use('/api/info', infoRoutes);
 ///////////////////////////////////////////////////
 //start listening on server's port
-app.listen(server_config_1.serverConfig.PORT, function () { return console.log("Server started on port " + server_config_1.serverConfig.PORT); });
+app.listen(serverConfig.PORT, () => console.log(`Server started on port ${serverConfig.PORT}`));

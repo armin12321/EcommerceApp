@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.types = void 0;
-var types = {
+const types = {
     BUYER: 'buyer',
     SELLER: 'seller'
 };
-exports.types = types;
+export { types };

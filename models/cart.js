@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = require("mongoose");
-var mongodb_1 = require("mongodb");
+import { model, Schema } from 'mongoose';
+import { ObjectID } from 'mongodb';
 ;
-var CartSchema = new mongoose_1.Schema({
+const CartSchema = new Schema({
     user_id: {
-        type: mongodb_1.ObjectID,
+        type: ObjectID,
         required: true
     },
     products: {
@@ -14,5 +12,5 @@ var CartSchema = new mongoose_1.Schema({
     }
 });
 //here maybe some functions relevant for this model.
-var Cart = mongoose_1.model('Cart', CartSchema);
-exports.default = Cart;
+const Cart = model('Cart', CartSchema);
+export default Cart;

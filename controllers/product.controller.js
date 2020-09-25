@@ -1,20 +1,17 @@
-"use strict";
-exports.__esModule = true;
-exports.productController = void 0;
-var path_1 = require("path");
-var user_1 = require("../models/user");
-var product_1 = require("../models/product");
-var uuid_1 = require("uuid");
+import path from 'path';
+import User from '../models/user';
+import Product from '../models/product';
+import { v4 as uuidv4 } from 'uuid';
 //functions:
-var add = function (req, res) {
-    var avatarName, upath, imageName;
-    var pass = true;
-    var uploaded;
+const add = (req, res) => {
+    let avatarName, upath, imageName;
+    let pass = true;
+    let uploaded;
     console.log(req.body.name);
     console.log(req.files.file);
-    var images = req.files.file;
-    var user = new user_1["default"](JSON.parse(req.body.user));
-    var product = new product_1["default"]({
+    const images = req.files.file;
+    const user = new User(JSON.parse(req.body.user));
+    const product = new Product({
         name: req.body.name[1],
         user: user,
         price: req.body.price,
@@ -25,15 +22,15 @@ var add = function (req, res) {
         images: [],
         description: req.body.description
     });
-    for (var i = 0; i < images.length; i++) {
-        product['images'].push(product.name + uuid_1.v4() + path_1["default"].extname(images[i].name));
+    for (let i = 0; i < images.length; i++) {
+        product['images'].push(product.name + uuidv4() + path.extname(images[i].name));
     }
-    product.save().then(function (product) {
-        for (var i = 0; i < images.length; i++) {
+    product.save().then((product) => {
+        for (let i = 0; i < images.length; i++) {
             imageName = product.images[i];
             // imageName = product.id + '-' + i.toString() + path.extname(images[i].name); Ima i ova varijanta davanja imena.
-            upath = path_1["default"].join(__dirname, '..', '/uploads/images/products', imageName);
-            images[i].mv(upath, function (err) {
+            upath = path.join(__dirname, '..', '/uploads/images/products', imageName);
+            images[i].mv(upath, (err) => {
                 if (err) {
                     return res.json({
                         success: false,
@@ -42,7 +39,7 @@ var add = function (req, res) {
                 }
             });
         }
-    })["catch"](function (err) {
+    }).catch((err) => {
         console.log(err);
     });
     return res.json({
@@ -50,13 +47,13 @@ var add = function (req, res) {
         msg: 'Product added successfully'
     });
 };
-var sendProductPicture = function (req, res) {
+const sendProductPicture = (req, res) => {
     console.log(req.body.url);
-    var pathToPicture = path_1["default"].join(__dirname, '..', 'uploads/images/products', req.body.url);
+    const pathToPicture = path.join(__dirname, '..', 'uploads/images/products', req.body.url);
     res.sendFile(pathToPicture);
 };
-var productController = {
-    add: add,
-    sendProductPicture: sendProductPicture
+const productController = {
+    add,
+    sendProductPicture
 };
-exports.productController = productController;
+export { productController };

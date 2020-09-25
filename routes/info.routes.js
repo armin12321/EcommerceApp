@@ -1,15 +1,12 @@
-"use strict";
-exports.__esModule = true;
-exports.infoRoutes = void 0;
 //third party packages
-var express_1 = require("express");
+import express from 'express';
 //middleware
-var auth_middleware_1 = require("../middlewares/auth.middleware");
+import { authMiddleware } from '../middlewares/auth.middleware';
 //controller
-var info_controller_1 = require("../controllers/info.controller");
-var infoRoutes = express_1["default"].Router();
-exports.infoRoutes = infoRoutes;
-infoRoutes.get('/newMessages', [auth_middleware_1.authMiddleware.verifyToken], info_controller_1.infoController.newMessages);
-infoRoutes.get('/recentChats', [auth_middleware_1.authMiddleware.verifyToken], info_controller_1.infoController.recentChats);
-infoRoutes.get('/myOrders', [auth_middleware_1.authMiddleware.verifyToken], info_controller_1.infoController.myOrders); //later
-infoRoutes.post('/changeOnlineStatus', [auth_middleware_1.authMiddleware.verifyToken], info_controller_1.infoController.changeOnlineStatus);
+import { infoController } from '../controllers/info.controller';
+const infoRoutes = express.Router();
+infoRoutes.get('/newMessages', [authMiddleware.verifyToken], infoController.newMessages);
+infoRoutes.get('/recentChats', [authMiddleware.verifyToken], infoController.recentChats);
+infoRoutes.get('/myOrders', [authMiddleware.verifyToken], infoController.myOrders); //later
+infoRoutes.post('/changeOnlineStatus', [authMiddleware.verifyToken], infoController.changeOnlineStatus);
+export { infoRoutes };

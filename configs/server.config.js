@@ -1,10 +1,7 @@
-"use strict";
-exports.__esModule = true;
-exports.serverConfig = void 0;
-var PORT = process.env.PORT || 8080;
-var SECRET = 'dalfj2lj43lj4234dkfjdj';
-var serverConfig = {
-    PORT: PORT,
-    SECRET: SECRET
+const PORT = process.env.PORT || 8080;
+const SECRET = 'dalfj2lj43lj4234dkfjdj';
+const serverConfig = {
+    PORT,
+    SECRET
 };
-exports.serverConfig = serverConfig;
+export { serverConfig };

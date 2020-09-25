@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var testing_1 = require("@angular/core/testing");
-var token_service_1 = require("./token.service");
-describe('TokenService', function () {
-    var service;
-    beforeEach(function () {
-        testing_1.TestBed.configureTestingModule({});
-        service = testing_1.TestBed.inject(token_service_1.TokenService);
+import { TestBed } from '@angular/core/testing';
+import { TokenService } from './token.service';
+describe('TokenService', () => {
+    let service;
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(TokenService);
     });
-    it('should be created', function () {
+    it('should be created', () => {
         expect(service).toBeTruthy();
     });
 });

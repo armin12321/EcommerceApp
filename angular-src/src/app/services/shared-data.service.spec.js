@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var testing_1 = require("@angular/core/testing");
-var shared_data_service_1 = require("./shared-data.service");
-describe('SharedDataService', function () {
-    var service;
-    beforeEach(function () {
-        testing_1.TestBed.configureTestingModule({});
-        service = testing_1.TestBed.inject(shared_data_service_1.SharedDataService);
+import { TestBed } from '@angular/core/testing';
+import { SharedDataService } from './shared-data.service';
+describe('SharedDataService', () => {
+    let service;
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(SharedDataService);
     });
-    it('should be created', function () {
+    it('should be created', () => {
         expect(service).toBeTruthy();
     });
 });

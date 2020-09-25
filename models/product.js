@@ -1,8 +1,6 @@
-"use strict";
-exports.__esModule = true;
-var mongoose_1 = require("mongoose");
+import { model, Schema } from 'mongoose';
 ;
-var ProductSchema = new mongoose_1.Schema({
+const ProductSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -41,5 +39,5 @@ var ProductSchema = new mongoose_1.Schema({
     }
 });
 //here maybe functions for this model...
-var Product = mongoose_1.model('Product', ProductSchema);
-exports["default"] = Product;
+const Product = model('Product', ProductSchema);
+export default Product;

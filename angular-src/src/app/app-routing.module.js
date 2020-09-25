@@ -1,37 +1,34 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppRoutingModule = void 0;
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var home_component_1 = require("./components/home/home.component");
-var login_component_1 = require("./components/login/login.component");
-var register_component_1 = require("./components/register/register.component");
-var profile_component_1 = require("./components/profile/profile.component");
-var cart_component_1 = require("./components/cart/cart.component");
-var products_component_1 = require("./components/products/products.component");
-var addproduct_component_1 = require("./components/addproduct/addproduct.component");
-var seller_info_component_1 = require("./components/seller-info/seller-info.component");
-var product_info_component_1 = require("./components/product-info/product-info.component");
-var chat_component_1 = require("./components/chat/chat.component");
-var info_component_1 = require("./components/info/info.component");
-var routes = [
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { CartComponent } from './components/cart/cart.component';
+import { ProductsComponent } from './components/products/products.component';
+import { AddproductComponent } from './components/addproduct/addproduct.component';
+import { SellerInfoComponent } from './components/seller-info/seller-info.component';
+import { ProductInfoComponent } from './components/product-info/product-info.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { InfoComponent } from './components/info/info.component';
+const routes = [
     {
         path: 'public/home',
-        component: home_component_1.HomeComponent
+        component: HomeComponent
     },
     {
         path: 'user/login',
-        component: login_component_1.LoginComponent
+        component: LoginComponent
     },
     {
         path: 'user/register',
-        component: register_component_1.RegisterComponent
+        component: RegisterComponent
     },
     {
         path: '',
@@ -40,46 +37,43 @@ var routes = [
     },
     {
         path: 'user/profile',
-        component: profile_component_1.ProfileComponent
+        component: ProfileComponent
     },
     {
         path: 'user/cart',
-        component: cart_component_1.CartComponent
+        component: CartComponent
     },
     {
         path: 'user/products',
-        component: products_component_1.ProductsComponent
+        component: ProductsComponent
     },
     {
         path: 'products/add',
-        component: addproduct_component_1.AddproductComponent
+        component: AddproductComponent
     },
     {
         path: 'public/sellerInfo',
-        component: seller_info_component_1.SellerInfoComponent
+        component: SellerInfoComponent
     },
     {
         path: 'public/productInfo',
-        component: product_info_component_1.ProductInfoComponent
+        component: ProductInfoComponent
     },
     {
         path: 'user/chat',
-        component: chat_component_1.ChatComponent
+        component: ChatComponent
     },
     {
         path: 'user/info',
-        component: info_component_1.InfoComponent
+        component: InfoComponent
     }
 ];
-var AppRoutingModule = /** @class */ (function () {
-    function AppRoutingModule() {
-    }
-    AppRoutingModule = __decorate([
-        core_1.NgModule({
-            imports: [router_1.RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
-            exports: [router_1.RouterModule]
-        })
-    ], AppRoutingModule);
-    return AppRoutingModule;
-}());
-exports.AppRoutingModule = AppRoutingModule;
+let AppRoutingModule = class AppRoutingModule {
+};
+AppRoutingModule = __decorate([
+    NgModule({
+        imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
+        exports: [RouterModule]
+    })
+], AppRoutingModule);
+export { AppRoutingModule };

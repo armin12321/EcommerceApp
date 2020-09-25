@@ -1,24 +1,21 @@
-"use strict";
-exports.__esModule = true;
-exports.infoController = void 0;
-var messages_1 = require("../models/messages");
-var mongodb_1 = require("mongodb");
-var user_1 = require("../models/user");
+import Messages from '../models/messages';
+import { ObjectID } from 'mongodb';
+import User from '../models/user';
 //helpers :
-var preprocess = function (messages) {
-    var histogram = []; //holding already viewed messengers.
-    var hasMessenger = function (histogram, messenger) {
-        for (var i = 0; i < histogram.length; i++) {
+let preprocess = (messages) => {
+    let histogram = []; //holding already viewed messengers.
+    let hasMessenger = (histogram, messenger) => {
+        for (let i = 0; i < histogram.length; i++) {
             if (String(histogram[i].from) == String(messenger))
                 return i; //return place of the messenger.
         }
         return -1;
     };
-    for (var i = 0; i < messages.length; i++) {
-        var index = hasMessenger(histogram, messages[i].from);
+    for (let i = 0; i < messages.length; i++) {
+        let index = hasMessenger(histogram, messages[i].from);
         if (index == -1) { //it has no messenger, push current.
-            var time = messages[i].time.getHours() + ":" + messages[i].time.getMinutes() + " - " + messages[i].time.getDate() + "/" + (messages[i].time.getMonth() + 1) + "/" + messages[i].time.getFullYear();
-            var newMessenger = {
+            let time = `${messages[i].time.getHours()}:${messages[i].time.getMinutes()} - ${messages[i].time.getDate()}/${messages[i].time.getMonth() + 1}/${messages[i].time.getFullYear()}`;
+            let newMessenger = {
                 from: messages[i].from,
                 fromUsername: messages[i].fromUsername,
                 time: time,
@@ -36,19 +33,19 @@ var preprocess = function (messages) {
     }
     return histogram;
 };
-var preprocess1 = function (messages, user_id_object) {
-    var histogram = []; //holding already viewed messengers.
-    var hasMessenger = function (histogram, messenger) {
-        for (var i = 0; i < histogram.length; i++) {
+let preprocess1 = (messages, user_id_object) => {
+    let histogram = []; //holding already viewed messengers.
+    let hasMessenger = (histogram, messenger) => {
+        for (let i = 0; i < histogram.length; i++) {
             if (String(histogram[i].messengerID) == String(messenger)) {
                 return i; //return place of the messenger.
             }
         }
         return -1;
     };
-    for (var i = 0; i < messages.length; i++) {
-        var messengerID = void 0;
-        var username = void 0;
+    for (let i = 0; i < messages.length; i++) {
+        let messengerID;
+        let username;
         if (String(user_id_object) == String(messages[i].from)) {
             messengerID = messages[i].to;
             username = messages[i].toUsername;
@@ -57,10 +54,10 @@ var preprocess1 = function (messages, user_id_object) {
             messengerID = messages[i].from;
             username = messages[i].fromUsername;
         }
-        var index = hasMessenger(histogram, messengerID);
+        let index = hasMessenger(histogram, messengerID);
         if (index == -1) { //it has no messenger, push current.
-            var time = messages[i].time.getHours() + ":" + messages[i].time.getMinutes() + " - " + messages[i].time.getDate() + "/" + (messages[i].time.getMonth() + 1) + "/" + messages[i].time.getFullYear();
-            var newMessenger = {
+            let time = `${messages[i].time.getHours()}:${messages[i].time.getMinutes()} - ${messages[i].time.getDate()}/${messages[i].time.getMonth() + 1}/${messages[i].time.getFullYear()}`;
+            let newMessenger = {
                 messengerID: messengerID,
                 messengerUsername: username,
                 time: time
@@ -77,22 +74,22 @@ var preprocess1 = function (messages, user_id_object) {
     return histogram;
 };
 /////////
-var myOrders = function (req, res) {
+let myOrders = (req, res) => {
     //later
 };
-var newMessages = function (req, res) {
-    var user_id_object = new mongodb_1.ObjectID(req.user_id);
-    var filter = {
+let newMessages = (req, res) => {
+    let user_id_object = new ObjectID(req.user_id);
+    let filter = {
         to: user_id_object,
         viewed: false
     };
-    messages_1["default"]
+    Messages
         .find(filter)
         .sort({ time: -1 })
         .lean()
-        .then(function (messages) {
+        .then((messages) => {
         //find only messengers, and number of messages that they've sent.
-        var newMessages = preprocess(messages);
+        let newMessages = preprocess(messages);
         res.json({
             success: true,
             msg: 'succesfuly returned non viewed messages.',
@@ -100,22 +97,22 @@ var newMessages = function (req, res) {
         });
     });
 };
-var recentChats = function (req, res) {
-    var user_id_object = new mongodb_1.ObjectID(req.user_id);
-    var filter = {
+let recentChats = (req, res) => {
+    let user_id_object = new ObjectID(req.user_id);
+    let filter = {
         $or: [
             { to: user_id_object },
             { from: user_id_object }
         ]
     };
-    messages_1["default"]
+    Messages
         .find(filter)
         .sort({ time: -1 })
         .lean()
         .limit(10000)
-        .then(function (messages) {
+        .then((messages) => {
         //find only people that you've been chating to, and last time you've chatted
-        var messengers = preprocess1(messages, user_id_object);
+        let messengers = preprocess1(messages, user_id_object);
         res.json({
             success: true,
             msg: 'successfuly returned people that youve been chatting to.',
@@ -123,27 +120,27 @@ var recentChats = function (req, res) {
         });
     });
 };
-var changeOnlineStatus = function (req, res) {
+let changeOnlineStatus = (req, res) => {
     console.log(req.body);
     console.log(req.username);
     console.log(req.user_id);
-    var user_id_object = new mongodb_1.ObjectID(req.user_id);
+    let user_id_object = new ObjectID(req.user_id);
     //change status in user field.
-    var updateQuery = {
+    let updateQuery = {
         online: req.body.online,
         lastTimeOnline: new Date()
     };
-    user_1["default"]
+    User
         .findByIdAndUpdate(user_id_object, updateQuery)
         .lean()
-        .then(function (user) {
-        console.log("Status for " + req.username + " changed.");
+        .then((user) => {
+        console.log(`Status for ${req.username} changed.`);
     });
 };
-var infoController = {
-    myOrders: myOrders,
-    newMessages: newMessages,
-    recentChats: recentChats,
-    changeOnlineStatus: changeOnlineStatus
+const infoController = {
+    myOrders,
+    newMessages,
+    recentChats,
+    changeOnlineStatus
 };
-exports.infoController = infoController;
+export { infoController };
