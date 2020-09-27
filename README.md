@@ -1,10 +1,10 @@
 # EcommerceApp
 
 ## Potrebni alati:
-  -npm
-  -nodejs
-  -angular
-  -angular-cli
+  - npm
+  - nodejs
+  - angular
+  - angular-cli
   
 ## Opis:
   - Aplikacija za online trgovinu sa potpuno funkcionalnim chat sistemom
