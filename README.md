@@ -7,9 +7,9 @@
   -angular-cli
   
 ## Opis:
-  -Aplikacija za online trgovinu sa potpuno funkcionalnim chat sistemom
-  -Neki od dijelova nisu dovršeni jer je aplikacija još u izradi
-  -Video demonstracija na linku: 
+  - Aplikacija za online trgovinu sa potpuno funkcionalnim chat sistemom
+  - Neki od dijelova nisu dovršeni jer je aplikacija još u izradi
+  - Video demonstracija na linku: 
   
 ## Upotreba:
   1. Klonirati repozitorijum
