@@ -13,4 +13,6 @@ productRoutes.post('/add', [authMiddleware.verifyToken], productController.add);
 
 productRoutes.post('/productImage', productController.sendProductPicture);
 
+productRoutes.post('/category', productController.category);
+
 export {productRoutes};

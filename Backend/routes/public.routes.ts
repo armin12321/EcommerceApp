@@ -6,7 +6,7 @@ import { publicController } from '../controllers/public.controller';
 
 const publicRoutes: Router = express.Router();
 
-publicRoutes.get('/home', publicController.home);
+publicRoutes.post('/home', publicController.home);
 
 publicRoutes.get('/about', publicController.about);
 

@@ -1,9 +1,122 @@
 <div class="row">
-<div class="col-3 filter">
-    filter za elemente koji se prikazuju.
+<div class="col-3 filter">       
+        <div class="container-fluid mt-100">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside1" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Categories </h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside1" style="">
+
+                                <ol class = "breadcrumb d-flex justify-content-center" *ngIf="this.sharedData.breadcrumbs.length > 1">
+                                    <li><a href = "#" onclick="return false" (click)="this.sharedData.goToBreadcrumb(breadcrumb); idiNaKategoriju(breadcrumb); getData()" *ngFor="let breadcrumb of this.sharedData.breadcrumbs"> {{ breadcrumb }}  /</a></li>                                      
+                                </ol> 
+
+                                <div class="card-body">
+                                    <ul class="list-menu">
+                                        <li class="choice" *ngFor="let k of kategorije">
+                                            <a href="#" data-abc="true" onclick="return false" (click)="this.sharedData.addBreadcrumb(k.naziv); idiNaKategoriju(k.naziv); getData()">
+                                                {{ k.naziv }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside2" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Price </h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside2" style="">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6"> <label>Min</label> <input class="form-control" [(ngModel)]="priceMin" name="priceMin" placeholder="{{ priceMin }} KM" type="number"> </div>
+                                        <div class="form-group text-right col-md-6"> <label>Max</label> <input class="form-control" [(ngModel)]="priceMax" name="priceMax" placeholder="{{ priceMax }}" type="number"> </div>
+                                    </div> 
+                                </div>
+                                <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside3" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Condition</h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside3" style="">
+                                <div class="form-group" style="text-align: center;">
+                                    <label>Condition:</label> <br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="condition" name="condition" id="inlineRadio1" value="new">
+                                        <label class="form-check-label" for="inlineRadio1">New</label>
+                                    </div> <br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="condition" name="condition" id="inlineRadio2" value="used">
+                                        <label class="form-check-label" for="inlineRadio2">Used</label>
+                                    </div>
+                                    <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside3" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Characteristics</h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside3" style="">
+                                <div class="form-group" style="text-align: center;">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6"> <label>Key</label> <input [(ngModel)]="key" name="key" class="form-control" placeholder="Key" type="string"> </div>
+                                            <div class="form-group text-right col-md-6"> <label>Value</label> <input [(ngModel)]="value" name="value" class="form-control" placeholder="Value" type="string"> </div>
+                                        </div> 
+                                        <a style="text-align: center; margin-top: 5px;" href="#" onclick="return false" (click)="addPair()" class="btn btn-success "  data-abc="true">Add</a>
+                                        <label style="margin-top: 30px;" class="d-flex justify-content-center"><b>Key-value pairs for your product</b></label> <br>
+                                    </div>
+                                    
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Key</th>
+                                            <th scope="col">Value</th>                                            
+                                            <th scope="col">Options</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let pair of keyValueArray; let i = index;">
+                                            <th scope="row">{{ i }}</th>
+                                            <td> {{ pair.key }} </td>
+                                            <td>{{ pair.value }}</td>   
+                                            <td><button (click)="removeItem(pair)" class="btn btn-danger btn-sm">x</button></td>                                         
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside4" data-abc="true" class="collapsed" aria-expanded="false"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Adittional filters</h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside4" style="">
+                                <div class="form-group" style="text-align: center;">
+                                    <div style="text-align: center; padding: 20px;" class="form-group"> <label>Seller</label> <input class="form-control" [(ngModel)]="seller" name="seller" placeholder="Type in the seller..." type="text"> </div>
+                                    <div style="text-align: center; padding: 20px;" class="form-group"> <label>Manufacturer</label> <input class="form-control" [(ngModel)]="manufacturer" name="manufacturer" placeholder="Type the manufacturer..." type="text"> </div>
+                                    <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                                </div>                                
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>        
 </div>
 <div class="col-9" id="column" (window:resize)="resize()">
 <div class="row">
+    <a href="#" onclick="return false" (click)="openModal(template)" class="modalFilter">
+        <i class="fa fa-filter fa-3x" *ngIf="!this.prikaziFilter" style="margin-top: 10px; margin-left: 10px;position: fixed; z-index: 10;"></i>
+    </a>
     <div class="card myCard" *ngFor="let p of products; let i = index">
     <h3 class="card-header">{{ p.product.name }}</h3>
     <div class="card-body">
@@ -43,3 +156,137 @@
 </div>
 </div>
 </div>
+
+
+<ng-template #template>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Filter</h5>
+            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close" (click)='modalRef.hide()'>
+                <span aria-hidden="true">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+    <div class="">       
+        <div class="container-fluid mt-100">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside1" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Categories </h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside1" style="">
+
+                                <ol class = "breadcrumb d-flex justify-content-center" *ngIf="this.sharedData.breadcrumbs.length > 1">
+                                    <li><a href = "#" onclick="return false" (click)="this.sharedData.goToBreadcrumb(breadcrumb); idiNaKategoriju(breadcrumb); getData()" *ngFor="let breadcrumb of this.sharedData.breadcrumbs"> {{ breadcrumb }}  /</a></li>                                      
+                                </ol> 
+
+                                <div class="card-body">
+                                    <ul class="list-menu">
+                                        <li class="choice" *ngFor="let k of kategorije">
+                                            <a href="#" data-abc="true" onclick="return false" (click)="this.sharedData.addBreadcrumb(k.naziv); idiNaKategoriju(k.naziv); getData()">
+                                                {{ k.naziv }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside2" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Price </h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside2" style="">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6"> <label>Min</label> <input class="form-control" [(ngModel)]="priceMin" name="priceMin" placeholder="{{ priceMin }} KM" type="number"> </div>
+                                        <div class="form-group text-right col-md-6"> <label>Max</label> <input class="form-control" [(ngModel)]="priceMax" name="priceMax" placeholder="{{ priceMax }}" type="number"> </div>
+                                    </div> 
+                                </div>
+                                <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside3" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Condition</h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside3" style="">
+                                <div class="form-group" style="text-align: center;">
+                                    <label>Condition:</label> <br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="condition" name="condition" id="inlineRadio1" value="new">
+                                        <label class="form-check-label" for="inlineRadio1">New</label>
+                                    </div> <br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="condition" name="condition" id="inlineRadio2" value="used">
+                                        <label class="form-check-label" for="inlineRadio2">Used</label>
+                                    </div>
+                                    <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside3" data-abc="true" aria-expanded="false" class="collapsed"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Characteristics</h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside3" style="">
+                                <div class="form-group" style="text-align: center;">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6"> <label>Key</label> <input [(ngModel)]="key" name="key" class="form-control" placeholder="Key" type="string"> </div>
+                                            <div class="form-group text-right col-md-6"> <label>Value</label> <input [(ngModel)]="value" name="value" class="form-control" placeholder="Value" type="string"> </div>
+                                        </div> 
+                                        <a style="text-align: center; margin-top: 5px;" href="#" onclick="return false" (click)="addPair()" class="btn btn-success "  data-abc="true">Add</a>
+                                        <label style="margin-top: 30px;" class="d-flex justify-content-center"><b>Key-value pairs for your product</b></label> <br>
+                                    </div>
+                                    
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Key</th>
+                                            <th scope="col">Value</th>                                            
+                                            <th scope="col">Options</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let pair of keyValueArray; let i = index;">
+                                            <th scope="row">{{ i }}</th>
+                                            <td> {{ pair.key }} </td>
+                                            <td>{{ pair.value }}</td>   
+                                            <td><button (click)="removeItem(pair)" class="btn btn-danger btn-sm">x</button></td>                                         
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="filter-group">
+                            <header class="card-header"> <a href="#" data-toggle="collapse" data-target="#collapse_aside4" data-abc="true" class="collapsed" aria-expanded="false"> <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title">Adittional filters</h6>
+                                </a> </header>
+                            <div class="filter-content collapsed" id="collapse_aside4" style="">
+                                <div class="form-group" style="text-align: center;">
+                                    <div style="text-align: center; padding: 20px;" class="form-group"> <label>Seller</label> <input class="form-control" [(ngModel)]="seller" name="seller" placeholder="Type in the seller..." type="text"> </div>
+                                    <div style="text-align: center; padding: 20px;" class="form-group"> <label>Manufacturer</label> <input class="form-control" [(ngModel)]="manufacturer" name="manufacturer" placeholder="Type the manufacturer..." type="text"> </div>
+                                    <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="getData()" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply</a>
+                                </div>                                
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>        
+</div>
+
+        </div>
+        <div class="modal-footer">
+            Search the world...
+        </div>
+    </div>
+</ng-template>
+
+

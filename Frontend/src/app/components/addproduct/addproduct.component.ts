@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 
 import { types } from '../../configs/types.config'
 import { TokenService } from 'src/app/services/token.service';
+import { Observable } from 'rxjs';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-addproduct',
@@ -17,7 +19,7 @@ import { TokenService } from 'src/app/services/token.service';
 export class AddproductComponent implements OnInit {
 
   name: string;
-  manufactuer: string;
+  manufacturer: string;
   price: number;
   available: number;
   description: string;
@@ -31,18 +33,76 @@ export class AddproductComponent implements OnInit {
   new: boolean;
   used: boolean;
   user: Object;
+  categories: Array<String> = [];
+  descriptionObject: Object = {};
+  optionText: string = "";
+  keyValueArray: Array<any> = [];
+  key: string = "";
+  value: string = "";
 
   constructor(
     private modalService: BsModalService,
     private flashMessage: FlashMessagesService,
     private serverService: ServerService,
     private router: Router,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    public sharedData: SharedDataService
     ) { }
 
   ngOnInit(): void {
     this.user = this.tokenService.getUser();
     console.log(this.user);
+    this.getKategorije().subscribe((data) => {
+      if (data.success) {
+        this.categories = data.kategorije;
+        this.optionText = "Select a category";
+      } else {
+        console.log(data.msg);
+      }
+    })
+  }
+
+  getKategorije(): Observable<any> {
+    //get breadcrumbs:
+    let wrapper = {
+      kategorije: this.sharedData.breadcrumbs1
+    };
+    return this.serverService.getOlxKategorije(wrapper);
+  }
+
+  addCategory(event: any): void {
+    this.sharedData.addBreadcrumb1(event.target.value);    
+    this.getKategorije().subscribe((data) => {
+      if (data.success) {
+        this.categories = data.kategorije;
+        this.optionText = "Now select a subcategory";
+      } else {
+        console.log(data.msg);
+      }
+    })
+  }
+
+  addPair(): void {
+    //only if they are not empty
+    if (this.key.length > 1 && this.value.length > 1) {
+      this.keyValueArray.push({
+        key: this.key,
+        value: this.value
+      });
+    }
+
+    //reset them after adding
+    this.key = "";
+    this.value = "";
+  }
+
+  removeItem(item: any): void {
+    this.keyValueArray = this.keyValueArray.filter((element) => {
+        if (element.key == item.key && element.value == item.value)
+          return false;
+        else 
+          return true;
+    });
   }
 
   onSubmit(){
@@ -50,11 +110,11 @@ export class AddproductComponent implements OnInit {
 
     const product = {
       name: this.name,
-      manufactuer: this.manufactuer,
+      manufacturer: this.manufacturer,
       price: this.price,
       available: this.available,
       condition: this.condition,
-      description: this.description
+      description: this.description,
     };
 
     for (let i = 0; i < this.numberOfPhotos; i++){
@@ -70,6 +130,9 @@ export class AddproductComponent implements OnInit {
     for (let key in product){
       fdata.append(key, product[key]);
     }
+
+    fdata.append('categories', JSON.stringify(this.sharedData.breadcrumbs1));
+    fdata.append('infoObjects', JSON.stringify(this.keyValueArray));
     
     this.serverService.postProductData(fdata).subscribe(data => {
       if (data.success){

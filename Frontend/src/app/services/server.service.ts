@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 })
 
 export class ServerService {
-  
   private serverURL: string = 'http://localhost:5000';
 
   constructor(
@@ -38,8 +37,16 @@ export class ServerService {
     return this.http.get(`${this.serverURL}/api/user/notifications`);
   }
 
-  getHomeData(): Observable<any> {
-    return this.http.get(`${this.serverURL}/api/public/home`, {}); //here goes http options.
+  getOlxKategorije(data): Observable<any> {
+    // throw new Error('Method not implemented.');    
+    const headers = new HttpHeaders({
+      'Content-Type':'application/json',      
+    });
+    return this.http.post(`${this.serverURL}/api/product/category`, data, {headers: headers});
+  }
+
+  getHomeData(data: any): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/public/home`, data); //here goes http options.
   }
 
   postRegisterData(data): Observable<any> {    

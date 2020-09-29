@@ -38,6 +38,18 @@ var ProductSchema = new mongoose_1.Schema({
     images: {
         type: Array,
         required: false
+    },
+    manufacturer: {
+        type: String,
+        required: true
+    },
+    categories: {
+        type: Array,
+        required: false
+    },
+    infoObjects: {
+        type: Array,
+        required: false
     }
 });
 //here maybe functions for this model...

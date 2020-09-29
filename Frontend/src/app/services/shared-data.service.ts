@@ -10,6 +10,8 @@ export class SharedDataService {
   chat_person_id: string = "";
   chat_person_username: string = "";
   chat_person_avatarURL: string = "";
+  breadcrumbs: Array<string> = ["All"];
+  breadcrumbs1: Array<string> = [];
 
   constructor(
     private sanitizer: DomSanitizer
@@ -20,6 +22,59 @@ export class SharedDataService {
     localStorage.removeItem("avatarURL");
 
     localStorage.setItem("avatarURL", this.chat_person_avatarURL);        
+  }
+
+  initBreadcrumbs(s: string): void {
+    this.breadcrumbs.push(s);
+  }
+
+  addBreadcrumb(s: string): void {
+    if (this.breadcrumbs.indexOf(s) != -1) {
+      this.goToBreadcrumb(s);  
+    } else {
+      this.breadcrumbs.push(s);       
+    }
+  }
+
+  addBreadcrumb1(s: string): void {
+    if (this.breadcrumbs1.indexOf(s) != -1) {
+      this.goToBreadcrumb1(s);  
+    } else {
+      this.breadcrumbs1.push(s);       
+    }
+  }
+
+  goToBreadcrumb1(breadcrumb: string): void {
+    for (let i = this.breadcrumbs1.length - 1; i >= 0; i--) {
+      if (this.breadcrumbs1[i] == breadcrumb) break;
+      this.breadcrumbs1.pop();
+    }
+  }
+
+  goToBreadcrumb(breadcrumb: string): void {
+    for (let i = this.breadcrumbs.length - 1; i >= 1; i--) {
+      if (this.breadcrumbs[i] == breadcrumb) break;
+      this.breadcrumbs.pop();
+    }
+  }
+
+
+  deleteBreadcrumb1(): void {
+    if (this.breadcrumbs1.length > 1)
+      this.breadcrumbs1.pop();
+  }
+
+  deleteBreadcrumb(): void {
+    if (this.breadcrumbs.length > 1)
+      this.breadcrumbs.pop();
+  }
+
+  clearBreadcrumbs(): void {    
+    this.breadcrumbs = ["All"];
+  }
+
+  clearBreadcrumbs1(): void {    
+    this.breadcrumbs1 = [];
   }
 
   getChatPersonAvatarURL():string {

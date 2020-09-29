@@ -7,10 +7,100 @@ import { userController } from './user.controller';
 import path from 'path';
 import { ObjectID } from 'mongodb';
 
+////////helpers
+
+let preprocessInfoObjects = (infoObjects: Array<any>) => {
+    /// object = {
+    //  key: 'nesto valko tamo nako',
+    //  value: 'nesto tamo nako vamo'
+    //}
+    let newArray: any = [];
+
+    for (let object of infoObjects) {
+
+        let newObject = {
+            "$elemMatch": {
+                "key": {
+                    $regex: `${object.key}`,
+                    $options: 'i'
+                },
+                "value": {
+                    $regex: `${object.value}`,
+                    $options: 'i'
+                }
+            }
+        };
+
+        newArray.push(newObject);
+    }
+
+    return newArray;
+};
+
+///////////
+
 const home = (req: any, res: any) => {
     //return all possible products sorted by the date
+    console.log(req.body);    
+    let filter: any = {};
+    let ctg: Array<string> = req.body.categories;
+
+    //////////PRETRAGA:::::
+    
+    //kategorije
+    if (ctg.length > 0) filter["categories"] = ctg.pop();
+
+    //cijena
+    filter["price"] = {
+        $gt: req.body.priceMin,
+        $lt: req.body.priceMax
+    };
+
+    //stanje
+    if (req.body.condition != "") filter["condition"] = req.body.condition;
+
+    //prodavač proizvoda
+    if (req.body.seller != "")
+        filter["$or"] = [
+            {
+                "user.username": {
+                    $regex: `${req.body.seller}`,
+                    $options: 'i'
+                }
+            },
+            {
+                "user.name": {
+                    $regex: `${req.body.seller}`,
+                    $options: 'i'
+                },
+            },
+            {
+                "user.surname": {
+                    $regex: `${req.body.seller}`,
+                    $options: 'i'
+                }
+            }            
+        ];
+
+    //proizvođač
+    if (req.body.manufacturer != "")    
+        filter["manufacturer"] = {
+            $regex: `${req.body.manufacturer}`,
+            $options: 'i'
+        };
+    
+    //info objekti - trebam da vratim onoga koji sadrži sve navedene objekte:
+    if (req.body.infoObjects.length > 0)
+        filter["infoObjects"] = {
+            $all: preprocessInfoObjects(req.body.infoObjects)
+        };
+        
+    console.log('Napravljeni filter od proslijeđenih informacija je :');
+    console.log(filter);
+    if (filter["infoObjects"] != undefined)
+        console.log(filter["infoObjects"].$all[0]);
     Product
-    .find({})
+    .find(filter)
     .sort({date: -1})
     .lean()
     .limit(18)

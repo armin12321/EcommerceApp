@@ -10,7 +10,7 @@ var express_1 = __importDefault(require("express"));
 var public_controller_1 = require("../controllers/public.controller");
 var publicRoutes = express_1.default.Router();
 exports.publicRoutes = publicRoutes;
-publicRoutes.get('/home', public_controller_1.publicController.home);
+publicRoutes.post('/home', public_controller_1.publicController.home);
 publicRoutes.get('/about', public_controller_1.publicController.about);
 publicRoutes.post('/sellerInfo', public_controller_1.publicController.sellerInfo);
 publicRoutes.post('/avatarImage', public_controller_1.publicController.avatarImage);

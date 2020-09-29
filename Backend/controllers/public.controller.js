@@ -10,10 +10,88 @@ var moment_1 = __importDefault(require("moment"));
 var user_1 = __importDefault(require("../models/user"));
 var path_1 = __importDefault(require("path"));
 var mongodb_1 = require("mongodb");
+////////helpers
+var preprocessInfoObjects = function (infoObjects) {
+    /// object = {
+    //  key: 'nesto valko tamo nako',
+    //  value: 'nesto tamo nako vamo'
+    //}
+    var newArray = [];
+    for (var _i = 0, infoObjects_1 = infoObjects; _i < infoObjects_1.length; _i++) {
+        var object = infoObjects_1[_i];
+        var newObject = {
+            "$elemMatch": {
+                "key": {
+                    $regex: "" + object.key,
+                    $options: 'i'
+                },
+                "value": {
+                    $regex: "" + object.value,
+                    $options: 'i'
+                }
+            }
+        };
+        newArray.push(newObject);
+    }
+    return newArray;
+};
+///////////
 var home = function (req, res) {
     //return all possible products sorted by the date
+    console.log(req.body);
+    var filter = {};
+    var ctg = req.body.categories;
+    //////////PRETRAGA:::::
+    //kategorije
+    if (ctg.length > 0)
+        filter["categories"] = ctg.pop();
+    //cijena
+    filter["price"] = {
+        $gt: req.body.priceMin,
+        $lt: req.body.priceMax
+    };
+    //stanje
+    if (req.body.condition != "")
+        filter["condition"] = req.body.condition;
+    //prodavač proizvoda
+    if (req.body.seller != "")
+        filter["$or"] = [
+            {
+                "user.username": {
+                    $regex: "" + req.body.seller,
+                    $options: 'i'
+                }
+            },
+            {
+                "user.name": {
+                    $regex: "" + req.body.seller,
+                    $options: 'i'
+                },
+            },
+            {
+                "user.surname": {
+                    $regex: "" + req.body.seller,
+                    $options: 'i'
+                }
+            }
+        ];
+    //proizvođač
+    if (req.body.manufacturer != "")
+        filter["manufacturer"] = {
+            $regex: "" + req.body.manufacturer,
+            $options: 'i'
+        };
+    //info objekti - trebam da vratim onoga koji sadrži sve navedene objekte:
+    if (req.body.infoObjects.length > 0)
+        filter["infoObjects"] = {
+            $all: preprocessInfoObjects(req.body.infoObjects)
+        };
+    console.log('Napravljeni filter od proslijeđenih informacija je :');
+    console.log(filter);
+    if (filter["infoObjects"] != undefined)
+        console.log(filter["infoObjects"].$all[0]);
     product_1.default
-        .find({})
+        .find(filter)
         .sort({ date: -1 })
         .lean()
         .limit(18)

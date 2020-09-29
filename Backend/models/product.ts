@@ -9,7 +9,10 @@ export interface IProduct extends Document {
     condition: string,
     date: Date,
     purchased: number,
-    images: Array<string>
+    images: Array<string>,
+    manufacturer: string,
+    categories: Array<string>,
+    infoObjects: Array<object>
 };
 
 const ProductSchema = new Schema({
@@ -46,6 +49,18 @@ const ProductSchema = new Schema({
         required: true
     },
     images: {
+        type: Array,
+        required: false
+    },
+    manufacturer: {
+        type: String,
+        required: true
+    },
+    categories: {
+        type: Array,
+        required: false
+    },
+    infoObjects: {
         type: Array,
         required: false
     }

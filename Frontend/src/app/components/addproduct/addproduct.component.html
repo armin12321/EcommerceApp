@@ -1,13 +1,13 @@
 <form action="">
     <div class="row addProduct">
-        <div class="col-6">
+        <div class="col-6" style="text-align: center;">
             <div class="form-group">
                 <label>Product name</label>
                 <input type="text" [(ngModel)]="name" name="name" class="form-control form-control-sm">
             </div>
             <div class="form-group">
                 <label>Manufactuer</label>
-                <input type="text" [(ngModel)]="manufactuer" name="manufactuer" class="form-control form-control-sm">
+                <input type="text" [(ngModel)]="manufacturer" name="manufacturer" class="form-control form-control-sm">
             </div>
             <div class="form-group">
                 <label>Available</label>
@@ -28,9 +28,22 @@
                     <label class="form-check-label" for="inlineRadio2">Used</label>
                 </div>
             </div>
-            
+            Chosen categories:
+            <ol class = "breadcrumb d-flex justify-content-center" *ngIf="this.sharedData.breadcrumbs1.length > 0">
+                <li><a href="" onclick="return false" *ngFor="let breadcrumb of this.sharedData.breadcrumbs1"> {{ breadcrumb }}  /</a></li>                                      
+            </ol>             
+            <div class="col-12">
+                <div class="form-group">
+                    <select class="custom-select" (change)="addCategory($event)">
+                        <option selected="">{{ optionText }}</option>
+                        <option *ngFor="let cat of categories;" value="{{ cat.naziv }}"> {{ cat.naziv }} </option>                  
+                    </select>
+                </div>
+            </div>                
+
+            <input type="submit" value="Submit" style="margin-top: 30px;" class="btn btn-primary justify-content-center" (click)="onSubmit()">
         </div>
-        <div class="col-6">
+        <div class="col-6" style="text-align: center;">
             <label>Description</label>
             <div class="form-group">
                 <textarea [(ngModel)]="description" name="description" id="exampleFormControlTextarea1" cols="50" rows="10" class="from-control"></textarea>
@@ -40,11 +53,42 @@
                   <input type="file" class="custom-file-input" multiple id="inputGroupFile01" (change)="filesSelected($event, template)">
                   <label class="custom-file-label" for="inputGroupFile01">Choose Photos</label>
                 </div>
-              </div>
-              <label *ngIf="choosenPhotos" class="selectedImages"><span class="boldSpan">Choosen images:</span> {{choosenPhotos}}</label>
+            </div>
+            <label *ngIf="choosenPhotos" class="selectedImages"><span class="boldSpan">Choosen images:</span> {{choosenPhotos}}</label>
+
+            <div class="form-group" style="text-align: center;">
+                <label><b>Enter some important info about your product: eg. for computers: key: memory, value: 256gb.</b></label> <br>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6"> <label>Key</label> <input [(ngModel)]="key" name="key" class="form-control" placeholder="Key" type="string"> </div>
+                        <div class="form-group text-right col-md-6"> <label>Value</label> <input [(ngModel)]="value" name="value" class="form-control" placeholder="Value" type="string"> </div>
+                    </div> 
+                </div>
+                <a style="text-align: center; margin-top: 10px;" href="#" onclick="return false" (click)="addPair()" class="btn btn-success "  data-abc="true">Add Pair</a>
+                <h4 style="margin-top: 30px;">Info overview:</h4>
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Key</th>
+                        <th scope="col">Value</th>                                            
+                        <th scope="col">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pair of keyValueArray; let i = index;">
+                        <th scope="row">{{ i }}</th>
+                        <td> {{ pair.key }} </td>
+                        <td>{{ pair.value }}</td>   
+                        <td><button (click)="removeItem(pair)" class="btn btn-danger btn-sm">x</button></td>                                         
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+
+
         </div>
     </div>
-    <input type="submit" value="Submit" class="btn btn-primary" (click)="onSubmit()">
 </form>
 <ng-template #template>
     <div class="modal-content">
