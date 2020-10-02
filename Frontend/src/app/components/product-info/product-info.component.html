@@ -1,1 +1,135 @@
-<p>product-info works!</p>
+<div class="container" (window:resize)="resize()">
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-6 avatarImage" id="avatarImage">
+            <div class="row" style="margin: 5px;">
+                <a href="#" onclick="return false;" (click)="openModal(template)">
+                    <img [src]="avatarURL" style="height: 250px; width: 300px;" alt="Seller avatar" [ngStyle]="pictureStyle()">
+                </a>
+            </div>
+        </div>
+        <div class="col-6 info" style="margin-top: 5px;" id="info">
+            <div class="row info1">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Price: </label>
+                            </div>
+                            <div class="col-6">
+                                <p> {{ this.product.price }} KM </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Name: </label>
+                            </div>
+                            <div class="col-6">
+                                <p> {{ this.product.name }} </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Condition: </label>
+                            </div>
+                            <div class="col-6">
+                                <p> {{ this.product.condition }} </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Seller:</label>
+                            </div>
+                            <div class="col-6">
+                                <p> {{ this.product.user.username }} </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Available:</label>
+                            </div>
+                            <div class="col-6">
+                                <p> {{ this.product.available }} </p>  <strong *ngIf="this.product.available == 0">- Out of stock</strong>
+                            </div>
+                        </div>
+            </div>
+            </div>
+            <div class="row info2" style="margin-top: 20px;">
+                <button class="col-5 btn btn-primary" style="margin-right: 5px;" (click)="visitSeller()"> More about seller </button>
+                <button class="col-5 btn btn-primary" style="margin-right: 5px;" (click)="addToCart()" id="cart"> Add to Cart </button>
+            </div>
+        </div>
+    </div><br>
+    <div class="alert alert-dismissible alert-primary">
+        <strong>Additional info about this product: </strong>
+    </div><br>
+    <div class="row">
+        <div class="col-6" id="characteristics">
+                               
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                  <tr>                    
+                    <th scope="col" colspan="2">Characteristics</th>                           
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>                    
+                    <td> Categories </td>
+                    <td><strong *ngFor="let category of this.product.categories"> {{ category }} /</strong></td>   
+                  </tr>
+                  <tr>
+                      <td> Published </td>
+                      <td> {{ this.ago }} </td>
+                  </tr>
+                  <tr>
+                      <td> Manufacturer </td>
+                      <td> {{ this.product.manufacturer }} </td>
+                  </tr>
+                  <tr>
+                      <td> Purchased </td>
+                      <td> {{ this.product.purchased }} pcs</td>
+                  </tr>
+                  <tr *ngFor="let object of this.product.infoObjects">
+                    <td>
+                        {{ object.key }}
+                    </td>
+                    <td>
+                        {{ object.value }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        <div class="col-6" id="description">
+            <div class="card border-dark mb-3">
+            <div class="card-header">Description</div>
+            <div class="card-body">
+                <h4 class="card-title"> {{ this.product.name }} </h4>
+                <p class="card-text"> {{ this.product.description }} </p>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-content" style="width: 600px; display: inline-block; vertical-align: middle;">
+        <div class="modal-header">
+        <h5 class="modal-title">Product images</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modalRef.hide()'>
+            <span aria-hidden="true"><button class="btn btn-danger">x</button></span>
+        </button>
+        </div>
+        <div class="modal-body">
+            Photo : {{ this.currentPhoto + 1 }} / {{ this.numberOfPhotos }}
+        </div>
+        <div class="container" id="imgPreviewContainer">
+            <div *ngIf='this.photos.length > 0' style="text-align: center;">
+                <img style="height: 300px; width: 500px;" id="previewImg" [src]="this.photos[this.currentPhoto]" alt="">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" (click)='previousImage()'> < </button>
+            <button class="btn btn-primary" (click)='nextImage()'> > </button>
+        </div>
+    </div>   
+</ng-template>

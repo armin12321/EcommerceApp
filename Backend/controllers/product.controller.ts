@@ -1,16 +1,40 @@
 import path from 'path';
 import User, { IUser } from '../models/user';
 import Product, { IProduct } from '../models/product';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { serverConfig } from '../configs/server.config';
-import { dbConfig } from '../configs/db.config';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
+import { ObjectID } from 'mongodb';
+import moment from 'moment';
 
 let zeljene_potkategorije: any = {};
 
 //helper funkcije.
+//pronalazak vremena:
+let findTime = (bigger: any, smaller: any) => {
+    let bigg = moment(bigger);
+    let small = moment(smaller);
+
+    let sec = bigg.diff(small, 'seconds');
+    let min = bigg.diff(small, 'minutes');
+    let hours = bigg.diff(small, 'hours');
+    let days = bigg.diff(small, 'days');
+    let months = bigg.diff(small, 'months');
+    let years = bigg.diff(small, 'years');
+
+    if (sec != 0 && sec < 60)
+        return `${sec} seconds ago`;
+    if (min != 0 && min < 60)    
+        return `${min} minutes ago`;
+    if (hours != 0 && hours < 24)    
+        return `${hours} hours ago`;   
+    if (days != 0 && days < 30)    
+        return `${days} days ago`;
+    if (months != 0 && months < 12)    
+        return `${months} months ago`;
+    return `${years} years ago`;
+};
+
+//rekurzivna za vraćanje kategorija
 function nadjiPotKategorije (kategorijeFrontend: Array<any>, kategorijeOlx: Array<any>, pocetnaKategorija: any, trazenaKategorija: any):any {
     //ako smo naišli na kliknutu kategoriju    
     if (pocetnaKategorija == trazenaKategorija) {
@@ -176,10 +200,34 @@ const category = (req: any, res: any) => {
     }
 };
 
+const getProduct = (req: any ,res: any) => {
+    //get product by its id:
+    console.log(req.body.productID);
+    let ID: ObjectID = new ObjectID(req.body.productID);
+
+    Product
+    .findById(ID)
+    .lean()
+    .then((product) => {
+        console.log(product);
+        let vrijeme = new Date().toISOString();
+
+        let ago = findTime(vrijeme, product?.date);
+
+        res.json({
+            success: true,
+            msg: 'returned one object',
+            product: product,
+            ago: ago
+        })
+    })
+}
+
 const productController: any = {
     add,
     sendProductPicture,
-    category
+    category,
+    getProduct
 };
 
 export { productController };

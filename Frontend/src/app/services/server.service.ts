@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,11 @@ export class ServerService {
   changeOnlineStatus(data): Observable<any> {
     // throw new Error('Method not implemented.');
     return this.http.post(`${this.serverURL}/api/info/changeOnlineStatus`, data);
+  }
+
+  getProductByID(data: any): Observable<any> {
+    // throw new Error('Method not implemented.');
+    return this.http.post(`${this.serverURL}/api/product/getProduct`, data);
   }
 
   getRecentChats(): Observable<any> {

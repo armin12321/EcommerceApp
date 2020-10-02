@@ -15,3 +15,4 @@ exports.productRoutes = productRoutes;
 productRoutes.post('/add', [auth_middleware_1.authMiddleware.verifyToken], product_controller_1.productController.add);
 productRoutes.post('/productImage', product_controller_1.productController.sendProductPicture);
 productRoutes.post('/category', product_controller_1.productController.category);
+productRoutes.post('/getProduct', product_controller_1.productController.getProduct);

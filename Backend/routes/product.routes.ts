@@ -15,4 +15,6 @@ productRoutes.post('/productImage', productController.sendProductPicture);
 
 productRoutes.post('/category', productController.category);
 
+productRoutes.post('/getProduct', productController.getProduct);
+
 export {productRoutes};
