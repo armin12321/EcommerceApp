@@ -3,7 +3,9 @@ import { ObjectID } from 'mongodb';
 
 export interface ICart extends Document {
     user_id: ObjectID,
-    products: Object
+    product: Object,
+    quantity: number,
+    time: Date
 };
 
 const CartSchema = new Schema({
@@ -11,8 +13,16 @@ const CartSchema = new Schema({
         type: ObjectID,
         required: true
     },
-    products: {
+    product: {
         type: Object,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    },
+    time: {
+        type: Date,
         required: true
     }
 });

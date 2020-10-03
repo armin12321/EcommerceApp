@@ -1,6 +1,66 @@
-<h1>Your cart credentials</h1>
-<ul>
-    <li>{{ username }}</li>
-    <li>{{ password }}</li>
-    <li>{{ email }}</li>
-</ul>
+
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">E-COMMERCE CART</h1>
+     </div>
+</section>
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col"> </th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Quantity</th>                            
+                            <th scope="col" class="text-right">Price</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cart of carts; let i = index;">
+                            <td><img [src]="this.pictures[i]" style="height: 50px; width: 50px; border-radius: 10%;"/> </td>
+                            <td> {{ cart.product.name }} </td>                            
+                            <td><input (change)="changeQuantity(i)" class="form-control" [(ngModel)]="quantities[i]" type="text" value="quantities[i]" name="carts[i].quantity" /></td>
+                            <td class="text-right"> {{ cart.product.price }} KM</td>
+                            <td class="text-right"><button (click)="deleteCart(i)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button> </td>
+                        </tr>
+                        <tr>                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Sub-Total</td>
+                            <td class="text-right">{{ this.subtotal }} KM</td>
+                        </tr>
+                        <tr>                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Shipping</td>
+                            <td class="text-right">0 KM</td>
+                        </tr>
+                        <tr>                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Total</strong></td>
+                            <td class="text-right"><strong>{{ this.subtotal }} KM</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col mb-2">
+            <div class="row">
+                <div class="col-sm-12  col-md-6">
+                    <button (click)="goShopping()" class="btn btn-block btn-light">Continue Shopping</button>
+                </div>
+                <div class="col-sm-12 col-md-6 text-right">
+                    <button (click)="checkout()" class="btn btn-lg btn-block btn-success text-uppercase">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

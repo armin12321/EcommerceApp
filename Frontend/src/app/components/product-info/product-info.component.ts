@@ -1,8 +1,10 @@
 import { AfterContentChecked, Component, OnInit, TemplateRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
+import { NavbarService } from 'src/app/services/navbar.service';
 import { ServerService } from 'src/app/services/server.service';
 import { SharedDataService } from 'src/app/services/shared-data.service';
 
@@ -25,7 +27,9 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
     private modalService: BsModalService,
     private sharedService: SharedDataService,
     private serverService: ServerService,
-    private router: Router
+    private router: Router,
+    private navbarService: NavbarService,
+    private flashMessages: FlashMessagesService
   ) { }
 
   ngOnInit(): void {
@@ -70,7 +74,7 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
           })
         }
 
-        if (this.product.available == 0) {
+        if (this.product.available == 0 || !this.navbarService.loggedIn() || !this.navbarService.isBuyer()) {
           let btn = document.getElementById('cart');
           btn.setAttribute("disabled", "");
         }
@@ -82,6 +86,26 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
 
   addToCart(): void {
     console.log('added to cart!!!!'); //kasnije srediti.
+
+    //za cart nam treba : proizvod koji se kupuje, onaj ko ga kupuje, te količina proizvoda
+    //pošto se može kupiti samo ukoliko sam logovan, znači da se šalje ID, pa ja trebam samo proizvod poslati.
+    let wrapper = {
+      quantity: 1,
+      product: this.product
+    };
+
+    this.serverService.addToCart(wrapper).subscribe((data: any) => {      
+      if (data.success) {
+        console.log(data);
+        if (data.msg == 'already exists') {
+          this.flashMessages.show('Already in the cart', {cssClass: 'flashMessages alert-danger', timeout: 2000});  
+        } else {
+          this.flashMessages.show('Successfully added to cart', {cssClass: 'flashMessages alert-success', timeout: 2000});
+        }        
+      } else {
+        console.log(data.msg);
+      }
+    });
   }
 
   getProduct(data): Observable<any> {

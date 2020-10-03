@@ -1,7 +1,44 @@
-<h1>This is your information:</h1>
-
-<ul>
-    <li>{{ password }}</li>
-    <li>{{ username }}</li>
-    <li>{{ email }}</li>
-</ul>
+<div class="row" style="text-align: center;">
+    <div class="col-12" style="margin-top: 20px;">
+        <img [src]="this.avatarImage" alt="avatarImage" style="border-radius: 20% ;height: 250px; width: 300px;">
+    </div>
+    <div class="col-12" style="margin-top: 20px;">
+        <button (click)="goToUpdateUser()" class="btn btn-warning"> Change profile info </button>
+    </div>
+</div>
+<br><br>
+<div class="row">
+    <table class="table table-striped" style="text-align: center;">
+        <thead>
+            <tr>
+                <th scope="col" colspan="2"> Profile info </th>                
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Username</td>
+                <td> {{ user.username }} </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td> {{ user.name }} </td>
+            </tr>
+            <tr>
+                <td>Surname</td>
+                <td> {{ user.surname }} </td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td> {{ user.email }} </td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td> {{ user.address }} </td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td> {{ user.type }} </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -12,6 +12,7 @@ export class SharedDataService {
   chat_person_avatarURL: string = "";
   breadcrumbs: Array<string> = ["All"];
   breadcrumbs1: Array<string> = [];
+  profileUser: any = {};
 
   constructor(
     private sanitizer: DomSanitizer
@@ -132,5 +133,16 @@ export class SharedDataService {
     this.chat_person_username = i;
     localStorage.removeItem("chatPersonUsername");
     localStorage.setItem("chatPersonUsername", this.chat_person_username);
+  }
+
+  setProfileUser(user: any): void {
+    this.profileUser = user;
+    localStorage.removeItem("profileUser");
+    localStorage.setItem("profileUser", JSON.stringify(this.profileUser));
+  }
+  
+  getProfileUser(): any {
+    this.profileUser = JSON.parse(localStorage.getItem('profileUser'));
+    return this.profileUser;
   }
 }

@@ -14,9 +14,28 @@ export class ServerService {
     private http: HttpClient
   ) { }
 
+  addToCart(wrapper: any) {
+    // throw new Error('Method not implemented.');
+    return this.http.post(`${this.serverURL}/api/user/addToCart`, wrapper);
+  }
+
+  updateRegisterData(data: any) {
+    // throw new Error('Method not implemented.');
+    return this.http.put(`${this.serverURL}/api/user/updateInfo`, data);
+  }
+
   changeOnlineStatus(data): Observable<any> {
     // throw new Error('Method not implemented.');
     return this.http.post(`${this.serverURL}/api/info/changeOnlineStatus`, data);
+  }
+
+  deleteCartByID(data: any) {
+    // throw new Error('Method not implemented.');
+    return this.http.post(`${this.serverURL}/api/user/deleteFromCart`, data);
+  }
+
+  updateCartQuantity(data: any) {
+    return this.http.post(`${this.serverURL}/api/user/updateCartQuantity`, data);
   }
 
   getProductByID(data: any): Observable<any> {

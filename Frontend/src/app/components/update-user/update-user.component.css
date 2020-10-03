@@ -1,0 +1,33 @@
+.mt-5 {
+    margin-top: 50px;
+}
+
+#profilePhotoPreview {
+    margin-top: 80px;
+    width: 60%;
+}
+
+#profilePhotoContainer {
+    width: 200px;
+    height: 180px;
+}
+
+#profilePhotoContainer div {
+    width: 100%;
+    height: 100%;
+    border: 3px solid gray;
+    border-style: dashed;
+    text-align: center;
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#profilePhoto {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}

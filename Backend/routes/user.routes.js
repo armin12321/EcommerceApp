@@ -24,3 +24,7 @@ userRoutes.post('/chat/sendMessage', [auth_middleware_1.authMiddleware.verifyTok
 userRoutes.post('/chat/getNewMessages', [auth_middleware_1.authMiddleware.verifyToken], chat_controller_1.chatController.getNewMessages);
 userRoutes.get('/notifications', [auth_middleware_1.authMiddleware.verifyToken], chat_controller_1.chatController.notifications);
 userRoutes.post('/getByID', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.getByID);
+userRoutes.post('/addToCart', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.addToCart);
+userRoutes.post('/deleteFromCart', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.deleteFromCart);
+userRoutes.post('/updateCartQuantity', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.updateCartQuantity);
+userRoutes.put('/updateInfo', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.updateInfo);

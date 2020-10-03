@@ -31,4 +31,12 @@ userRoutes.get('/notifications', [authMiddleware.verifyToken], chatController.no
 
 userRoutes.post('/getByID', [authMiddleware.verifyToken], userController.getByID);
 
+userRoutes.post('/addToCart', [authMiddleware.verifyToken], userController.addToCart);
+
+userRoutes.post('/deleteFromCart', [authMiddleware.verifyToken], userController.deleteFromCart);
+
+userRoutes.post('/updateCartQuantity', [authMiddleware.verifyToken], userController.updateCartQuantity);
+
+userRoutes.put('/updateInfo', [authMiddleware.verifyToken], userController.updateInfo);
+
 export {userRoutes};

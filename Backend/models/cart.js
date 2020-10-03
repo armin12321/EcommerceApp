@@ -8,8 +8,16 @@ var CartSchema = new mongoose_1.Schema({
         type: mongodb_1.ObjectID,
         required: true
     },
-    products: {
+    product: {
         type: Object,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    },
+    time: {
+        type: Date,
         required: true
     }
 });

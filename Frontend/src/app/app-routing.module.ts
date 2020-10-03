@@ -11,6 +11,7 @@ import { SellerInfoComponent } from './components/seller-info/seller-info.compon
 import { ProductInfoComponent } from './components/product-info/product-info.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { InfoComponent } from './components/info/info.component';
+import { UpdateUserComponent } from './components/update-user/update-user.component';
 
 const routes: Routes = [
   {
@@ -61,6 +62,10 @@ const routes: Routes = [
   {
     path: 'user/info',
     component: InfoComponent
+  },
+  {
+    path: 'user/updateInfo',
+    component: UpdateUserComponent
   }
 ];
 

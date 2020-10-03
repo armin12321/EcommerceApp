@@ -42,11 +42,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
 var path_1 = __importDefault(require("path"));
 var user_1 = __importDefault(require("../models/user"));
+var cart_1 = __importDefault(require("../models/cart"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var server_config_1 = require("../configs/server.config");
 var db_config_1 = require("../configs/db.config");
 var mongodb_1 = require("mongodb");
+var product_1 = __importDefault(require("../models/product"));
+var fs_1 = __importDefault(require("fs"));
 //functions:
 var login = function (req, res) {
     var username = req.body.username;
@@ -164,30 +167,43 @@ var cart = function (req, res) {
         });
     }
     else {
-        var user = {
-            username: req.username,
-            _id: req.user_id,
-            type: req.user_type
+        var ID = new mongodb_1.ObjectID(req.user_id);
+        var filter = {
+            user_id: ID
         };
-        console.log(user);
-        res.json({
-            success: true,
-            msg: 'Here I am at my cart.',
-            user: user
+        cart_1.default
+            .find(filter)
+            .lean()
+            .sort({ time: 1 })
+            .then(function (carts) {
+            res.json({
+                success: true,
+                msg: 'returned cart data',
+                carts: carts
+            });
         });
     }
 };
 var profile = function (req, res) {
-    var user = {
-        username: req.username,
-        _id: req.user_id,
-        type: req.user_type
-    };
-    console.log(user);
-    res.json({
-        success: true,
-        msg: 'Here i am at my profile page.',
-        user: user
+    var ID = new mongodb_1.ObjectID(req.user_id);
+    user_1.default
+        .findById(ID)
+        .lean()
+        .then(function (u) {
+        var user = {
+            username: u === null || u === void 0 ? void 0 : u.username,
+            name: u === null || u === void 0 ? void 0 : u.name,
+            surname: u === null || u === void 0 ? void 0 : u.surname,
+            email: u === null || u === void 0 ? void 0 : u.email,
+            address: u === null || u === void 0 ? void 0 : u.address,
+            type: u === null || u === void 0 ? void 0 : u.type,
+            avatarName: u === null || u === void 0 ? void 0 : u.avatarName
+        };
+        res.json({
+            success: true,
+            user: user,
+            msg: 'successfully returned user'
+        });
     });
 };
 var products = function (req, res) {
@@ -229,12 +245,226 @@ var getByID = function (req, res) {
         });
     });
 };
+var addToCart = function (req, res) {
+    console.log('evo mene u addToCart');
+    console.log(req.body);
+    var ID = new mongodb_1.ObjectID(req.user_id);
+    var filter = {
+        user_id: ID,
+        product: req.body.product
+    };
+    cart_1.default
+        .findOne(filter)
+        .lean()
+        .then(function (cart) {
+        if (cart != undefined) {
+            res.json({
+                msg: 'already exists',
+                success: true
+            });
+        }
+        else {
+            var cart_2 = new cart_1.default({
+                user_id: req.user_id,
+                product: req.body.product,
+                quantity: req.body.quantity,
+                time: new Date()
+            });
+            cart_2
+                .save()
+                .then(function (product) {
+                console.log(product);
+                res.json({
+                    success: true,
+                    msg: 'Uspješno dodano u košaricu',
+                    product: product
+                });
+            });
+        }
+    });
+};
+var deleteFromCart = function (req, res) {
+    var ID = new mongodb_1.ObjectID(req.body.ID);
+    cart_1.default
+        .findByIdAndDelete(ID)
+        .lean()
+        .then(function (cart) {
+        res.json({
+            success: true,
+            msg: 'deleted cart by id',
+            deletedCart: cart
+        });
+    });
+};
+var updateCartQuantity = function (req, res) {
+    var ID = new mongodb_1.ObjectID(req.body.ID);
+    var quantity = req.body.quantity;
+    var filter = {
+        $set: {
+            quantity: quantity
+        }
+    };
+    cart_1.default
+        .findByIdAndUpdate(ID, filter)
+        .lean()
+        .then(function (cart) {
+        res.json({
+            success: true,
+            msg: 'updated with id',
+            updatedCart: cart
+        });
+    });
+};
+var updateInfo = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var ID, newFile, avatarName, filter;
+    return __generator(this, function (_a) {
+        ID = new mongodb_1.ObjectID(req.user_id);
+        newFile = undefined;
+        if (req.files)
+            newFile = req.files.file;
+        avatarName = req.body.previousAvatar;
+        if (newFile != undefined)
+            avatarName = req.body.username + path_1.default.extname(newFile.name);
+        console.log(req.body);
+        filter = {
+            name: req.body.name,
+            username: req.body.username,
+            surname: req.body.surname,
+            email: req.body.email,
+            address: req.body.address,
+            avatarName: avatarName
+        };
+        //update user in User collection
+        user_1.default
+            .findByIdAndUpdate(ID, { $set: filter })
+            .lean()
+            .then(function (user) { return __awaiter(void 0, void 0, void 0, function () {
+            var filter1, uploadPath;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('Updated user:');
+                        console.log(user);
+                        if (!(req.user_type == db_config_1.dbConfig.user_type.SELLER)) return [3 /*break*/, 1];
+                        filter1 = {
+                            "user.name": req.body.name,
+                            "user.username": req.body.username,
+                            "user.surname": req.body.surname,
+                            "user.email": req.body.email,
+                            "user.address": req.body.address,
+                            "user.avatarName": avatarName
+                        };
+                        product_1.default
+                            .updateMany({ "user._id": ID }, { $set: filter1 })
+                            .lean()
+                            .then(function (product) {
+                            console.log('Updated product(s):');
+                            if (product != undefined)
+                                console.log(product);
+                            //Update user in all of the cart documents
+                            var filter2 = {
+                                "product.user.name": req.body.name,
+                                "product.user.username": req.body.username,
+                                "product.user.surname": req.body.surname,
+                                "product.user.address": req.body.address,
+                                "product.user.email": req.body.email,
+                                "product.user.avatarName": avatarName
+                            };
+                            cart_1.default
+                                .updateMany({ "product.user._id": req.user_id }, { $set: filter2 })
+                                .lean()
+                                .then(function (carts) { return __awaiter(void 0, void 0, void 0, function () {
+                                var uploadPath;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            console.log('Updated cart(s):');
+                                            if (carts != undefined)
+                                                console.log(carts);
+                                            if (!(newFile != null)) return [3 /*break*/, 2];
+                                            //izbriši staru sliku ako postoji
+                                            if (req.body.previousAvatar != 'default.jpg' && fs_1.default.existsSync(path_1.default.join(__dirname, '../uploads/images/avatars', req.body.previousAvatar)))
+                                                fs_1.default.unlinkSync(path_1.default.join(__dirname, '../uploads/images/avatars', req.body.previousAvatar));
+                                            uploadPath = path_1.default.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+                                            return [4 /*yield*/, newFile.mv(uploadPath, function (err) {
+                                                    if (err) {
+                                                        res.json({
+                                                            success: false,
+                                                            msg: 'Something went wrong. Try again later'
+                                                        });
+                                                    }
+                                                    else {
+                                                        return res.json({
+                                                            success: true,
+                                                            msg: 'successfully updated user in user database.',
+                                                            user: user
+                                                        });
+                                                    }
+                                                })];
+                                        case 1:
+                                            _a.sent();
+                                            return [3 /*break*/, 3];
+                                        case 2:
+                                            res.json({
+                                                success: true,
+                                                msg: 'successfully updated user in user database.',
+                                                user: user
+                                            });
+                                            _a.label = 3;
+                                        case 3: return [2 /*return*/];
+                                    }
+                                });
+                            }); });
+                        });
+                        return [3 /*break*/, 4];
+                    case 1:
+                        if (!(newFile != null)) return [3 /*break*/, 3];
+                        //izbriši staru sliku ako postoji
+                        if (req.body.previousAvatar != 'default.jpg' && fs_1.default.existsSync(path_1.default.join(__dirname, '../uploads/images/avatars', req.body.previousAvatar)))
+                            fs_1.default.unlinkSync(path_1.default.join(__dirname, '../uploads/images/avatars', req.body.previousAvatar));
+                        uploadPath = path_1.default.join(__dirname, '..', '/uploads/images/avatars/', avatarName);
+                        return [4 /*yield*/, newFile.mv(uploadPath, function (err) {
+                                if (err) {
+                                    res.json({
+                                        success: false,
+                                        msg: 'Something went wrong. Try again later'
+                                    });
+                                }
+                                else {
+                                    res.json({
+                                        success: true,
+                                        msg: 'successfully updated user in user database.',
+                                        user: user
+                                    });
+                                }
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        res.json({
+                            success: true,
+                            msg: 'successfully updated user in user database.',
+                            user: user
+                        });
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); });
+        return [2 /*return*/];
+    });
+}); };
 var userController = {
+    updateInfo: updateInfo,
     getByID: getByID,
     register: register,
     login: login,
     cart: cart,
     profile: profile,
-    products: products
+    products: products,
+    addToCart: addToCart,
+    deleteFromCart: deleteFromCart,
+    updateCartQuantity: updateCartQuantity
 };
 exports.userController = userController;

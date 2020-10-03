@@ -4,3 +4,11 @@
 input[type] {
     font-size: 24px;
 }
+
+.flashMessages {
+    text-align: center;
+    position: fixed;
+    z-index: 11;
+    overflow: auto;
+    width: 100%;
+};
