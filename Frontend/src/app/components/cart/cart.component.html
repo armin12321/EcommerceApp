@@ -25,7 +25,7 @@
                             <td> {{ cart.product.name }} </td>                            
                             <td><input (change)="changeQuantity(i)" class="form-control" [(ngModel)]="quantities[i]" type="text" value="quantities[i]" name="carts[i].quantity" /></td>
                             <td class="text-right"> {{ cart.product.price }} KM</td>
-                            <td class="text-right"><button (click)="deleteCart(i)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button> </td>
+                            <td class="text-right"><button (click)="setTempIndex(i, template)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button> </td>
                         </tr>
                         <tr>                            
                             <td></td>
@@ -64,3 +64,21 @@
         </div>
     </div>
 </div>
+
+<ng-template #template>
+    <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete item?</h5>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close" (click)='modalRef.hide()'>
+            x
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)='deleteCart(tempIndex)'>Yes, I'm sure</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modalRef.hide()'>Close</button>
+        </div>
+    </div>        
+</ng-template>

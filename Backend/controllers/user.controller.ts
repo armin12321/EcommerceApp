@@ -8,6 +8,35 @@ import { dbConfig } from '../configs/db.config';
 import { ObjectID } from 'mongodb';
 import Product from '../models/product';
 import fs from 'fs';
+import moment from 'moment';
+
+//helper funkcije.
+//pronalazak vremena:
+let findTime = (bigger: any, smaller: any) => {
+    let bigg = moment(bigger);
+    let small = moment(smaller);
+
+    let sec = bigg.diff(small, 'seconds');
+    let min = bigg.diff(small, 'minutes');
+    let hours = bigg.diff(small, 'hours');
+    let days = bigg.diff(small, 'days');
+    let months = bigg.diff(small, 'months');
+    let years = bigg.diff(small, 'years');
+
+    if (sec != 0 && sec < 60)
+        return `${sec} seconds ago`;
+    if (min != 0 && min < 60)    
+        return `${min} minutes ago`;
+    if (hours != 0 && hours < 24)    
+        return `${hours} hours ago`;   
+    if (days != 0 && days < 30)    
+        return `${days} days ago`;
+    if (months != 0 && months < 12)    
+        return `${months} months ago`;
+    if (sec == 0 && min == 0 && hours == 0 && days == 0 && months == 0 && years == 0)
+        return 'a moment ago';
+    return `${years} years ago`;
+};
 
 //functions:
 
@@ -39,7 +68,8 @@ const login = (req: any, res: any) => {
                 let token: any = jwt.sign({
                     username: user.username,
                     _id: user._id,
-                    type: user.type            
+                    type: user.type,
+                    email: user.email           
                 }, serverConfig.SECRET, {expiresIn: 86400});   //one day.
 
                 let modifiedUser: any = {
@@ -179,16 +209,34 @@ const products = (req: any, res: any) => {
             products: null
         });
     } else {
-        const user = {
-            username: req.username,
-            _id: req.user_id,
-            user_type: req.user_type 
-        }
-        const products: any = {};
-        res.json({
-            success: true,
-            msg: 'Here i am at my products.',
-            products: products
+        //nadji sve producte koji dolaze od ovog prodavca/sellera
+        let ID: ObjectID = new ObjectID(req.user_id);
+        console.log(req);
+        
+        Product
+        .find({"user._id": ID})
+        .lean()
+        .sort({date: -1})
+        .then((products) => {
+            console.log(products);
+            //find time for every of the products, then send them to the frontend:
+            let timeNow: any = new Date().toISOString();
+
+            let modifiedProducts = products.map((product, index) => {
+
+                let ago = findTime(timeNow, product.date);
+
+                return {
+                    ago,
+                    product
+                }
+            });
+
+            res.json({
+                success: true,
+                msg: 'returned this sellers products',
+                products: modifiedProducts
+            });
         });
     }
 };

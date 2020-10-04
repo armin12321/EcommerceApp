@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import { ObjectID } from 'mongodb';
 import moment from 'moment';
+import Cart from '../models/cart';
 
 let zeljene_potkategorije: any = {};
 
@@ -31,6 +32,8 @@ let findTime = (bigger: any, smaller: any) => {
         return `${days} days ago`;
     if (months != 0 && months < 12)    
         return `${months} months ago`;
+    if (sec == 0 && min == 0 && hours == 0 && days == 0 && months == 0 && years == 0)
+        return 'a moment ago';
     return `${years} years ago`;
 };
 
@@ -117,16 +120,35 @@ const add = (req: any, res: any) => {
         infoObjects: infoObjects
     });    
 
-    for (let i = 0; i < images.length; i++){
-        product['images'].push(product.name + uuidv4() + path.extname(images[i].name));
+    if (images.length != undefined) {
+        for (let i = 0; i < images.length; i++){
+            product['images'].push(product.name + uuidv4() + path.extname(images[i].name));
+        }
+    } else {
+        product['images'].push(product.name + uuidv4() + path.extname(images.name));
     }
 
     product.save().then((product) => {
-        for (let i = 0; i < images.length; i++){
-            imageName = product.images[i];
-            // imageName = product.id + '-' + i.toString() + path.extname(images[i].name); Ima i ova varijanta davanja imena.
+        if (images.length != undefined) {
+            for (let i = 0; i < product.images.length; i++){
+                imageName = product.images[i];            
+                upath = path.join(__dirname, '..', '/uploads/images/products', imageName);
+
+                images[i].mv(upath, (err: any) => {
+                    if (err){
+                        return res.json({
+                            success: false,
+                            msg: 'Something went wrong. Try again later'
+                        });
+                    }
+                });
+            }    
+
+        } else {
+            imageName = product.images[0];
             upath = path.join(__dirname, '..', '/uploads/images/products', imageName);
-            images[i].mv(upath, (err: any) => {
+
+            images.mv(upath, (err: any) => {
                 if (err){
                     return res.json({
                         success: false,
@@ -134,13 +156,14 @@ const add = (req: any, res: any) => {
                     });
                 }
             });
-        }    
+        }
+
+        res.json({
+            success: true,
+            msg: 'Product added successfully'
+        });        
     }).catch((err) => {
         console.log(err);
-    });
-    return res.json({
-        success: true,
-        msg: 'Product added successfully'
     });
 };
 
@@ -165,7 +188,9 @@ const category = (req: any, res: any) => {
         kategorije: []
     };
 
-    if (kategorije.length == 0 || kategorije == undefined) {
+
+
+    if (kategorije == undefined || kategorije.length == 0) {
 
         kategorijeJSON.msg = 'uspješno vraćene sve kategorije';
 
@@ -223,7 +248,146 @@ const getProduct = (req: any ,res: any) => {
     })
 }
 
+const deleteProduct = (req: any, res: any) => {
+    console.log(req.body);
+    let product: any = JSON.parse(req.body.product);
+    let images: Array<any> = product.images;
+    let ID: ObjectID = new ObjectID(product._id);
+
+    //firstly, delete all the pictures of this product.
+    for (let image of images) {
+        let myPath = path.join(__dirname, '../uploads/images/products', image);
+        if (fs.existsSync(myPath)) fs.unlinkSync(myPath);
+    }
+
+    //then, delete product by ID.
+    Product
+    .findByIdAndDelete(ID)
+    .lean()
+    .then((data) => {
+        console.log('Deleted product. Info that came: ');
+        console.log(data);
+
+        //now, delete product from every cart that it has been in        
+        Cart
+        .deleteMany({"product._id": product._id})
+        .lean()
+        .then((data1) => {
+            console.log('Deleted carts. Info that came: ');
+            console.log(data1);
+
+            //now, return json to the frontend
+            res.json({
+                success: true,
+                msg: "deleted product by id",
+                product: data
+            });
+        })
+    })
+};
+
+const updateProduct = (req: any, res: any) => {
+    const product: any = JSON.parse(req.body.product);
+    const images: any = req.files.file;
+    let imageURLs: Array<string> = [];
+    const ID: ObjectID = new ObjectID(product._id);
+
+    //first and foremost, delete all the previous pictures of this product
+    for (let image of product.images) {
+        const upath = path.join(__dirname, '../uploads/images/products', image);
+        if (fs.existsSync(upath))
+            fs.unlinkSync(upath);
+    }
+
+    //make new picture names for new pictures
+    if (images.length != undefined) {
+        for (let i = 0; i < images.length; i++) {
+            imageURLs.push(product.name + uuidv4() + path.extname(images[i].name));
+        }
+
+        //save new pictures with new names on the server
+        for (let i = 0; i < imageURLs.length; i++) {
+            const imageName = imageURLs[i];
+            const myPath = path.join(__dirname, '..', '/uploads/images/products', imageName);
+
+            images[i].mv(myPath, (err: any) => {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: 'something went wrong when saving image of this product, please try again'
+                    });
+                }
+            })
+        }
+    } else {
+        imageURLs.push(product.name + uuidv4() + path.extname(images.name));
+        const myPPath = path.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
+
+        images.mv(myPPath, (err: any) => {
+           if (err) {
+               res.json({
+                   success: false,
+                   msg: 'something went wrong when saving image of this product, please try again'
+               });
+           } 
+        });
+    }
+
+    const updateFilter = {
+        available: product.available,
+        categories: product.categories,
+        condition: product.condition,
+        date: new Date(),
+        description: product.description,
+        images: imageURLs,
+        infoObjects: product.infoObjects,
+        manufacturer: product.manufacturer,
+        name: product.name,
+        price: product.price,
+    };
+
+    //then, update values in product collection
+    Product
+    .findByIdAndUpdate(ID, {$set: updateFilter})
+    .lean()
+    .then((data) => {
+        console.log('Product update-ovan u produktima, rezultat:');
+        console.log(data);
+
+        const updateFilter1 = {
+            "product.available": product.available,
+            "product.categories": product.categories,
+            "product.condition": product.condition,
+            "product.date": new Date(),
+            "product.description": product.description,
+            "product.images": imageURLs,
+            "product.infoObjects": product.infoObjects,
+            "product.manufacturer": product.manufacturer,
+            "product.name": product.name,
+            "product.price": product.price
+        };  
+
+        //then, update values for cart collection
+        Cart
+        .updateMany({'product._id': product._id}, {$set: updateFilter1})
+        .lean()
+        .then((data1) => {
+            console.log('Produkt update-ovan u cartovima, rezultat:');
+            console.log(data1);
+
+            //send response to the frontend
+            res.json({
+                success: true,
+                msg: 'successfully updated product',
+                product: data1
+            });
+        })
+    })        
+};
+
 const productController: any = {
+    updateProduct,
+    deleteProduct,
     add,
     sendProductPicture,
     category,

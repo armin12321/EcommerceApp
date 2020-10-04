@@ -65,13 +65,13 @@ var verifyCredentials = function (req, res, next) { return __awaiter(void 0, voi
                     })];
             case 2:
                 email = _a.sent();
-                if (username === false) {
+                if (username === false && (req.username == undefined || (req.username != undefined && req.username != req.body.username))) {
                     return [2 /*return*/, res.json({
                             success: false,
                             msg: 'Username already exists'
                         })];
                 }
-                else if (email === false) {
+                else if (email === false && (req.email == undefined || (req.email != undefined && req.email != req.body.email))) {
                     return [2 /*return*/, res.json({
                             success: false,
                             msg: 'Email already exists'

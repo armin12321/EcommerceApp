@@ -21,6 +21,7 @@ let verifyToken = (req: any, res: any, next: any) => {
       req.username = decoded.username;
       req.user_id = decoded._id;
       req.user_type = decoded.type;
+      req.email = decoded.email;
       next();
     });
 };

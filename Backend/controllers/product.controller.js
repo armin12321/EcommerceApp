@@ -11,6 +11,7 @@ var uuid_1 = require("uuid");
 var fs_1 = __importDefault(require("fs"));
 var mongodb_1 = require("mongodb");
 var moment_1 = __importDefault(require("moment"));
+var cart_1 = __importDefault(require("../models/cart"));
 var zeljene_potkategorije = {};
 //helper funkcije.
 //pronalazak vremena:
@@ -33,6 +34,8 @@ var findTime = function (bigger, smaller) {
         return days + " days ago";
     if (months != 0 && months < 12)
         return months + " months ago";
+    if (sec == 0 && min == 0 && hours == 0 && days == 0 && months == 0 && years == 0)
+        return 'a moment ago';
     return years + " years ago";
 };
 //rekurzivna za vraćanje kategorija
@@ -102,15 +105,33 @@ var add = function (req, res) {
         categories: categories,
         infoObjects: infoObjects
     });
-    for (var i = 0; i < images.length; i++) {
-        product['images'].push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
+    if (images.length != undefined) {
+        for (var i = 0; i < images.length; i++) {
+            product['images'].push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
+        }
+    }
+    else {
+        product['images'].push(product.name + uuid_1.v4() + path_1.default.extname(images.name));
     }
     product.save().then(function (product) {
-        for (var i = 0; i < images.length; i++) {
-            imageName = product.images[i];
-            // imageName = product.id + '-' + i.toString() + path.extname(images[i].name); Ima i ova varijanta davanja imena.
+        if (images.length != undefined) {
+            for (var i = 0; i < product.images.length; i++) {
+                imageName = product.images[i];
+                upath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
+                images[i].mv(upath, function (err) {
+                    if (err) {
+                        return res.json({
+                            success: false,
+                            msg: 'Something went wrong. Try again later'
+                        });
+                    }
+                });
+            }
+        }
+        else {
+            imageName = product.images[0];
             upath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
-            images[i].mv(upath, function (err) {
+            images.mv(upath, function (err) {
                 if (err) {
                     return res.json({
                         success: false,
@@ -119,12 +140,12 @@ var add = function (req, res) {
                 }
             });
         }
+        res.json({
+            success: true,
+            msg: 'Product added successfully'
+        });
     }).catch(function (err) {
         console.log(err);
-    });
-    return res.json({
-        success: true,
-        msg: 'Product added successfully'
     });
 };
 var sendProductPicture = function (req, res) {
@@ -143,7 +164,7 @@ var category = function (req, res) {
         msg: 'uspješno vraćene sve kategorije',
         kategorije: []
     };
-    if (kategorije.length == 0 || kategorije == undefined) {
+    if (kategorije == undefined || kategorije.length == 0) {
         kategorijeJSON.msg = 'uspješno vraćene sve kategorije';
         for (var _i = 0, kategorijeOlx_2 = kategorijeOlx; _i < kategorijeOlx_2.length; _i++) {
             var kategorija = kategorijeOlx_2[_i];
@@ -192,7 +213,134 @@ var getProduct = function (req, res) {
         });
     });
 };
+var deleteProduct = function (req, res) {
+    console.log(req.body);
+    var product = JSON.parse(req.body.product);
+    var images = product.images;
+    var ID = new mongodb_1.ObjectID(product._id);
+    //firstly, delete all the pictures of this product.
+    for (var _i = 0, images_1 = images; _i < images_1.length; _i++) {
+        var image = images_1[_i];
+        var myPath = path_1.default.join(__dirname, '../uploads/images/products', image);
+        if (fs_1.default.existsSync(myPath))
+            fs_1.default.unlinkSync(myPath);
+    }
+    //then, delete product by ID.
+    product_1.default
+        .findByIdAndDelete(ID)
+        .lean()
+        .then(function (data) {
+        console.log('Deleted product. Info that came: ');
+        console.log(data);
+        //now, delete product from every cart that it has been in        
+        cart_1.default
+            .deleteMany({ "product._id": product._id })
+            .lean()
+            .then(function (data1) {
+            console.log('Deleted carts. Info that came: ');
+            console.log(data1);
+            //now, return json to the frontend
+            res.json({
+                success: true,
+                msg: "deleted product by id",
+                product: data
+            });
+        });
+    });
+};
+var updateProduct = function (req, res) {
+    var product = JSON.parse(req.body.product);
+    var images = req.files.file;
+    var imageURLs = [];
+    var ID = new mongodb_1.ObjectID(product._id);
+    //first and foremost, delete all the previous pictures of this product
+    for (var _i = 0, _a = product.images; _i < _a.length; _i++) {
+        var image = _a[_i];
+        var upath = path_1.default.join(__dirname, '../uploads/images/products', image);
+        if (fs_1.default.existsSync(upath))
+            fs_1.default.unlinkSync(upath);
+    }
+    //make new picture names for new pictures
+    if (images.length != undefined) {
+        for (var i = 0; i < images.length; i++) {
+            imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
+        }
+        //save new pictures with new names on the server
+        for (var i = 0; i < imageURLs.length; i++) {
+            var imageName = imageURLs[i];
+            var myPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
+            images[i].mv(myPath, function (err) {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: 'something went wrong when saving image of this product, please try again'
+                    });
+                }
+            });
+        }
+    }
+    else {
+        imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images.name));
+        var myPPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
+        images.mv(myPPath, function (err) {
+            if (err) {
+                res.json({
+                    success: false,
+                    msg: 'something went wrong when saving image of this product, please try again'
+                });
+            }
+        });
+    }
+    var updateFilter = {
+        available: product.available,
+        categories: product.categories,
+        condition: product.condition,
+        date: new Date(),
+        description: product.description,
+        images: imageURLs,
+        infoObjects: product.infoObjects,
+        manufacturer: product.manufacturer,
+        name: product.name,
+        price: product.price,
+    };
+    //then, update values in product collection
+    product_1.default
+        .findByIdAndUpdate(ID, { $set: updateFilter })
+        .lean()
+        .then(function (data) {
+        console.log('Product update-ovan u produktima, rezultat:');
+        console.log(data);
+        var updateFilter1 = {
+            "product.available": product.available,
+            "product.categories": product.categories,
+            "product.condition": product.condition,
+            "product.date": new Date(),
+            "product.description": product.description,
+            "product.images": imageURLs,
+            "product.infoObjects": product.infoObjects,
+            "product.manufacturer": product.manufacturer,
+            "product.name": product.name,
+            "product.price": product.price
+        };
+        //then, update values for cart collection
+        cart_1.default
+            .updateMany({ 'product._id': product._id }, { $set: updateFilter1 })
+            .lean()
+            .then(function (data1) {
+            console.log('Produkt update-ovan u cartovima, rezultat:');
+            console.log(data1);
+            //send response to the frontend
+            res.json({
+                success: true,
+                msg: 'successfully updated product',
+                product: data1
+            });
+        });
+    });
+};
 var productController = {
+    updateProduct: updateProduct,
+    deleteProduct: deleteProduct,
     add: add,
     sendProductPicture: sendProductPicture,
     category: category,

@@ -13,6 +13,7 @@ export class SharedDataService {
   breadcrumbs: Array<string> = ["All"];
   breadcrumbs1: Array<string> = [];
   profileUser: any = {};
+  product: any = {};
 
   constructor(
     private sanitizer: DomSanitizer
@@ -144,5 +145,16 @@ export class SharedDataService {
   getProfileUser(): any {
     this.profileUser = JSON.parse(localStorage.getItem('profileUser'));
     return this.profileUser;
+  }
+
+  setProduct(product: any): void {
+    this.product = product;
+    localStorage.removeItem("product");
+    localStorage.setItem("product", JSON.stringify(this.product));
+  }
+
+  getProduct(): any {
+    this.product = JSON.parse(localStorage.getItem("product"));
+    return this.product;
   }
 }

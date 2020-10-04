@@ -50,6 +50,32 @@ var db_config_1 = require("../configs/db.config");
 var mongodb_1 = require("mongodb");
 var product_1 = __importDefault(require("../models/product"));
 var fs_1 = __importDefault(require("fs"));
+var moment_1 = __importDefault(require("moment"));
+//helper funkcije.
+//pronalazak vremena:
+var findTime = function (bigger, smaller) {
+    var bigg = moment_1.default(bigger);
+    var small = moment_1.default(smaller);
+    var sec = bigg.diff(small, 'seconds');
+    var min = bigg.diff(small, 'minutes');
+    var hours = bigg.diff(small, 'hours');
+    var days = bigg.diff(small, 'days');
+    var months = bigg.diff(small, 'months');
+    var years = bigg.diff(small, 'years');
+    if (sec != 0 && sec < 60)
+        return sec + " seconds ago";
+    if (min != 0 && min < 60)
+        return min + " minutes ago";
+    if (hours != 0 && hours < 24)
+        return hours + " hours ago";
+    if (days != 0 && days < 30)
+        return days + " days ago";
+    if (months != 0 && months < 12)
+        return months + " months ago";
+    if (sec == 0 && min == 0 && hours == 0 && days == 0 && months == 0 && years == 0)
+        return 'a moment ago';
+    return years + " years ago";
+};
 //functions:
 var login = function (req, res) {
     var username = req.body.username;
@@ -74,7 +100,8 @@ var login = function (req, res) {
                 var token = jsonwebtoken_1.default.sign({
                     username: user.username,
                     _id: user._id,
-                    type: user.type
+                    type: user.type,
+                    email: user.email
                 }, server_config_1.serverConfig.SECRET, { expiresIn: 86400 }); //one day.
                 var modifiedUser = {
                     address: user.address,
@@ -216,16 +243,29 @@ var products = function (req, res) {
         });
     }
     else {
-        var user = {
-            username: req.username,
-            _id: req.user_id,
-            user_type: req.user_type
-        };
-        var products_1 = {};
-        res.json({
-            success: true,
-            msg: 'Here i am at my products.',
-            products: products_1
+        //nadji sve producte koji dolaze od ovog prodavca/sellera
+        var ID = new mongodb_1.ObjectID(req.user_id);
+        console.log(req);
+        product_1.default
+            .find({ "user._id": ID })
+            .lean()
+            .sort({ date: -1 })
+            .then(function (products) {
+            console.log(products);
+            //find time for every of the products, then send them to the frontend:
+            var timeNow = new Date().toISOString();
+            var modifiedProducts = products.map(function (product, index) {
+                var ago = findTime(timeNow, product.date);
+                return {
+                    ago: ago,
+                    product: product
+                };
+            });
+            res.json({
+                success: true,
+                msg: 'returned this sellers products',
+                products: modifiedProducts
+            });
         });
     }
 };

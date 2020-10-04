@@ -33,6 +33,13 @@ export class UpdateUserComponent implements OnInit {
   ngOnInit(): void {
     const user = this.sharedService.getProfileUser();
     this.setValues(user);
+    this.serverService.getAvatarImage({avatarName: this.avatarName}).subscribe((picture) => {
+      let reader = new FileReader();
+      reader.readAsDataURL(picture);
+      reader.onload = (_event) => {
+      this.imgUrl = reader.result;
+    }  
+    })
   }
 
   setValues(user: any): void {

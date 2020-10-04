@@ -16,3 +16,5 @@ productRoutes.post('/add', [auth_middleware_1.authMiddleware.verifyToken], produ
 productRoutes.post('/productImage', product_controller_1.productController.sendProductPicture);
 productRoutes.post('/category', product_controller_1.productController.category);
 productRoutes.post('/getProduct', product_controller_1.productController.getProduct);
+productRoutes.post('/delete', [auth_middleware_1.authMiddleware.verifyToken], product_controller_1.productController.deleteProduct);
+productRoutes.post('/update', [auth_middleware_1.authMiddleware.verifyToken], product_controller_1.productController.updateProduct);

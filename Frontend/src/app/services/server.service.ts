@@ -24,6 +24,11 @@ export class ServerService {
     return this.http.put(`${this.serverURL}/api/user/updateInfo`, data);
   }
 
+  updateProductData(data) {
+    // throw new Error('Method not implemented.');
+    return this.http.post(`${this.serverURL}/api/product/update`, data);
+  }
+
   changeOnlineStatus(data): Observable<any> {
     // throw new Error('Method not implemented.');
     return this.http.post(`${this.serverURL}/api/info/changeOnlineStatus`, data);
@@ -128,5 +133,9 @@ export class ServerService {
 
   getNewMessages(data): Observable<any> {
     return this.http.post(`${this.serverURL}/api/user/chat/getNewMessages`, data);
+  }
+
+  deleteProduct(data): Observable<any> {
+    return this.http.post(`${this.serverURL}/api/product/delete`, data);
   }
 }

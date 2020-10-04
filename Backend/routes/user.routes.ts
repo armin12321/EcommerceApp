@@ -37,6 +37,6 @@ userRoutes.post('/deleteFromCart', [authMiddleware.verifyToken], userController.
 
 userRoutes.post('/updateCartQuantity', [authMiddleware.verifyToken], userController.updateCartQuantity);
 
-userRoutes.put('/updateInfo', [authMiddleware.verifyToken], userController.updateInfo);
+userRoutes.put('/updateInfo', [authMiddleware.verifyToken, validateMiddleware.verifyCredentials], userController.updateInfo);
 
 export {userRoutes};

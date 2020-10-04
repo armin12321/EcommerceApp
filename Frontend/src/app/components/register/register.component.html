@@ -1,19 +1,19 @@
 <div class="row">
-    <div class="col-8 mt-5 mx-auto">
+    <div class="col-6 mt-5 mx-auto">
         <div id="profilePhotoPreview">
-            <h4 class="text-center">Profile photo preview</h4>
-            <div class="container" id="profilePhotoContainer">
+            <h4 class="text-center" style="margin-left: 60%;">Profile photo preview</h4>
+            <div class="container" id="profilePhotoContainer" style="margin-left: 55%;">
                 <div *ngIf='imgUrl'>
                     <span class="helper"></span><img id="profilePhoto" [src]="imgUrl" alt="Profile photo">
                 </div>
             </div>
         </div> <br><br><br><br>
-        <a [routerLink]="['../login']" class="">
+        <a [routerLink]="['../login']" class="text-center">
             <h4>Already have an account? login here</h4>
         </a>
     </div>
 
-    <div class="col-4 mt-5 mx-auto">
+    <div class="col-6 mt-5 mx-auto">
         <form>
             <div class="form-group">
                 <label>Name</label>

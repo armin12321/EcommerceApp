@@ -17,4 +17,8 @@ productRoutes.post('/category', productController.category);
 
 productRoutes.post('/getProduct', productController.getProduct);
 
+productRoutes.post('/delete', [authMiddleware.verifyToken], productController.deleteProduct);
+
+productRoutes.post('/update', [authMiddleware.verifyToken], productController.updateProduct);
+
 export {productRoutes};

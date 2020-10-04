@@ -27,4 +27,4 @@ userRoutes.post('/getByID', [auth_middleware_1.authMiddleware.verifyToken], user
 userRoutes.post('/addToCart', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.addToCart);
 userRoutes.post('/deleteFromCart', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.deleteFromCart);
 userRoutes.post('/updateCartQuantity', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.updateCartQuantity);
-userRoutes.put('/updateInfo', [auth_middleware_1.authMiddleware.verifyToken], user_controller_1.userController.updateInfo);
+userRoutes.put('/updateInfo', [auth_middleware_1.authMiddleware.verifyToken, validate_middleware_1.validateMiddleware.verifyCredentials], user_controller_1.userController.updateInfo);

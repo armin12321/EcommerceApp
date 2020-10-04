@@ -59,7 +59,7 @@ export class AddproductComponent implements OnInit {
       } else {
         console.log(data.msg);
       }
-    })
+    });
   }
 
   getKategorije(): Observable<any> {

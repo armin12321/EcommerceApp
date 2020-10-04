@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { ServerService } from '../../services/server.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
 import { Observable } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -17,13 +18,16 @@ export class CartComponent implements OnInit {
   pictures: Array<any> = [];
   subtotal: number = 0;
   quantities: Array<any> = [];
+  modalRef: BsModalRef;
+  tempIndex: number = 0;
 
   constructor(
     private serverService: ServerService,
     private flashMessages: FlashMessagesService,
     private router: Router,
     private tokenService: TokenService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private modalService: BsModalService
   ) { }
 
   ngOnInit(): void {
@@ -71,6 +75,9 @@ export class CartComponent implements OnInit {
 
   deleteCart(index: number): void {
     console.log('deleted cart');
+    //close the modal
+    this.modalRef.hide();
+    
     //change subtotal value:
     this.subtotal -= this.carts[index].quantity * this.carts[index].product.price;
 
@@ -144,5 +151,14 @@ export class CartComponent implements OnInit {
 
   checkout(): void {
     console.log('checkout!!');
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template,{ backdrop: 'static', keyboard: false });
+  }
+
+  setTempIndex(index, template): void {
+    this.tempIndex = index;
+    this.openModal(template)
   }
 }  
