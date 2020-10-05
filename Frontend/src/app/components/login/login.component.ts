@@ -39,11 +39,11 @@ export class LoginComponent implements OnInit {
     this.serverService.postLoginData(credentials).subscribe((data) => {
       if (data.success == true) {                
         this.tokenService.storeUserData(data.token, data.user);  
-        this.flashMessage.show('You are now logged in', {cssClass: 'alert-success', timeout: 5000});
+        this.flashMessage.show('You are now logged in', {cssClass:'flashMessages alert-success', timeout: 1500});
         this.changeOnlineStatus(true).subscribe();
         this.router.navigate(['/public/home']); //ako sve bude u redu.
       } else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });      
+        this.flashMessage.show(data.msg, { cssClass: 'flashMessages alert-danger', timeout: 1500 });      
         this.router.navigate(['/user/login']);
       }
     });    

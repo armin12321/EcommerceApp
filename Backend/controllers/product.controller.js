@@ -1,4 +1,40 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -113,38 +149,56 @@ var add = function (req, res) {
     else {
         product['images'].push(product.name + uuid_1.v4() + path_1.default.extname(images.name));
     }
-    product.save().then(function (product) {
-        if (images.length != undefined) {
-            for (var i = 0; i < product.images.length; i++) {
-                imageName = product.images[i];
-                upath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
-                images[i].mv(upath, function (err) {
-                    if (err) {
-                        return res.json({
-                            success: false,
-                            msg: 'Something went wrong. Try again later'
-                        });
-                    }
-                });
-            }
-        }
-        else {
-            imageName = product.images[0];
-            upath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
-            images.mv(upath, function (err) {
-                if (err) {
-                    return res.json({
-                        success: false,
-                        msg: 'Something went wrong. Try again later'
+    product.save().then(function (product) { return __awaiter(void 0, void 0, void 0, function () {
+        var i;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(images.length != undefined)) return [3 /*break*/, 5];
+                    i = 0;
+                    _a.label = 1;
+                case 1:
+                    if (!(i < product.images.length)) return [3 /*break*/, 4];
+                    imageName = product.images[i];
+                    upath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
+                    return [4 /*yield*/, images[i].mv(upath, function (err) {
+                            if (err) {
+                                return res.json({
+                                    success: false,
+                                    msg: 'Something went wrong. Try again later'
+                                });
+                            }
+                        })];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3:
+                    i++;
+                    return [3 /*break*/, 1];
+                case 4: return [3 /*break*/, 7];
+                case 5:
+                    imageName = product.images[0];
+                    upath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
+                    return [4 /*yield*/, images.mv(upath, function (err) {
+                            if (err) {
+                                return res.json({
+                                    success: false,
+                                    msg: 'Something went wrong. Try again later'
+                                });
+                            }
+                        })];
+                case 6:
+                    _a.sent();
+                    _a.label = 7;
+                case 7:
+                    res.json({
+                        success: true,
+                        msg: 'Product added successfully'
                     });
-                }
-            });
-        }
-        res.json({
-            success: true,
-            msg: 'Product added successfully'
+                    return [2 /*return*/];
+            }
         });
-    }).catch(function (err) {
+    }); }).catch(function (err) {
         console.log(err);
     });
 };
@@ -248,96 +302,112 @@ var deleteProduct = function (req, res) {
         });
     });
 };
-var updateProduct = function (req, res) {
-    var product = JSON.parse(req.body.product);
-    var images = req.files.file;
-    var imageURLs = [];
-    var ID = new mongodb_1.ObjectID(product._id);
-    //first and foremost, delete all the previous pictures of this product
-    for (var _i = 0, _a = product.images; _i < _a.length; _i++) {
-        var image = _a[_i];
-        var upath = path_1.default.join(__dirname, '../uploads/images/products', image);
-        if (fs_1.default.existsSync(upath))
-            fs_1.default.unlinkSync(upath);
-    }
-    //make new picture names for new pictures
-    if (images.length != undefined) {
-        for (var i = 0; i < images.length; i++) {
-            imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
-        }
-        //save new pictures with new names on the server
-        for (var i = 0; i < imageURLs.length; i++) {
-            var imageName = imageURLs[i];
-            var myPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
-            images[i].mv(myPath, function (err) {
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'something went wrong when saving image of this product, please try again'
-                    });
+var updateProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var product, images, imageURLs, ID, _i, _a, image, upath, i, i, imageName, myPath, myPPath, updateFilter;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                product = JSON.parse(req.body.product);
+                images = req.files.file;
+                imageURLs = [];
+                ID = new mongodb_1.ObjectID(product._id);
+                //first and foremost, delete all the previous pictures of this product
+                for (_i = 0, _a = product.images; _i < _a.length; _i++) {
+                    image = _a[_i];
+                    upath = path_1.default.join(__dirname, '../uploads/images/products', image);
+                    if (fs_1.default.existsSync(upath))
+                        fs_1.default.unlinkSync(upath);
                 }
-            });
-        }
-    }
-    else {
-        imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images.name));
-        var myPPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
-        images.mv(myPPath, function (err) {
-            if (err) {
-                res.json({
-                    success: false,
-                    msg: 'something went wrong when saving image of this product, please try again'
+                if (!(images.length != undefined)) return [3 /*break*/, 5];
+                for (i = 0; i < images.length; i++) {
+                    imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
+                }
+                i = 0;
+                _b.label = 1;
+            case 1:
+                if (!(i < imageURLs.length)) return [3 /*break*/, 4];
+                imageName = imageURLs[i];
+                myPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
+                return [4 /*yield*/, images[i].mv(myPath, function (err) {
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: 'something went wrong when saving image of this product, please try again'
+                            });
+                        }
+                    })];
+            case 2:
+                _b.sent();
+                _b.label = 3;
+            case 3:
+                i++;
+                return [3 /*break*/, 1];
+            case 4: return [3 /*break*/, 7];
+            case 5:
+                imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images.name));
+                myPPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
+                return [4 /*yield*/, images.mv(myPPath, function (err) {
+                        if (err) {
+                            res.json({
+                                success: false,
+                                msg: 'something went wrong when saving image of this product, please try again'
+                            });
+                        }
+                    })];
+            case 6:
+                _b.sent();
+                _b.label = 7;
+            case 7:
+                updateFilter = {
+                    available: product.available,
+                    categories: product.categories,
+                    condition: product.condition,
+                    date: new Date(),
+                    description: product.description,
+                    images: imageURLs,
+                    infoObjects: product.infoObjects,
+                    manufacturer: product.manufacturer,
+                    name: product.name,
+                    price: product.price,
+                };
+                //then, update values in product collection
+                product_1.default
+                    .findByIdAndUpdate(ID, { $set: updateFilter })
+                    .lean()
+                    .then(function (data) {
+                    console.log('Product update-ovan u produktima, rezultat:');
+                    console.log(data);
+                    var updateFilter1 = {
+                        "product.available": product.available,
+                        "product.categories": product.categories,
+                        "product.condition": product.condition,
+                        "product.date": new Date(),
+                        "product.description": product.description,
+                        "product.images": imageURLs,
+                        "product.infoObjects": product.infoObjects,
+                        "product.manufacturer": product.manufacturer,
+                        "product.name": product.name,
+                        "product.price": product.price
+                    };
+                    //then, update values for cart collection
+                    cart_1.default
+                        .updateMany({ 'product._id': product._id }, { $set: updateFilter1 })
+                        .lean()
+                        .then(function (data1) {
+                        console.log('Produkt update-ovan u cartovima, rezultat:');
+                        console.log(data1);
+                        //send response to the frontend
+                        res.json({
+                            success: true,
+                            msg: 'successfully updated product',
+                            product: data1
+                        });
+                    });
                 });
-            }
-        });
-    }
-    var updateFilter = {
-        available: product.available,
-        categories: product.categories,
-        condition: product.condition,
-        date: new Date(),
-        description: product.description,
-        images: imageURLs,
-        infoObjects: product.infoObjects,
-        manufacturer: product.manufacturer,
-        name: product.name,
-        price: product.price,
-    };
-    //then, update values in product collection
-    product_1.default
-        .findByIdAndUpdate(ID, { $set: updateFilter })
-        .lean()
-        .then(function (data) {
-        console.log('Product update-ovan u produktima, rezultat:');
-        console.log(data);
-        var updateFilter1 = {
-            "product.available": product.available,
-            "product.categories": product.categories,
-            "product.condition": product.condition,
-            "product.date": new Date(),
-            "product.description": product.description,
-            "product.images": imageURLs,
-            "product.infoObjects": product.infoObjects,
-            "product.manufacturer": product.manufacturer,
-            "product.name": product.name,
-            "product.price": product.price
-        };
-        //then, update values for cart collection
-        cart_1.default
-            .updateMany({ 'product._id': product._id }, { $set: updateFilter1 })
-            .lean()
-            .then(function (data1) {
-            console.log('Produkt update-ovan u cartovima, rezultat:');
-            console.log(data1);
-            //send response to the frontend
-            res.json({
-                success: true,
-                msg: 'successfully updated product',
-                product: data1
-            });
-        });
+                return [2 /*return*/];
+        }
     });
-};
+}); };
 var productController = {
     updateProduct: updateProduct,
     deleteProduct: deleteProduct,

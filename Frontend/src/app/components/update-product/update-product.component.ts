@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { Observable } from 'rxjs';
 import { ServerService } from 'src/app/services/server.service';
 import { SharedDataService } from 'src/app/services/shared-data.service';
@@ -24,7 +25,8 @@ export class UpdateProductComponent implements OnInit {
     private sharedService: SharedDataService,
     private sanitizer: DomSanitizer,
     private serverService: ServerService,
-    private router: Router
+    private router: Router,
+    private flashMessages: FlashMessagesService
   ) { }
 
   ngOnInit(): void {
@@ -68,6 +70,7 @@ export class UpdateProductComponent implements OnInit {
     //send it to the server
     this.serverService.updateProductData(fdata).subscribe((data) => {
       console.log(data);
+      this.flashMessages.show('Updated product successfully', {cssClass: 'flashMessages alert-success', timeout: 1500});
       this.router.navigate(['/user/products']);
     })
   }

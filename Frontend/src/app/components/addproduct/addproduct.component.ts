@@ -136,10 +136,10 @@ export class AddproductComponent implements OnInit {
     
     this.serverService.postProductData(fdata).subscribe(data => {
       if (data.success){
-        this.flashMessage.show(data.msg, { cssClass: 'alert-success', timeout: 3000 });
+        this.flashMessage.show('Added product successfully', { cssClass: 'flashMessages alert-success', timeout: 1500 });
         this.router.navigate(['/user/products']);
       }else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.flashMessage.show(data.msg, { cssClass: 'flashMessages alert-danger', timeout: 1500 });
       }
     });
   }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { FlashMessage } from 'angular2-flash-messages/module/flash-message';
 import { ServerService } from 'src/app/services/server.service';
 import { SharedDataService } from 'src/app/services/shared-data.service';
 import { ValidateService } from 'src/app/services/validate.service';
@@ -64,7 +63,7 @@ export class UpdateUserComponent implements OnInit {
     }
 
     if (!this.validateService.validateEmail(user.email)){
-      this.flashMessage.show('Please provide valid email!', { cssClass: 'alert-danger', timeout: 3000 });
+      this.flashMessage.show('Please provide valid email!', { cssClass: 'flashMessages alert-danger', timeout: 1500 });
       return false;
     }
     
@@ -76,10 +75,10 @@ export class UpdateUserComponent implements OnInit {
 
     this.serverService.updateRegisterData(fdata).subscribe((data: any) => {
       if (data.success) {
-        this.flashMessage.show('Info updated successfully!', {cssClass: 'alert-success flashMessages', timeout: 2000});
+        this.flashMessage.show('Info updated successfully!', {cssClass: 'alert-success flashMessages', timeout: 1500});
         this.router.navigate(['/user/profile']);
       } else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger flashMessages', timeout: 2000 });
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger flashMessages', timeout: 1500 });
       }
     })
   }

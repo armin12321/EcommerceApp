@@ -21,6 +21,8 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
   modalRef: BsModalRef;
   product: any = {};
   ago: string = "";
+  rows: number = 0;
+  columns: number = 50;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -59,6 +61,7 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
       if (data.success) {
         console.log(data);
         this.product = data.product;
+        this.rows = this.product.description.split(/\r\n|\r|\n/).length; // find length of our textarea
         this.ago = data.ago;
         this.numberOfPhotos = data.product.images.length;
 
@@ -98,9 +101,9 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
       if (data.success) {
         console.log(data);
         if (data.msg == 'already exists') {
-          this.flashMessages.show('Already in the cart', {cssClass: 'flashMessages alert-danger', timeout: 2000});  
+          this.flashMessages.show('Already in the cart', {cssClass: 'flashMessages alert-danger', timeout: 1500});  
         } else {
-          this.flashMessages.show('Successfully added to cart', {cssClass: 'flashMessages alert-success', timeout: 2000});
+          this.flashMessages.show('Successfully added to cart', {cssClass: 'flashMessages alert-success', timeout: 1500});
         }        
       } else {
         console.log(data.msg);
@@ -118,7 +121,16 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
     let description = document.getElementById('description');
     let characteristics = document.getElementById('characteristics');
 
-    if (window.innerWidth < 600) {
+    if (window.innerWidth < 600) 
+      this.columns = 40;
+    else if (window.innerWidth < 770)
+      this.columns = 27;
+    else if (window.innerWidth < 1100)
+      this.columns = 35;
+    else
+      this.columns = 50;
+
+    if (window.innerWidth < 600) {      
       if (!column.classList.contains('col-12')) column.classList.add('col-12');
       if (column.classList.contains('col-6'))   column.classList.remove('col-6');
 
@@ -127,7 +139,7 @@ export class ProductInfoComponent implements OnInit, AfterContentChecked {
 
       if (characteristics.classList.contains('col-6')) characteristics.classList.remove('col-6');
       if (!characteristics.classList.contains('col-12')) characteristics.classList.add('col-12');
-    } else {
+    } else {      
       if (!column.classList.contains('col-6')) column.classList.add('col-6');
       if (column.classList.contains('col-12')) column.classList.remove('col-12');
 

@@ -98,13 +98,11 @@
                 </tbody>
               </table>
         </div>
-        <div class="col-6" id="description">
-            <div class="card border-dark mb-3">
-            <div class="card-header">Description</div>
-            <div class="card-body">
-                <h4 class="card-title"> {{ this.product.name }} </h4>
-                <p class="card-text"> {{ this.product.description }} </p>
-            </div>
+        <div class="col-6" id="description">            
+            <div class="form-group">                
+                <textarea readonly id="exampleFormControlTextarea1" cols="{{ this.columns }}" rows="{{ this.rows }}" class="from-control">
+                    {{ this.product.description }}
+                </textarea>
             </div>
         </div>
     </div>
@@ -124,7 +122,7 @@
         </div>
         <div class="container" id="imgPreviewContainer">
             <div *ngIf='this.photos.length > 0' style="text-align: center;">
-                <img style="height: 300px; width: 500px;" id="previewImg" [src]="this.photos[this.currentPhoto]" alt="">
+                <img style="height: 300px; width: 500px; border-radius: 20%;" id="previewImg" [src]="this.photos[this.currentPhoto]" alt="">
             </div>
         </div>
         <div class="modal-footer">

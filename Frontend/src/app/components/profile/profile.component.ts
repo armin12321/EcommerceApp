@@ -52,7 +52,7 @@ export class ProfileComponent implements OnInit {
         css = 'alert-danger';
         this.router.navigate(['public/home']);
       }
-      this.flashMessages.show(data.msg, {cssClass: `flashMessages ${css}`, timeout: 3000});        
+      this.flashMessages.show('Welcome to your profile', {cssClass: `flashMessages ${css}`, timeout: 1500});        
     });
   }
   showImage(picture: any) {

@@ -6,9 +6,9 @@ input[type] {
 }
 
 .flashMessages {
-    text-align: center;
-    position: fixed;
     z-index: 11;
-    overflow: auto;
-    width: 100%;
+    position: fixed;    
+    width: 50%;        
+    top: 100px;
+    left: 25%;            
 };

@@ -128,13 +128,13 @@ const add = (req: any, res: any) => {
         product['images'].push(product.name + uuidv4() + path.extname(images.name));
     }
 
-    product.save().then((product) => {
+    product.save().then(async (product) => {
         if (images.length != undefined) {
             for (let i = 0; i < product.images.length; i++){
                 imageName = product.images[i];            
                 upath = path.join(__dirname, '..', '/uploads/images/products', imageName);
 
-                images[i].mv(upath, (err: any) => {
+                await images[i].mv(upath, (err: any) => {
                     if (err){
                         return res.json({
                             success: false,
@@ -148,7 +148,7 @@ const add = (req: any, res: any) => {
             imageName = product.images[0];
             upath = path.join(__dirname, '..', '/uploads/images/products', imageName);
 
-            images.mv(upath, (err: any) => {
+            await images.mv(upath, (err: any) => {
                 if (err){
                     return res.json({
                         success: false,
@@ -286,7 +286,7 @@ const deleteProduct = (req: any, res: any) => {
     })
 };
 
-const updateProduct = (req: any, res: any) => {
+const updateProduct = async (req: any, res: any) => {
     const product: any = JSON.parse(req.body.product);
     const images: any = req.files.file;
     let imageURLs: Array<string> = [];
@@ -310,7 +310,7 @@ const updateProduct = (req: any, res: any) => {
             const imageName = imageURLs[i];
             const myPath = path.join(__dirname, '..', '/uploads/images/products', imageName);
 
-            images[i].mv(myPath, (err: any) => {
+            await images[i].mv(myPath, (err: any) => {
                 if (err) {
                     res.json({
                         success: false,
@@ -323,7 +323,7 @@ const updateProduct = (req: any, res: any) => {
         imageURLs.push(product.name + uuidv4() + path.extname(images.name));
         const myPPath = path.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
 
-        images.mv(myPPath, (err: any) => {
+        await images.mv(myPPath, (err: any) => {
            if (err) {
                res.json({
                    success: false,

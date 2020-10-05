@@ -117,6 +117,7 @@ export class HomeComponent implements OnInit, AfterContentChecked {
     //here we gather all the data for our search.    
     //change get to post, and then send it to the server
     let myCategories: Array<any> = [];
+    document.documentElement.scrollTop = 0;
 
     //don't take first one because of the 'all' field
     for (let i = 1; i < this.sharedData.breadcrumbs.length; i++)

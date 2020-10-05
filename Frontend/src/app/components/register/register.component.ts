@@ -52,17 +52,17 @@ export class RegisterComponent implements OnInit {
     }
 
     if (!this.validateService.validateRegisterForm(user)){
-      this.flashMessage.show('Please fill in all fields!', { cssClass: 'alert-danger', timeout: 3000 });
+      this.flashMessage.show('Please fill in all fields!', { cssClass: 'flashMessages alert-danger', timeout: 1500 });
       return false;
     }
 
     if (!this.validateService.validateEmail(user.email)){
-      this.flashMessage.show('Please provide valid email!', { cssClass: 'alert-danger', timeout: 3000 });
+      this.flashMessage.show('Please provide valid email!', { cssClass: 'flashMessages alert-danger', timeout: 1500 });
       return false;
     }
 
     if (!this.validateService.validatePasswords(user.password, user.repeatedPassword)){
-      this.flashMessage.show("Passwords don't match!", { cssClass: 'alert-danger', timeout: 3000 });
+      this.flashMessage.show("Passwords don't match!", { cssClass: 'flashMessages alert-danger', timeout: 1500 });
       return false;
     }
     
@@ -74,10 +74,10 @@ export class RegisterComponent implements OnInit {
 
     this.serverService.postRegisterData(fdata).subscribe(data => {
       if (data.success){
-        this.flashMessage.show(data.msg, { cssClass: 'alert-success', timeout: 3000 });
+        this.flashMessage.show('Registered successfully', { cssClass: 'flashMessages alert-success', timeout: 1500 });
         this.router.navigate(['user/login']);
       }else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.flashMessage.show(data.msg, { cssClass: 'flashMessages alert-danger', timeout: 1500 });
       }
     });
   }

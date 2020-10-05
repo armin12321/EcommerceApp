@@ -85,7 +85,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.username = '';
     this.modalRef.hide();
     this.navbarService.logOut();
-    this.flashMessages.show('Logout successful', {cssClass: 'alert-success', timeout: 5000});
+    this.flashMessages.show('Logout successfull', {cssClass: 'flashMessages alert-success', timeout: 1500});
   }
 
   showGreeting(): any {

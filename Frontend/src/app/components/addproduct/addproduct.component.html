@@ -101,9 +101,9 @@
         <div class="modal-body">
         <p>Inspect your images.</p>
         </div>
-        <div class="container" id="imgPreviewContainer">
-            <div *ngIf='imgPreviewUrl'>
-                <span class="helper"></span><img id="previewImg" [src]="imgPreviewUrl" alt="">
+        <div class="container">
+            <div *ngIf='imgPreviewUrl' style="text-align: center;">
+                <img id="previewImg" style="height: 300px; width: 500px; border-radius: 20%;" [src]="imgPreviewUrl" alt="">
             </div>
         </div>
         <div class="modal-footer">
