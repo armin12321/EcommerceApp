@@ -90,6 +90,8 @@ var findTime = function (bigger, smaller) {
         return days + " days ago";
     if (months != 0 && months < 12)
         return months + " months ago";
+    if (sec == 0 && min == 0 && hours == 0 && days == 0 && months == 0 && years == 0)
+        return "a moment ago";
     return years + " years ago";
 };
 ///helper for updating all messages that are seen

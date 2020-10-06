@@ -100,7 +100,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterContentChecked {
             this.scroll();
           }          
           else if (data.messages.length != 0 && (box.scrollHeight - box.scrollTop > 515)) {
-            this.numOfMessages = data.messages.length;            
+            this.numOfMessages += data.messages.length;            
           }
 
           //let's get if chat_person is online:

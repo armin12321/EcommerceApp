@@ -5,9 +5,13 @@
       <header class="text-center">
         <h1 class="display-10 text-white">
           Chat with: {{ chat_person_username }}
-          <i *ngIf="this.online == true"  class="fas fa-circle fa-sm" style="color:green;padding-left: 10px;"></i> 
-          <i style="padding-left: 10px;">online</i>
-          <i style="padding-left: 10px;" *ngIf="this.online == false">{{this.lastTimeOnline}}</i>
+          <div *ngIf="online">
+            <i class="fas fa-circle" style="color:green;"></i> - online
+          </div>
+          <div *ngIf="!online">
+            <i style="padding-left: 10px;">online</i>
+            <i style="padding-left: 10px;">{{this.lastTimeOnline}}</i>
+          </div>
         </h1>        
       </header>
     </div>    
