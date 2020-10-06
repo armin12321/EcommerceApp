@@ -10,7 +10,9 @@ import moment from 'moment';
 //because in extreme cases current implementation would not work.
 
 //helper update method
-let calcNewMessages = (messages: Array<Pick<any, any>>) => {
+let calcNewMessages = (messages: Array<any>) => {
+    if (messages == undefined)
+        return;
     let newMessages: Array<Object> = [];
     messages.forEach((message) => {
         let time = `${message.time.getHours()}:${message.time.getMinutes()} - ${message.time.getDate()}/${message.time.getMonth() + 1}/${message.time.getFullYear()}`;
@@ -59,6 +61,8 @@ let findTime = (bigger: any, smaller: any) => {
 
 ///helper for updating all messages that are seen
 let updateAll = async (messages: Array<any>, user_id_object: any) => {
+    if (messages == undefined)
+        return;
    for (let i = 0; i < messages.length; i++) {
        //see if I need to update this 
        if (String(user_id_object) == String(messages[i].to) && messages[i].viewed == false) {
@@ -155,7 +159,7 @@ const saveMessage = (req: any, res: any) => {
         res.json({
             success: true,
             msg: "succesfuly sent a message",            
-            message: newMessages[0]
+            message: newMessages?[0]
         });
     });
 }
@@ -261,10 +265,15 @@ const notifications = (req: any, res: any) => {
     .lean()
     .then((messages) => {
         //we do not need update for our notifications, just messages.
+        let length = 0;
+
+        if (messages != undefined)
+            length = messages.length;
+
         res.json({
             success: true,
             msg: 'returned notifications',
-            numOfMessages: messages.length
+            numOfMessages: length
         });
     });
 }
