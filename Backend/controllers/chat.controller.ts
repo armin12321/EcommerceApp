@@ -12,7 +12,8 @@ import moment from 'moment';
 //helper update method
 let calcNewMessages = (messages: Array<any>) => {
     if (messages == undefined)
-        return;
+        return null;
+
     let newMessages: Array<Object> = [];
     messages.forEach((message) => {
         let time = `${message.time.getHours()}:${message.time.getMinutes()} - ${message.time.getDate()}/${message.time.getMonth() + 1}/${message.time.getFullYear()}`;
@@ -155,11 +156,15 @@ const saveMessage = (req: any, res: any) => {
     .save()
     .then((data) => {
         let newMessages = calcNewMessages([data]); // cause array is needed.
+        let msg: any = "";
+
+        if (newMessages != undefined)
+            msg = newMessages[0];
 
         res.json({
             success: true,
             msg: "succesfuly sent a message",            
-            message: newMessages?[0]
+            message: msg            
         });
     });
 }
@@ -196,11 +201,11 @@ const getNewMessages = (req: any, res: any) => {
     .limit(1)
     .then((msgs) => {
         let msg_id:any;
-
-        if (msgs == undefined)
-            msg_id = undefined;
-        else
+        
+        if (msgs != undefined && msgs[0] != undefined)
             msg_id = msgs[0]._id;
+        else
+            msg_id = undefined;
 
         Messages
         .find(filter)
@@ -249,7 +254,7 @@ const getNewMessages = (req: any, res: any) => {
             });
         });
     });
-}
+};
 
 const notifications = (req: any, res: any) => {
     const user_id = new ObjectID(req.user_id);

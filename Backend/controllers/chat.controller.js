@@ -50,6 +50,8 @@ var moment_1 = __importDefault(require("moment"));
 //because in extreme cases current implementation would not work.
 //helper update method
 var calcNewMessages = function (messages) {
+    if (messages == undefined)
+        return null;
     var newMessages = [];
     messages.forEach(function (message) {
         var time = message.time.getHours() + ":" + message.time.getMinutes() + " - " + message.time.getDate() + "/" + (message.time.getMonth() + 1) + "/" + message.time.getFullYear();
@@ -96,6 +98,8 @@ var updateAll = function (messages, user_id_object) { return __awaiter(void 0, v
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                if (messages == undefined)
+                    return [2 /*return*/];
                 _loop_1 = function (i) {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
@@ -196,10 +200,13 @@ var saveMessage = function (req, res) {
         .save()
         .then(function (data) {
         var newMessages = calcNewMessages([data]); // cause array is needed.
+        var msg = "";
+        if (newMessages != undefined)
+            msg = newMessages[0];
         res.json({
             success: true,
             msg: "succesfuly sent a message",
-            message: newMessages[0]
+            message: msg
         });
     });
 };
@@ -228,10 +235,10 @@ var getNewMessages = function (req, res) {
         .limit(1)
         .then(function (msgs) {
         var msg_id;
-        if (msgs == undefined)
-            msg_id = undefined;
-        else
+        if (msgs != undefined && msgs[0] != undefined)
             msg_id = msgs[0]._id;
+        else
+            msg_id = undefined;
         messages_1.default
             .find(filter)
             .sort({ time: 1 })
@@ -287,10 +294,13 @@ var notifications = function (req, res) {
         .lean()
         .then(function (messages) {
         //we do not need update for our notifications, just messages.
+        var length = 0;
+        if (messages != undefined)
+            length = messages.length;
         res.json({
             success: true,
             msg: 'returned notifications',
-            numOfMessages: messages.length
+            numOfMessages: length
         });
     });
 };
