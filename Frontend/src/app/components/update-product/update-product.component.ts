@@ -111,6 +111,8 @@ export class UpdateProductComponent implements OnInit {
         value: this.value
       });
     }
+    this.key = "";
+    this.value = "";
   }
 
   removeItem(ind: number): void {

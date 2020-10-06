@@ -190,15 +190,16 @@ var add = function (req, res) {
                 case 6:
                     _a.sent();
                     _a.label = 7;
-                case 7:
-                    res.json({
-                        success: true,
-                        msg: 'Product added successfully'
-                    });
-                    return [2 /*return*/];
+                case 7: return [2 /*return*/];
             }
         });
-    }); }).catch(function (err) {
+    }); }).then(function () {
+        return res.json({
+            success: true,
+            msg: 'Product added successfully'
+        });
+    })
+        .catch(function (err) {
         console.log(err);
     });
 };
@@ -303,109 +304,117 @@ var deleteProduct = function (req, res) {
     });
 };
 var updateProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product, images, imageURLs, ID, _i, _a, image, upath, i, i, imageName, myPath, myPPath, updateFilter;
+    var product, images, imageURLs, ID, _i, _a, image, upath, i, updateFilter;
     return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                product = JSON.parse(req.body.product);
-                images = req.files.file;
-                imageURLs = [];
-                ID = new mongodb_1.ObjectID(product._id);
-                //first and foremost, delete all the previous pictures of this product
-                for (_i = 0, _a = product.images; _i < _a.length; _i++) {
-                    image = _a[_i];
-                    upath = path_1.default.join(__dirname, '../uploads/images/products', image);
-                    if (fs_1.default.existsSync(upath))
-                        fs_1.default.unlinkSync(upath);
-                }
-                if (!(images.length != undefined)) return [3 /*break*/, 5];
-                for (i = 0; i < images.length; i++) {
-                    imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
-                }
-                i = 0;
-                _b.label = 1;
-            case 1:
-                if (!(i < imageURLs.length)) return [3 /*break*/, 4];
-                imageName = imageURLs[i];
-                myPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
-                return [4 /*yield*/, images[i].mv(myPath, function (err) {
-                        if (err) {
-                            res.json({
-                                success: false,
-                                msg: 'something went wrong when saving image of this product, please try again'
-                            });
-                        }
-                    })];
-            case 2:
-                _b.sent();
-                _b.label = 3;
-            case 3:
-                i++;
-                return [3 /*break*/, 1];
-            case 4: return [3 /*break*/, 7];
-            case 5:
-                imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images.name));
-                myPPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
-                return [4 /*yield*/, images.mv(myPPath, function (err) {
-                        if (err) {
-                            res.json({
-                                success: false,
-                                msg: 'something went wrong when saving image of this product, please try again'
-                            });
-                        }
-                    })];
-            case 6:
-                _b.sent();
-                _b.label = 7;
-            case 7:
-                updateFilter = {
-                    available: product.available,
-                    categories: product.categories,
-                    condition: product.condition,
-                    date: new Date(),
-                    description: product.description,
-                    images: imageURLs,
-                    infoObjects: product.infoObjects,
-                    manufacturer: product.manufacturer,
-                    name: product.name,
-                    price: product.price,
-                };
-                //then, update values in product collection
-                product_1.default
-                    .findByIdAndUpdate(ID, { $set: updateFilter })
-                    .lean()
-                    .then(function (data) {
-                    console.log('Product update-ovan u produktima, rezultat:');
-                    console.log(data);
-                    var updateFilter1 = {
-                        "product.available": product.available,
-                        "product.categories": product.categories,
-                        "product.condition": product.condition,
-                        "product.date": new Date(),
-                        "product.description": product.description,
-                        "product.images": imageURLs,
-                        "product.infoObjects": product.infoObjects,
-                        "product.manufacturer": product.manufacturer,
-                        "product.name": product.name,
-                        "product.price": product.price
-                    };
-                    //then, update values for cart collection
-                    cart_1.default
-                        .updateMany({ 'product._id': product._id }, { $set: updateFilter1 })
-                        .lean()
-                        .then(function (data1) {
-                        console.log('Produkt update-ovan u cartovima, rezultat:');
-                        console.log(data1);
-                        //send response to the frontend
-                        res.json({
-                            success: true,
-                            msg: 'successfully updated product',
-                            product: data1
-                        });
-                    });
-                });
-                return [2 /*return*/];
+        product = JSON.parse(req.body.product);
+        images = req.files.file;
+        imageURLs = [];
+        ID = new mongodb_1.ObjectID(product._id);
+        //first and foremost, delete all the previous pictures of this product
+        for (_i = 0, _a = product.images; _i < _a.length; _i++) {
+            image = _a[_i];
+            upath = path_1.default.join(__dirname, '../uploads/images/products', image);
+            if (fs_1.default.existsSync(upath))
+                fs_1.default.unlinkSync(upath);
         }
+        if (images.length != undefined) {
+            for (i = 0; i < images.length; i++) {
+                imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images[i].name));
+            }
+        }
+        else {
+            imageURLs.push(product.name + uuid_1.v4() + path_1.default.extname(images.name));
+        }
+        updateFilter = {
+            available: product.available,
+            categories: product.categories,
+            condition: product.condition,
+            date: new Date(),
+            description: product.description,
+            images: imageURLs,
+            infoObjects: product.infoObjects,
+            manufacturer: product.manufacturer,
+            name: product.name,
+            price: product.price,
+        };
+        //then, update values in product collection
+        product_1.default
+            .findByIdAndUpdate(ID, { $set: updateFilter })
+            .lean()
+            .then(function (data) { return __awaiter(void 0, void 0, void 0, function () {
+            var i, imageName, myPath, myPPath, updateFilter1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(images.length != undefined)) return [3 /*break*/, 5];
+                        i = 0;
+                        _a.label = 1;
+                    case 1:
+                        if (!(i < imageURLs.length)) return [3 /*break*/, 4];
+                        imageName = imageURLs[i];
+                        myPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageName);
+                        return [4 /*yield*/, images[i].mv(myPath, function (err) {
+                                if (err) {
+                                    return res.json({
+                                        success: false,
+                                        msg: 'something went wrong when saving image of this product, please try again'
+                                    });
+                                }
+                            })];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        i++;
+                        return [3 /*break*/, 1];
+                    case 4: return [3 /*break*/, 7];
+                    case 5:
+                        myPPath = path_1.default.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
+                        return [4 /*yield*/, images.mv(myPPath, function (err) {
+                                if (err) {
+                                    return res.json({
+                                        success: false,
+                                        msg: 'something went wrong when saving image of this product, please try again'
+                                    });
+                                }
+                            })];
+                    case 6:
+                        _a.sent();
+                        _a.label = 7;
+                    case 7:
+                        console.log('Product update-ovan u produktima, rezultat:');
+                        console.log(data);
+                        updateFilter1 = {
+                            "product.available": product.available,
+                            "product.categories": product.categories,
+                            "product.condition": product.condition,
+                            "product.date": new Date(),
+                            "product.description": product.description,
+                            "product.images": imageURLs,
+                            "product.infoObjects": product.infoObjects,
+                            "product.manufacturer": product.manufacturer,
+                            "product.name": product.name,
+                            "product.price": product.price
+                        };
+                        //then, update values for cart collection
+                        cart_1.default
+                            .updateMany({ 'product._id': product._id }, { $set: updateFilter1 })
+                            .lean()
+                            .then(function (data1) {
+                            console.log('Produkt update-ovan u cartovima, rezultat:');
+                            console.log(data1);
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); }).then(function () {
+            return res.json({
+                success: true,
+                msg: 'Successfully updated my product',
+                data: ""
+            });
+        });
+        return [2 /*return*/];
     });
 }); };
 var productController = {

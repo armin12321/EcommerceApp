@@ -50,6 +50,7 @@ export class AddproductComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.sharedData.clearBreadcrumbs1();
     this.user = this.tokenService.getUser();
     console.log(this.user);
     this.getKategorije().subscribe((data) => {

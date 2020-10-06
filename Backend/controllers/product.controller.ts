@@ -157,12 +157,13 @@ const add = (req: any, res: any) => {
                 }
             });
         }
-
-        res.json({
+    }).then(() => {
+        return res.json({
             success: true,
             msg: 'Product added successfully'
-        });        
-    }).catch((err) => {
+        });
+    })
+    .catch((err) => {
         console.log(err);
     });
 };
@@ -299,38 +300,12 @@ const updateProduct = async (req: any, res: any) => {
             fs.unlinkSync(upath);
     }
 
-    //make new picture names for new pictures
     if (images.length != undefined) {
         for (let i = 0; i < images.length; i++) {
             imageURLs.push(product.name + uuidv4() + path.extname(images[i].name));
         }
-
-        //save new pictures with new names on the server
-        for (let i = 0; i < imageURLs.length; i++) {
-            const imageName = imageURLs[i];
-            const myPath = path.join(__dirname, '..', '/uploads/images/products', imageName);
-
-            await images[i].mv(myPath, (err: any) => {
-                if (err) {
-                    res.json({
-                        success: false,
-                        msg: 'something went wrong when saving image of this product, please try again'
-                    });
-                }
-            })
-        }
     } else {
         imageURLs.push(product.name + uuidv4() + path.extname(images.name));
-        const myPPath = path.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
-
-        await images.mv(myPPath, (err: any) => {
-           if (err) {
-               res.json({
-                   success: false,
-                   msg: 'something went wrong when saving image of this product, please try again'
-               });
-           } 
-        });
     }
 
     const updateFilter = {
@@ -350,7 +325,37 @@ const updateProduct = async (req: any, res: any) => {
     Product
     .findByIdAndUpdate(ID, {$set: updateFilter})
     .lean()
-    .then((data) => {
+    .then(async (data) => {
+        //make new picture names for new pictures
+        if (images.length != undefined) {            
+            //save new pictures with new names on the server
+            for (let i = 0; i < imageURLs.length; i++) {
+                const imageName = imageURLs[i];
+                const myPath = path.join(__dirname, '..', '/uploads/images/products', imageName);
+
+                await images[i].mv(myPath, (err: any) => {
+                    if (err) {
+                        return res.json({
+                            success: false,
+                            msg: 'something went wrong when saving image of this product, please try again'
+                        });
+                    }
+                })
+            }
+        } else {            
+            const myPPath = path.join(__dirname, '..', '/uploads/images/products', imageURLs[0]);
+
+            await images.mv(myPPath, (err: any) => {
+            if (err) {
+                return res.json({
+                    success: false,
+                    msg: 'something went wrong when saving image of this product, please try again'
+                });
+            } 
+            });
+        }
+
+
         console.log('Product update-ovan u produktima, rezultat:');
         console.log(data);
 
@@ -374,15 +379,14 @@ const updateProduct = async (req: any, res: any) => {
         .then((data1) => {
             console.log('Produkt update-ovan u cartovima, rezultat:');
             console.log(data1);
-
-            //send response to the frontend
-            res.json({
-                success: true,
-                msg: 'successfully updated product',
-                product: data1
-            });
         })
-    })        
+    }).then(() => {
+        return res.json({
+            success:true,
+            msg: 'Successfully updated my product',
+            data: ""
+        });
+    });
 };
 
 const productController: any = {
