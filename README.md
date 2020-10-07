@@ -9,7 +9,7 @@
 ## Opis:
   - Aplikacija za online trgovinu sa potpuno funkcionalnim chat sistemom
   - Neki od dijelova nisu dovršeni jer je aplikacija još u izradi
-  - Video demonstracija na linku: 
+  - Video demonstracija na linku: https://youtu.be/R6GQGY2Gmgc
   
 ## Upotreba:
   1. Klonirati repozitorijum
